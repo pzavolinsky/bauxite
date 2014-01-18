@@ -1,4 +1,9 @@
 class Action
+	# Asserts that the page source matches +text+.
+	#
+	# +text+ can be a regular expression.
+	#
+	# :category: Action Methods
 	def source(text)
 		actual = @ctx.driver.page_source
 		verbose = @ctx.options[:verbose] ? "\nPage source:\n#{actual}" : ''
