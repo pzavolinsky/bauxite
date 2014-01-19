@@ -1,5 +1,15 @@
-require "selenium-webdriver"
-require "csv"
+require 'selenium-webdriver'
+require 'readline'
+require 'csv'
+
+# Load dependencies and extensions without leaking dir into the global scope
+lambda do
+	dir = File.expand_path(File.dirname(__FILE__))
+	Dir[File.join(dir,                    '*.rb')].each { |file| require file }
+	Dir[File.join(dir, '..', 'actions'  , '*.rb')].each { |file| require file }
+	Dir[File.join(dir, '..', 'selectors', '*.rb')].each { |file| require file }
+	Dir[File.join(dir, '..', 'loggers'  , '*.rb')].each { |file| require file }
+end.call
 
 # The Main test context. This class includes state and helper functions
 # used by clients execute tests and by actions and selectors to interact
@@ -20,11 +30,12 @@ class Context
 	# Constructs a new test context instance.
 	def initialize(options)
 		@options = options
-		@logger  = options[:logger] || Logger.new
 		@driver_name = (options[:driver] || :firefox).to_sym
 		@variables = {
 			'__TIMEOUT__' => options[:timeout].to_i
 		}
+		
+		handle_errors { @logger = _load_logger(options[:logger]) }
 	end
 	
 	# Starts the test engine and executes the actions specified. If no action
@@ -133,8 +144,11 @@ class Context
 	#     # => returns 'World!'
 	#
 	def get_value(element)
-		return element.attribute('value') if ['input','select','textarea'].include? element.tag_name.downcase
-		element.text
+		if ['input','select','textarea'].include? element.tag_name.downcase
+			element.attribute('value') 
+		else
+			element.text
+		end
 	end
 	
 	# ======================================================================= #
@@ -152,8 +166,9 @@ class Context
 	def exec_action(action)
 		ret = handle_errors(true) do
 			file = action[:file]
+			dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
 			@variables['__FILE__'] = file
-			@variables['__DIR__'] = File.absolute_path((File.exists? file) ? File.dirname(file) : Dir.pwd)
+			@variables['__DIR__'] = File.absolute_path(dir)
 			
 			@logger.log_cmd(action[:cmd], action[:args].call) do
 		    	Readline::HISTORY << action[:text]
@@ -183,7 +198,10 @@ class Context
 		data = text.split(' ', 2)
 		cmd = data[0].strip.downcase
 		cmd_real = (action.respond_to? cmd) ? cmd : (cmd+'_action')
-		raise "#{file} (line #{line+1}): Unknown command #{cmd}." unless action.respond_to? cmd_real
+		
+		unless action.respond_to? cmd_real
+			raise "#{file} (line #{line+1}): Unknown command #{cmd}."
+		end
 		
 		args = data[1] ? data[1].strip : ''
 		begin
@@ -210,7 +228,8 @@ class Context
 	#     # => [ { :cmd => 'echo', ... } ]
 	#
 	def parse_file(file)
-		File.open(file).each_line.each_with_index.map do |text,line|
+		io = (file == 'stdin') ? $stdin : File.open(file) 
+		io.each_line.each_with_index.map do |text,line|
 			text = text.sub(/\r?\n$/, '')
 			next nil if text =~ /^\s*(#|$)/
 			parse_line(text, file, line)
@@ -275,7 +294,7 @@ class Context
 		if break_into_debug and @options[:debug]
 			debug
 		elsif exit_on_error
-			exit
+			exit false
 		end
 	end
 	
@@ -327,8 +346,20 @@ class Context
 	def self.selectors(include_standard_selectors = true)
 		ret = Selector.public_instance_methods(false).map { |a| a.to_s.sub(/_selector$/, '') } \
 		- [ 'find' ]
-		ret += Selenium::WebDriver::SearchContext::FINDERS.map { |k,v| k.to_s } if include_standard_selectors
+		if include_standard_selectors
+			ret += Selenium::WebDriver::SearchContext::FINDERS.map { |k,v| k.to_s }
+		end
 		ret
+	end
+	
+	# Returns an array with the names of every logger available.
+	#
+	# For example:
+	#     Context::loggers
+	#     # => [ "null", "bash", ... ]
+	#
+	def self.loggers
+		Loggers.constants.map { |l| l.to_s.downcase.sub(/logger$/, '') }
 	end
 	
 	# ======================================================================= #
@@ -382,6 +413,19 @@ class Context
 private
 	def self._action_methods
 		Action.public_instance_methods(false).map { |a| a.to_s }
+	end
+	
+	def _load_logger(log_name)
+		log_name = (log_name || 'null').downcase
+		
+		class_name = "#{log_name.capitalize}Logger"
+		
+		unless Loggers.const_defined? class_name.to_sym
+			raise NameError,
+				"Invalid logger '#{log_name}'"
+		end
+		
+		Loggers.const_get(class_name).new
 	end
 
 	# ======================================================================= #

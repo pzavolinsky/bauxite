@@ -1,13 +1,10 @@
-require 'optparse'
-require 'readline'
+#!/usr/bin/env ruby
 
-# Load custom actions and selectors
-Dir[File.dirname(__FILE__)+'/core/*.rb'     ].each { |file| require file }
-Dir[File.dirname(__FILE__)+'/actions/*.rb'  ].each { |file| require file }
-Dir[File.dirname(__FILE__)+'/selectors/*.rb'].each { |file| require file }
+require 'optparse'
+require_relative  File.join('core', 'Context.rb')
 
 options = {
-	:log      => 'bash',
+	:logger   => 'bash',
 	:verbose  => false,
 	:break    => false,
 	:provider => 'firefox',
@@ -15,18 +12,28 @@ options = {
 	:timeout  => 10,
 	:reset    => false
 }
+
+cmd = File.basename(__FILE__)
+
 OptionParser.new do |opts|
-	opts.banner = "Usage: test.rb [options] [files...]"
+	opts.banner = "Usage: #{cmd} [options] [files...]"
 	
 	opts.separator ""
 	opts.separator "Options: "
-	opts.on("-v", "--[no-]verbose", "Show verbose errors")      { |v| options[:verbose ] = v }
-	opts.on("-l", "--log TYPE", "Logger type ('bash')")         { |v| options[:log     ] = v }
-	opts.on("-w", "--wait", "Wait for ENTER before exiting")    { |v| options[:wait    ] = v }
-	opts.on("-p", "--provider", "Driver provider")              { |v| options[:driver  ] = v }
-	opts.on("-d", "--debug", "Debug")                           { |v| options[:debug   ] = v }
-	opts.on("-t", "--timeout SECONDS", "Selector timeout")      { |v| options[:timeout ] = v }
-	opts.on("-r", "--[no-]reset", "Reset driver between tests") { |v| options[:reset   ] = v }
+	opts.on("-v", "--verbose", "Show verbose errors")                              { |v| options[:verbose ] = v }
+	opts.on("-l", "--logger LOGGER", "Logger type ('#{options[:logger]}')")        { |v| options[:logger  ] = v }
+	opts.on("-w", "--wait", "Wait for ENTER before exiting")                       { |v| options[:wait    ] = v }
+	opts.on("-p", "--provider", "Driver provider")                                 { |v| options[:driver  ] = v }
+	opts.on("-d", "--debug", "Break to debug on error. "+
+	                         "Start the debug console if no input files given.")   { |v| options[:debug   ] = v }
+	opts.on("-t", "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)") { |v| options[:timeout ] = v }
+	opts.on("-r", "--reset", "Reset driver between tests")                         { |v| options[:reset   ] = v }
+	
+	opts.separator ""
+	opts.separator "Loggers:"
+	Context::loggers.sort.each do |s|
+		opts.separator "    #{s}"
+	end
 	
 	opts.separator ""
 	opts.separator "Actions:".ljust(33)+"Selectors:"
@@ -36,18 +43,17 @@ OptionParser.new do |opts|
 		a = a ? "#{a.ljust(7)} #{Context.action_args(a).join(' ')}" : ''
 		opts.separator "    #{a.ljust(33)}#{s || ''}"
 	end
-	opts.separator ""
 	
+	opts.separator ""
 end.parse!
-
-if options[:log] != ''
-	Dir[File.dirname(__FILE__)+"/loggers/#{options[:log]}.rb"  ].each { |file| require file }
-end
 
 ctx = Context.new(options)
 
+files = ARGV
+files = ['stdin'] if files.size == 0 and not options[:debug]
+
 actions = ctx.handle_errors do
-	ARGV.map do |file|
+	files.map do |file|
 		ctx.logger.log_cmd('load', [file]) do
 			ctx.parse_file(file)
 		end
@@ -58,6 +64,6 @@ actions = ctx.handle_errors do
 	end
 end
 
-actions = [ctx.parse_line('debug')] unless actions
+actions = [ctx.parse_line('debug')] if options[:debug] and not actions
 
 ctx.start(actions)
