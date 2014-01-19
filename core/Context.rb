@@ -22,7 +22,7 @@ class Context
 		@logger  = logger
 		@options = options
 		@variables = {
-			'selector_timeout' => options[:timeout].to_i
+			'__TIMEOUT__' => options[:timeout].to_i
 		}
 	end
 	
@@ -143,6 +143,7 @@ class Context
 		ret = handle_errors(true) do
 			@logger.log_cmd(action[:cmd], action[:args].call) do
 		    	Readline::HISTORY << action[:text]
+				@variables['__FILE__'] = action[:file]
 				action[:exec].call
 			end
 		end
@@ -174,16 +175,34 @@ class Context
 		args = data[1] ? data[1].strip : ''
 		begin
 			args = Context::parse_args(args) || []
-		rescue CSV::MalformedCSVError => e
+		rescue StandardError => e
 			raise "#{file} (line #{line+1}): #{e.message}"
 		end
 		
 		{
 			:cmd  => cmd,
-			:args => lambda { args.map { |a| self.expand(a) } },
+			:args => lambda { args.map { |a| '"'+self.expand(a)+'"' } },
 			:exec => lambda { action.send(cmd_real, *(args.map { |a| self.expand(a) })) },
-			:text => text
+			:text => text,
+			:file => file
 		}
+	end
+	
+	# Parses the specified text into a test action array.
+	#
+	# See #parse_line for more details.
+	#
+	# For example:
+	#     ctx.parse_file('file')
+	#     # => [ { :cmd => 'echo', ... } ]
+	#
+	def parse_file(file)
+		File.open(file).each_line.each_with_index.map do |text,line|
+			text = text.sub(/\r?\n$/, '')
+			return nil if text =~ /^\s*(#|$)/
+			parse_line(text, file, line)
+		end
+		.select { |item| item != nil }
 	end
 	
 	# Parses a line of action text into an array. The input +line+ should be a
@@ -199,7 +218,18 @@ class Context
 	#     # => ' ["echo", "Hello World!"]
 	#
 	def self.parse_args(line)
-		CSV.parse_line(line, { :skip_blanks => true, :col_sep => ' ' })
+		# col_sep must be a regex because String.split has a special case for
+		# a single space char (' ') that produced unexpected results (i.e.
+		# if line is '"a      b"' the resulting array contains ["a b"]).
+		#
+		# ...but... 
+		#
+		# CSV expects col_sep to be a string so we need to work some dark magic
+		# here. Basically we proxy the StringIO received by CSV to returns
+		# strings for which the split method does not fold the whitespaces.
+		#
+		return [] if line.strip == ''
+		CSV.new(StringIOProxy.new(line), { :col_sep => ' ' }).shift
 	end
 	
 	# Executes the +block+ inside a rescue block applying standard criteria of
@@ -213,19 +243,25 @@ class Context
 	# If the +break_into_debug+ argument is +true+ and the +:debug+ option is
 	# set, the handler will break into the debug console instead of exiting.
 	#
+	# If the +exit_on_error+ argument is +false+ the handler will not exit
+	# after printing the error message.
+	#
 	# For example:
 	#     ctx = Context.new(Logger.new(), { :debug => true })
 	#     ctx.handle_errors(true) { raise 'break into debug now!' }
 	#     # => this breaks into the debug console
 	#
-	def handle_errors(break_into_debug = false)
+	def handle_errors(break_into_debug = false, exit_on_error = true)
 		yield
 	rescue StandardError => e
 		puts e.message
-		puts e.backtrace if @options[:verbose]
+		if @options[:verbose]
+			p e
+			puts e.backtrace 
+		end
 		if break_into_debug and @options[:debug]
 			debug
-		else
+		elsif exit_on_error
 			exit
 		end
 	end
@@ -329,4 +365,35 @@ private
 	def self._action_methods
 		Action.public_instance_methods(false).map { |a| a.to_s }
 	end
+
+	# ======================================================================= #
+	# Hacks required to overcome the String#split(' ') behavior of folding the
+	# space characters, coupled with CSV not supporting a regex as :col_sep.
+	
+	# Same as a common String except that split(' ') behaves as split(/ /).
+	class StringProxy # :nodoc:
+		def initialize(s)
+			@s = s
+		end
+		
+		def method_missing(method, *args, &block)
+			args[0] = / / if method == :split and args.size > 0 and args[0] == ' '
+			ret = @s.send(method, *args, &block)
+		end
+	end
+	
+	# Same as a common StringIO except that get(sep) returns a StringProxy
+	# instead of a regular string.
+	class StringIOProxy # :nodoc:
+		def initialize(s)
+			@s = StringIO.new(s)
+		end
+		
+		def method_missing(method, *args, &block)
+			ret = @s.send(method, *args, &block)
+			return ret unless method == :gets and args.size == 1
+			StringProxy.new(ret)
+		end
+	end
+	# ======================================================================= #
 end

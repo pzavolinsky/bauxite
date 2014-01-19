@@ -27,15 +27,12 @@ class Selector
 		delimiter = arg[0]
 		items = arg[1..-1].split(delimiter, 2)
 		frame = find(items[0])
-		_frame_scope frame do
+		
+		begin
+			@ctx.driver.switch_to.frame frame
 			find(items[1], &block)
+		ensure
+			@ctx.driver.switch_to.default_content
 		end
-	end
-private
-	def _frame_scope(frame)
-		@ctx.driver.switch_to.frame frame
-		yield
-	ensure
-		@ctx.driver.switch_to.default_content
 	end
 end

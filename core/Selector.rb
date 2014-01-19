@@ -111,6 +111,6 @@ protected
 	
 private
 	def _find_timeout
-		@ctx.variables['selector_timeout'].to_i
+		@ctx.variables['__TIMEOUT__'].to_i
 	end
 end

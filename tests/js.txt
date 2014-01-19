@@ -1,0 +1,6 @@
+open file:///home/nemo/src/lab/selenium-ruby/test1.html
+set title "test title"
+js "document.title = '${title}'"
+js "return document.title" current_title
+echo "Title is: ${current_title}"
+assertv "^${title}$" "${current_title}"

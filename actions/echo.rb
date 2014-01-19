@@ -5,5 +5,6 @@ class Action
 	#
 	# :category: Action Methods
 	def echo(text)
+		true
 	end
 end

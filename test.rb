@@ -40,20 +40,14 @@ ctx = Context.new(Logger.new, options)
 actions = ctx.handle_errors do
 	ARGV.map do |file|
 		ctx.logger.log_cmd('load', [file]) do
-			File.open(file).each_line.each_with_index.map do |text,line|
-				{ :file => file, :line => line, :text => text.sub(/\r?\n$/, '') }
-			end
+			ctx.parse_file(file)
 		end
 	end
 	.flatten
-	.select { |item| not (item[:text] =~ /^\s*(#|$)/) }
-	.map do |item|
-		ctx.parse_line(item[:text], item[:file], item[:line])
-	end
 end
 
 if actions.size == 0
-	actions = [ctx.parse_line('break')]
+	actions = [ctx.parse_line('debug')]
 end
 
 ctx.start(options[:provider].to_sym, actions)
