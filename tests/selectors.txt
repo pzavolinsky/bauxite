@@ -1,8 +1,7 @@
-open "file://${__DIR__}/selectors/selectors.html"
+open "file://${__DIR__}/selectors/page.html"
 write by_id hello
 assert "css=.parent input" hello
 assert "attr=by_attr:attr_value" hello
 assert "class=by_class" hello
 assert "tag_name=input" hello 
 
- 

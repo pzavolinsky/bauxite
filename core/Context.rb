@@ -225,7 +225,7 @@ class Context
 	#     # => [ { :cmd => 'echo', ... } ]
 	#
 	def parse_file(file)
-		io = (file == 'stdin') ? $stdin : File.open(file) 
+		io = (file == 'stdin') ? $stdin : File.open(file)
 		io.each_line.each_with_index.map do |text,line|
 			text = text.sub(/\r?\n$/, '')
 			next nil if text =~ /^\s*(#|$)/
@@ -258,7 +258,9 @@ class Context
 		# strings for which the split method does not fold the whitespaces.
 		#
 		return [] if line.strip == ''
-		CSV.new(StringIOProxy.new(line), { :col_sep => ' ' }).shift
+		CSV.new(StringIOProxy.new(line), { :col_sep => ' ' })
+		.shift
+		.select { |a| a != nil }
 	end
 	
 	# Executes the +block+ inside a rescue block applying standard criteria of
@@ -431,14 +433,14 @@ private
 	# Hacks required to overcome the String#split(' ') behavior of folding the
 	# space characters, coupled with CSV not supporting a regex as :col_sep.
 	
-	# Same as a common String except that split(' ') behaves as split(/ /).
+	# Same as a common String except that split(' ') behaves as split(/\s/).
 	class StringProxy # :nodoc:
 		def initialize(s)
 			@s = s
 		end
 		
 		def method_missing(method, *args, &block)
-			args[0] = / / if method == :split and args.size > 0 and args[0] == ' '
+			args[0] = /\s/ if method == :split and args.size > 0 and args[0] == ' '
 			ret = @s.send(method, *args, &block)
 		end
 	end

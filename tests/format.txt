@@ -1,0 +1,17 @@
+open 			 		 	 		 "file://${__DIR__}/format/page.html"			
+
+#   action      arg1           arg2
+    write       by_id          hello
+    echo	  	"hello world!"
+	assert	    by_id 		   hello			
+
+	
+	
+
+#
+
+
+			# indented comment
+			
+set       my_var "stuff    with   whitespace	and	tabs embedded			"
+assertv   "^stuff    with   whitespace	and	tabs embedded			$" "${my_var}"

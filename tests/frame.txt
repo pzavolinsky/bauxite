@@ -1,4 +1,4 @@
-open "file://${__DIR__}/frame/main_frame.html"
+open "file://${__DIR__}/frame/page.html"
 write "frame=|child|search_text" "World"
 assert "frame=|child|label" "Hello"
 assert "frame=|child|css=.input_box" "World"
