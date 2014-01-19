@@ -1,0 +1,6 @@
+open "file://${__DIR__}/main_frame.html"
+write "frame=|child|search_text" "World"
+assert "frame=|child|label" "Hello"
+assert "frame=|child|css=.input_box" "World"
+assert "frame=|child|frame=|grandchild|label" "Hello boy!"
+

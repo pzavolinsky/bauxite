@@ -21,18 +21,22 @@ class Action
 			return nil unless File.exists? file
 		end
 		
-		var_hash = vars.inject({'__FILE__' => file}) do |h,v|
+		var_hash = vars.inject({}) do |h,v|
 			data = v.split('=', 2)
 			h[data[0]] = data[1]
 			h
 		end
 		
-		actions = @ctx.parse_file file
+		actions = @ctx.parse_file(file)
 		
 		lambda do
+			ret_vars = []
 			@ctx.with_vars var_hash do
 				actions.each { |a| @ctx.exec_action(a) }
+				rets = @ctx.variables['__RETURN__']
+				ret_vars = @ctx.variables.select { |k,v| rets.include? k }
 			end
+			@ctx.variables.merge!(ret_vars)
 		end
 	end
 end

@@ -9,3 +9,5 @@ assertv "child.txt$" "${__FILE__}"
 assertv "^this shouldn't change$" "${other}"
 assertv "^overriden$" "${var}"
 assertv "^this is local$" "${child_only}"
+set retval "child"
+return retval

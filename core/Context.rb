@@ -18,9 +18,10 @@ class Context
 	attr_accessor :variables
 	
 	# Constructs a new test context instance.
-	def initialize(logger, options)
-		@logger  = logger
+	def initialize(options)
 		@options = options
+		@logger  = options[:logger] || Logger.new
+		@driver_name = (options[:driver] || :firefox).to_sym
 		@variables = {
 			'__TIMEOUT__' => options[:timeout].to_i
 		}
@@ -36,14 +37,12 @@ class Context
 	#         'click "name=sa"',
 	#         'break'
 	#     ]
-	#     ctx.start(:firefox, 
-	#         lines.map { |l| ctx.parse_line(l) }
-	#     )
+	#     ctx.start(lines.map { |l| ctx.parse_line(l) })
 	#     # => navigates to www.ruby-lang.org, types ljust in the search box
 	#     #    and clicks the "Search" button.
 	#
-	def start(driver_name, actions = [])
-		@driver = Selenium::WebDriver.for driver_name
+	def start(actions = [])
+		@driver = Selenium::WebDriver.for @driver_name
 		return unless actions.size > 0
 		begin
 			actions.each do |action|
@@ -52,6 +51,17 @@ class Context
 		ensure
 			stop
 		end
+	end
+	
+	# Stops the test engine and starts a new engine with the same provider.
+	#
+	# For example:
+	#     ctx.reset_driver
+	#     => closes the browser and opens a new one
+	#
+	def reset_driver
+		stop
+		@driver = Selenium::WebDriver.for @driver_name
 	end
 	
 	# Stops the test engine.
@@ -141,9 +151,12 @@ class Context
 	#
 	def exec_action(action)
 		ret = handle_errors(true) do
+			file = action[:file]
+			@variables['__FILE__'] = file
+			@variables['__DIR__'] = File.absolute_path((File.exists? file) ? File.dirname(file) : Dir.pwd)
+			
 			@logger.log_cmd(action[:cmd], action[:args].call) do
 		    	Readline::HISTORY << action[:text]
-				@variables['__FILE__'] = action[:file]
 				action[:exec].call
 			end
 		end
@@ -199,7 +212,7 @@ class Context
 	def parse_file(file)
 		File.open(file).each_line.each_with_index.map do |text,line|
 			text = text.sub(/\r?\n$/, '')
-			return nil if text =~ /^\s*(#|$)/
+			next nil if text =~ /^\s*(#|$)/
 			parse_line(text, file, line)
 		end
 		.select { |item| item != nil }
@@ -247,7 +260,7 @@ class Context
 	# after printing the error message.
 	#
 	# For example:
-	#     ctx = Context.new(Logger.new(), { :debug => true })
+	#     ctx = Context.new({ :debug => true })
 	#     ctx.handle_errors(true) { raise 'break into debug now!' }
 	#     # => this breaks into the debug console
 	#
