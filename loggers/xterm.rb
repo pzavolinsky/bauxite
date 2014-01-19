@@ -8,10 +8,15 @@ module Loggers
 	#
 	class XtermLogger < NullLogger
 		
+		# Constructs a new XTerm logger instance.
+		def initialize
+			@max_cmd_size = Context::max_action_name_size
+		end
+		
 		# Pretty prints action information and status.
 		def log_cmd(action)
 			width = TermInfo.screen_size[1]
-			cmd = action.cmd.downcase.ljust(7)
+			cmd = action.cmd.downcase.ljust(@max_cmd_size)
 			max_args_size = width-cmd.size-1-6-1-1
 
 			print "#{_fmt(:light_blue, cmd)} "

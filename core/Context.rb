@@ -361,6 +361,18 @@ class Context
 		Loggers.constants.map { |l| l.to_s.downcase.sub(/logger$/, '') }
 	end
 	
+	# Returns the maximum size in characters of an action name.
+	#
+	# This method is useful to pretty print lists of actions
+	#
+	# For example:
+	#     # assuming actions = [ "echo", "assert", "tryload" ]
+	#     Context::max_action_name_size
+	#     # => 7
+	def self.max_action_name_size
+		actions.inject(0) { |s,a| a.size > s ? a.size : s }
+	end
+	
 	# ======================================================================= #
 	# :section: Variable manipulation methods
 	# ======================================================================= #

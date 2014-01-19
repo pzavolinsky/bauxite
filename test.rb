@@ -36,12 +36,14 @@ OptionParser.new do |opts|
 	end
 	
 	opts.separator ""
-	opts.separator "Actions:".ljust(33)+"Selectors:"
-	actions = Context::actions.sort
+	opts.separator "Selectors:".ljust(32)+" Actions:"
+	max_action_size = Context::max_action_name_size
 	selectors = Context::selectors.sort
-	[actions.size, selectors.size].max.times.zip(actions, selectors).each do |idx,a,s|
-		a = a ? "#{a.ljust(7)} #{Context.action_args(a).join(' ')}" : ''
-		opts.separator "    #{a.ljust(33)}#{s || ''}"
+	actions = Context::actions.sort
+	[selectors.size, actions.size].max.times.zip(selectors, actions).each do |idx,s,a|
+		a = a ? "#{a.ljust(max_action_size)} #{Context.action_args(a).join(' ')}" : ''
+		s = '' unless s
+		opts.separator "    #{s.ljust(28)}     #{a}"
 	end
 	
 	opts.separator ""
