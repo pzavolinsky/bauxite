@@ -62,7 +62,7 @@ class Context
 	#     #    and clicks the "Search" button.
 	#
 	def start(actions = [])
-		@driver = Selenium::WebDriver.for @driver_name
+		_load_driver
 		return unless actions.size > 0
 		begin
 			actions.each do |action|
@@ -81,7 +81,7 @@ class Context
 	#
 	def reset_driver
 		@driver.quit
-		@driver = Selenium::WebDriver.for @driver_name
+		_load_driver
 	end
 	
 	# Stops the test engine.
@@ -439,6 +439,10 @@ private
 		end
 		
 		Loggers.const_get(class_name).new
+	end
+	
+	def _load_driver
+		@driver = Selenium::WebDriver.for @driver_name
 	end
 
 	# ======================================================================= #
