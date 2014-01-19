@@ -1,3 +1,80 @@
+# Action common state and behavior.
+module ActionModule
+	# Parsed action command (i.e. action name)
+	attr_reader :cmd
+	
+	# Raw action text.
+	attr_reader :text
+	
+	# File where the action was defined.
+	attr_reader :file
+	
+	# Line in the #file where the action was defined.
+	attr_reader :line
+	
+	# Constructs a new test action instance.
+	def initialize(ctx, cmd, args, text, file, line)
+		@ctx  = ctx
+		@cmd  = cmd
+		@args = args
+		@text = text
+		@file = file
+		@line = line
+		
+		@cmd_real = (respond_to? cmd) ? cmd : (cmd+'_action')
+		
+		unless respond_to? @cmd_real and Context::actions.include? @cmd
+			raise "#{file} (line #{line+1}): Unknown command #{cmd}."
+		end
+	end
+	
+	# Returns the action arguments after applying variable expansion.
+	#
+	# See Context#expand.
+	#
+	# If +quote+ is +true+, the arguments are surrounded by quote
+	# characters (") and every quote inside an argument is doubled.
+	#
+	# For example:
+	#     # assuming 
+	#     #     action.new(ctx, cmd,
+	#     #         [ 'dude', 'say "hi"', '${myvar} ], # args
+	#     #         text, file, line)
+	#     #     ctx.variables = { 'myvar' => 'world' }
+	#     
+	#     action.args
+	#     # => [ 'dude', 'say "hi"', 'world' ]
+	#     
+	#     action.args(true)
+	#     # => [ '"dude"', '"say ""hi"""', '"world"' ]
+	#
+	def args(quote = false)
+		ret = @args.map { |a| @ctx.expand(a) }
+		ret = ret.map { |a| '"'+a.gsub('"', '""')+'"' } if quote
+		ret
+	end
+	
+	# Executes the action evaluating the arguments in the current context.
+	#
+	# Note that #execute calls #args to expand variables. This means that
+	# two calls to #execute on the same instance might yield different results.
+	#
+	# For example:
+	#     action = ctx.parse_action('echo ${message}')
+	#     
+	#     ctx.variables = { 'message' => 'hi!' }
+	#     action.execute()
+	#     # => outputs 'hi!'
+	#     
+	#     ctx.variables['message'] = 'hello world'
+	#     action.execute()
+	#     # => outputs 'hello world!' yet the instance of action is same!
+	#
+	def execute()
+		send(@cmd_real, *args)
+	end
+end
+
 # Test action class.
 #
 # Test actions are basic test operations that can be combined to create a test
@@ -92,9 +169,5 @@
 #                                   [ OK  ]
 #
 class Action
-	
-	# Constructs a new test action instance.
-	def initialize(ctx)
-		@ctx = ctx
-	end
+	include ActionModule
 end

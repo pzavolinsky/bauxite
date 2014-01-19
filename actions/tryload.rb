@@ -30,13 +30,13 @@ class Action
 		actions = @ctx.parse_file(file)
 		
 		lambda do
-			ret_vars = []
+			ret_vars = nil
 			@ctx.with_vars var_hash do
 				actions.each { |a| @ctx.exec_action(a) }
 				rets = @ctx.variables['__RETURN__']
-				ret_vars = @ctx.variables.select { |k,v| rets.include? k }
+				ret_vars = @ctx.variables.select { |k,v| rets.include? k } if rets
 			end
-			@ctx.variables.merge!(ret_vars)
+			@ctx.variables.merge!(ret_vars) if ret_vars
 		end
 	end
 end

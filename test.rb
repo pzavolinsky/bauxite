@@ -4,7 +4,7 @@ require 'optparse'
 require_relative  File.join('core', 'Context.rb')
 
 options = {
-	:logger   => 'bash',
+	:logger   => 'xterm',
 	:verbose  => false,
 	:break    => false,
 	:provider => 'firefox',
@@ -54,16 +54,19 @@ files = ['stdin'] if files.size == 0 and not options[:debug]
 
 actions = ctx.handle_errors do
 	files.map do |file|
-		ctx.logger.log_cmd('load', [file]) do
-			ctx.parse_file(file)
-		end
-	end
-	.inject do |sum,a|
-		sum += [ctx.parse_line('reset')] if options[:reset]
-		sum + a
+		ctx.parse_action("load \"#{file.gsub('"', '""')}\"")
 	end
 end
 
-actions = [ctx.parse_line('debug')] if options[:debug] and not actions
+if options[:reset] and files.size > 1
+	actions = actions.map { |a| [a] }.inject do |sum,a|
+		sum += [ctx.parse_action('reset')]
+		sum + a
+	end.flatten
+end
+
+if options[:debug] and actions.size == 0
+	actions = [ctx.parse_action('debug')] 
+end
 
 ctx.start(actions)

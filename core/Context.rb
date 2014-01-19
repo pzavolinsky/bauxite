@@ -28,11 +28,20 @@ class Context
 	attr_accessor :variables
 	
 	# Constructs a new test context instance.
+	#
+	# +options+ is a hash with the following values:
+	# [:driver] selenium driver symbol (defaults to +:firefox+)
+	# [:timeout] selector timeout in seconds (defaults to +10s+)
+	# [:logger] logger implementation name without the 'Logger' suffix (defaults to 'null' for Loggers::NullLogger).
+	# [:verbose] if +true+, show verbose error information (e.g. backtraces) if an error occurs (defaults to +false+)
+	# [:debug] if +true+, break into the #debug console if an error occurs (defaults to +false+)
+	# [:wait] if +true+, call ::wait before stopping the test engine with #stop (defaults to +false+)
+	#
 	def initialize(options)
 		@options = options
 		@driver_name = (options[:driver] || :firefox).to_sym
 		@variables = {
-			'__TIMEOUT__' => options[:timeout].to_i
+			'__TIMEOUT__' => (options[:timeout] || 10).to_i
 		}
 		
 		handle_errors { @logger = _load_logger(options[:logger]) }
@@ -48,7 +57,7 @@ class Context
 	#         'click "name=sa"',
 	#         'break'
 	#     ]
-	#     ctx.start(lines.map { |l| ctx.parse_line(l) })
+	#     ctx.start(lines.map { |l| ctx.parse_action(l) })
 	#     # => navigates to www.ruby-lang.org, types ljust in the search box
 	#     #    and clicks the "Search" button.
 	#
@@ -71,7 +80,7 @@ class Context
 	#     => closes the browser and opens a new one
 	#
 	def reset_driver
-		stop
+		@driver.quit
 		@driver = Selenium::WebDriver.for @driver_name
 	end
 	
@@ -156,23 +165,23 @@ class Context
 	# ======================================================================= #
 	
 	# Executes the specified action handling errors, logging and debug history.
-	# Actions can be obtained by calling #parse_line.
+	# Actions can be obtained by calling #parse_action.
 	#
 	# For example:
-	#     action = ctx.parse_line('open "http://www.ruby-lang.org"')
+	#     action = ctx.parse_action('open "http://www.ruby-lang.org"')
 	#     ctx.exec_action action
 	#     # => navigates to www.ruby-lang.org
 	#
 	def exec_action(action)
 		ret = handle_errors(true) do
-			file = action[:file]
+			file = action.file
 			dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
 			@variables['__FILE__'] = file
 			@variables['__DIR__'] = File.absolute_path(dir)
 			
-			@logger.log_cmd(action[:cmd], action[:args].call) do
-		    	Readline::HISTORY << action[:text]
-				action[:exec].call
+			@logger.log_cmd(action) do
+		    	Readline::HISTORY << action.text
+				action.execute
 			end
 		end
 		ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
@@ -185,7 +194,7 @@ class Context
 	# expansion throught the #expand method.
 	#
 	# For example:
-	#     ctx.parse_line('echo "!"', 'test.txt' 3)
+	#     ctx.parse_action('echo "!"', 'test.txt' 3)
 	#     # => {
 	#     #        :cmd  => 'echo',
 	#     #        :args => lambda, # returns expandad action arguments
@@ -193,15 +202,9 @@ class Context
 	#     #        :text => 'echo "!"'
 	#     #    }
 	#
-	def parse_line(text, file = '<unknown>', line = 0)
-		action = Action.new(self)
+	def parse_action(text, file = '<unknown>', line = 0)
 		data = text.split(' ', 2)
 		cmd = data[0].strip.downcase
-		cmd_real = (action.respond_to? cmd) ? cmd : (cmd+'_action')
-		
-		unless action.respond_to? cmd_real
-			raise "#{file} (line #{line+1}): Unknown command #{cmd}."
-		end
 		
 		args = data[1] ? data[1].strip : ''
 		begin
@@ -210,18 +213,12 @@ class Context
 			raise "#{file} (line #{line+1}): #{e.message}"
 		end
 		
-		{
-			:cmd  => cmd,
-			:args => lambda { args.map { |a| '"'+self.expand(a)+'"' } },
-			:exec => lambda { action.send(cmd_real, *(args.map { |a| self.expand(a) })) },
-			:text => text,
-			:file => file
-		}
+		Action.new(self, cmd, args, text, file, line)
 	end
 	
 	# Parses the specified text into a test action array.
 	#
-	# See #parse_line for more details.
+	# See #parse_action for more details.
 	#
 	# For example:
 	#     ctx.parse_file('file')
@@ -232,7 +229,7 @@ class Context
 		io.each_line.each_with_index.map do |text,line|
 			text = text.sub(/\r?\n$/, '')
 			next nil if text =~ /^\s*(#|$)/
-			parse_line(text, file, line)
+			parse_action(text, file, line)
 		end
 		.select { |item| item != nil }
 	end
@@ -412,7 +409,9 @@ class Context
 	
 private
 	def self._action_methods
-		Action.public_instance_methods(false).map { |a| a.to_s }
+		(Action.public_instance_methods(false) \
+		 - ActionModule.public_instance_methods(false))
+		.map { |a| a.to_s }
 	end
 	
 	def _load_logger(log_name)

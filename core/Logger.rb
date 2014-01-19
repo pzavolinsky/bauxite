@@ -11,9 +11,8 @@ module Loggers
 	# The default logger does not provide any output logging.
 	#
 	# This default behavior can be overriden in a custom logger passed to the
-	# Context constructor. By convention, custom loggers are defined in the 
-	# 'loggers/' directory. Custom loggers replace the #log_cmd and/or the
-	# #debug_prompt methods.
+	# Context constructor (see Context::new). By convention, custom loggers are
+	# defined in the 'loggers/' directory.
 	#
 	class NullLogger
 		# Executes the given block in a logging context.
@@ -27,7 +26,7 @@ module Loggers
 		#     end
 		#     # => echoes 'Hello World!'
 		#
-		def log_cmd(cmd, args)
+		def log_cmd(action)
 			yield
 		end
 		
@@ -38,6 +37,10 @@ module Loggers
 		#     # => returns the debug prompt
 		def debug_prompt
 			'debug> '
+		end
+		
+		# Updates the progress of the current action.
+		def progress(value)
 		end
 	end
 end
