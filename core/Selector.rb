@@ -74,11 +74,11 @@ class Selector
 	def find(selector, &block)
 		data = selector.split('=', 2)
 		type = data.length == 2 ? data[0] : "default"
-		raise ArgumentError, 'Invalid selector type "find"' if type == "find"
+		raise ArgumentError, "Invalid selector type '#{type}'" unless Context::selectors.include? type
 		
 		arg  = data[-1]
-		return send(type, arg, &block) if self.respond_to? type
-		return send(type+'_selector', arg, &block) if self.respond_to? type+'_selector'
+		return send(type            , arg, &block) if Context::selectors(false).include? type
+		return send(type+'_selector', arg, &block) if Context::selectors(false).include? type+'_selector'
 		selenium_find(type, arg, &block)
 	end
 	

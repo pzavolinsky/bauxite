@@ -316,14 +316,19 @@ class Context
 
 	# Returns an array with the names of every selector available.
 	#
+	# If +include_standard_selectors+ is +true+ (default behavior) both
+	# standard and custom selector are returned, otherwise only custom 
+	# selectors are returned.
+	#
 	# For example:
 	#     Context::selectors
 	#     # => [ "class", "id", ... ]
 	#
-	def self.selectors
-		Selector.public_instance_methods(false).map { |a| a.to_s.sub(/_selector$/, '') } \
-		- [ 'find', 'default' ] \
-		+ Selenium::WebDriver::SearchContext::FINDERS.map { |k,v| k.to_s }
+	def self.selectors(include_standard_selectors = true)
+		ret = Selector.public_instance_methods(false).map { |a| a.to_s.sub(/_selector$/, '') } \
+		- [ 'find' ]
+		ret += Selenium::WebDriver::SearchContext::FINDERS.map { |k,v| k.to_s } if include_standard_selectors
+		ret
 	end
 	
 	# ======================================================================= #

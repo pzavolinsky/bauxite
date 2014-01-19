@@ -58,8 +58,6 @@ actions = ctx.handle_errors do
 	end
 end
 
-if actions.size == 0
-	actions = [ctx.parse_line('debug')]
-end
+actions = [ctx.parse_line('debug')] unless actions
 
 ctx.start(actions)
