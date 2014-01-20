@@ -16,11 +16,11 @@ if do_step? 'test'
 	end
 end
 
+doc_target = File.join(dir, 'doc')
 if do_step? 'doc'
 	puts ""
 	puts "=== Building documentation ==="
 	doc_dirs = ['core','actions','selectors','loggers'].map { |d| File.join(dir,d,'*') }.join(' ')
-	doc_target = File.join(dir, 'doc')
 	FileUtils.rm_r doc_target if Dir.exists? doc_target
 	system("rdoc -V -o #{doc_target} #{doc_dirs}")
 end

@@ -14,6 +14,14 @@ class Action
 	#
 	# :category: Action Methods
 	def tryload(file, *vars)
+		_load_file_action(file, *vars) do |f|
+			actions = @ctx.parse_file(f)
+			lambda { actions.each { |a| @ctx.exec_action(a) } }
+		end
+	end
+	
+private
+	def _load_file_action(file, *vars)
 		unless File.exists? file
 			current = @ctx.variables['__FILE__']
 			current = (File.exists? current) ? File.dirname(current) : Dir.pwd
@@ -27,12 +35,12 @@ class Action
 			h
 		end
 		
-		actions = @ctx.parse_file(file)
+		execution_lambda = yield file
 		
 		lambda do
 			ret_vars = nil
 			@ctx.with_vars var_hash do
-				actions.each { |a| @ctx.exec_action(a) }
+				execution_lambda.call
 				rets = @ctx.variables['__RETURN__']
 				ret_vars = @ctx.variables.select { |k,v| rets.include? k } if rets
 			end

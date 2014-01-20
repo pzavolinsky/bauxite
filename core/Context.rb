@@ -134,7 +134,7 @@ class Context
 	#     ctx.debug
 	#     # => this breaks into the debug console
 	def debug
-		Action.new(self).debug.call
+		parse_action('debug').execute.call
 	end
 	
 	# Returns the value of the specified +element+.
@@ -173,6 +173,8 @@ class Context
 	#     # => navigates to www.ruby-lang.org
 	#
 	def exec_action(action)
+		action = parse_action(action) if (action.is_a? String)
+		
 		ret = handle_errors(true) do
 			file = action.file
 			dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
