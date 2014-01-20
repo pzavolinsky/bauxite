@@ -1,0 +1,6 @@
+exec "date --date='2001-01-01' | cut -f 1 -d ' '" today
+assertv "^Mon$" "${today}"
+
+alias get_date exec "date --date='${1}' | cut -f 1 -d ' '" ${2}
+get_date 2001-01-02 tomorrow
+assertv "^Tue$" "${tomorrow}"

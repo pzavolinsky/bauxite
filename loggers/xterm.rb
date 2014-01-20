@@ -15,10 +15,13 @@ class RUITest::Loggers::XtermLogger < RUITest::Loggers::NullLogger
 	# Pretty prints action information and status.
 	def log_cmd(action)
 		width = TermInfo.screen_size[1]
-		cmd = action.cmd.downcase.ljust(@max_cmd_size)
+		cmd = action.cmd.downcase
+		color = (cmd == 'load') ? :light_cyan : :light_blue
+
+		cmd = cmd.ljust(@max_cmd_size)
 		max_args_size = width-cmd.size-1-6-1-1
 
-		print "#{_fmt(:light_blue, cmd)} "
+		print "#{_fmt(color, cmd)} "
 		s = action.args(true).join(' ')
 		s = s[0...max_args_size-3]+'...' if s.size > max_args_size
 		print s.ljust(max_args_size)
