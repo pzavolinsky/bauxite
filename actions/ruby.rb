@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Load the specified ruby file into an isolated variable context and
 	# execute the ruby code.
 	#

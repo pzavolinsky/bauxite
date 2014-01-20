@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Prompts the user to press ENTER before resuming execution.
 	#
 	# Note that this method provides an action named +break+ and not

@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Sets the value of the selected element to +text+.
 	#
 	# +text+ is subject to variable expansion (see Context#expand).

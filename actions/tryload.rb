@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Load the specified file into an isolated variable context and execute
 	# the actions specified. If the file does not exist, this action skips.
 	# See #load for a similar action that fails if the file does not exist.

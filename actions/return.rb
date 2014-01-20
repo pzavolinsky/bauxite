@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Returns the specified variables to the parent scope (if any).
 	#
 	# The syntax of the variable specification is:

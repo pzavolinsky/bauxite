@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Opens the specified +url+ in the browser.
 	#
 	# :category: Action Methods

@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Breaks into the debug console.
 	#
 	# In the debug console you can type action strings and test their result.

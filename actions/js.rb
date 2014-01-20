@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Executes the specified Javascript +script+, optionally storing the
 	# results the variable named +name+.
 	#

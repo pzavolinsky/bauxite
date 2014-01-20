@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Asserts that the page source matches +text+.
 	#
 	# +text+ can be a regular expression.

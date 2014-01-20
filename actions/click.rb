@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Triggers the +click+ event on the selected element.
 	#
 	# :category: Action Methods

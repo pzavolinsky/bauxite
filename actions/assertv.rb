@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Asserts that the +actual+ text matches the +expected+ text.
 	#
 	# +expected+ can be a regular expression.

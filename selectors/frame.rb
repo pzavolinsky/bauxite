@@ -1,4 +1,4 @@
-class Selector
+class RUITest::Selector
 	# Change the selector scope to the given frame and finds an element in that
 	# frame.
 	#

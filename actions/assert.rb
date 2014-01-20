@@ -1,4 +1,4 @@
-class Action
+class RUITest::Action
 	# Asserts that the value of the selected element matches +text+.
 	#
 	# +text+ can be a regular expression.
