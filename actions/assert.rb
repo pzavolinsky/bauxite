@@ -5,9 +5,13 @@ class RUITest::Action
 	#
 	# :category: Action Methods
 	def assert(selector, text)
-		@ctx.find(selector) do |e|
-			actual = @ctx.get_value(e)
-			raise Errors::AssertionError, "Assertion failed: expected '#{text}', got '#{actual}'" unless (actual =~ /#{text}/)
+		@ctx.with_timeout RUITest::Errors::AssertionError do
+			@ctx.find(selector) do |e|
+				actual = @ctx.get_value(e)
+				unless actual =~ _pattern(text)
+					raise RUITest::Errors::AssertionError, "Assertion failed: expected '#{text}', got '#{actual}'"
+				end
+			end
 		end
 	end
 end

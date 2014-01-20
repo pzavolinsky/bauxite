@@ -74,6 +74,14 @@ module RUITest
 		def execute()
 			send(@cmd_real, *args)
 		end
+	private
+		def _pattern(s)
+			if s =~ /^\/.*\/[imxo]*$/
+				eval(s)
+			else
+				/#{s}/
+			end
+		end
 	end
 
 	# Test action class.

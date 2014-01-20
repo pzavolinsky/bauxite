@@ -5,7 +5,9 @@ class RUITest::Action
 	#
 	# :category: Action Methods
 	def assertv(expected, actual)
-		raise Errors::AssertionError, "Assertion failed: '#{actual}' does not match '#{expected}'" unless (actual =~ /#{expected}/)
+		unless actual =~ _pattern(expected)
+			raise Errors::AssertionError, "Assertion failed: '#{actual}' does not match '#{expected}'" 
+		end
 		true
 	end
 end

@@ -130,7 +130,9 @@ module RUITest
 		#     # => error, cannot click .my_button (no longer in myframe scope)
 		#
 		def find(selector, &block) # yields: element
-			Selector.new(self).find(selector, &block)
+			with_timeout Selenium::WebDriver::Error::NoSuchElementError do
+				Selector.new(self).find(selector, &block)
+			end
 		end
 		
 		# Breaks into the debug console.
@@ -286,7 +288,28 @@ module RUITest
 				exit false
 			end
 		end
-		
+
+		# Executes the given block retrying for at most <tt>${__TIMEOUT__}</tt>
+		# seconds. Note that this method does not take into account the time it
+		# takes to execute the block itself.
+		#
+		# For example
+		#     ctx.with_timeout StandardError do
+		#         ctx.find ('element_with_delay') do |e|
+		#             # do something with e
+		#         end
+		#     end
+		#
+		def with_timeout(*error_types)
+			tries ||= @variables['__TIMEOUT__'].to_i*10
+			yield
+		rescue *error_types => e
+			raise if (tries -= 1).zero?
+			@logger.progress(tries/10) if (tries % 10) == 0
+			sleep(1.0/10.0)
+			retry
+		end
+
 		# Prompts the user to press ENTER before resuming execution.
 		#
 		# For example:

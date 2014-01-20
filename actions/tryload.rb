@@ -39,7 +39,11 @@ private
 			@ctx.with_vars var_hash do
 				yield file
 				rets = @ctx.variables['__RETURN__']
-				ret_vars = @ctx.variables.select { |k,v| rets.include? k } if rets
+				if rets == ['*']
+					ret_vars = @ctx.variables
+				elsif rets != nil 
+					ret_vars = @ctx.variables.select { |k,v| rets.include? k }
+				end
 			end
 			@ctx.variables.merge!(ret_vars) if ret_vars
 		end

@@ -8,6 +8,6 @@ class RUITest::Action
 	#
 	# :category: Action Methods
 	def break_action
-		lambda { Context::wait }
+		lambda { RUITest::Context::wait }
 	end
 end

@@ -50,20 +50,9 @@ module RUITest
 		#     # === end selectors/data.rb === #
 		#
 		def selenium_find(type, selector)
-			tries ||= _find_timeout*10
 			element = @ctx.driver.find_element(type, selector)
 			yield element if block_given?
 			element
-		rescue Selenium::WebDriver::Error::NoSuchElementError => e
-			raise if (tries -= 1).zero?
-			@ctx.logger.progress(tries/10) if (tries % 10) == 0
-			sleep(1.0/10.0)
-			retry
-		end
-		
-	private
-		def _find_timeout
-			@ctx.variables['__TIMEOUT__'].to_i
 		end
 	end
 
