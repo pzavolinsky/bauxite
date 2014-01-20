@@ -19,11 +19,11 @@ class Action
 	#
 	# :category: Action Methods
 	def ruby(file, *vars)
+		# _load_file_action is defined in tryload.rb
 		_load_file_action(file, *vars) do |f|
 			content = ''
 			File.open(f, 'r') { |ff| content = ff.read }
-			code = eval(content)
-			lambda { code.call(@ctx) }
+			eval(content).call(@ctx)
 		end
 	end
 end

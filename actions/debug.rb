@@ -21,7 +21,7 @@ private
 		while line = _debug_get_line
 			break if line.strip == 'exit'
 			@ctx.handle_errors(false, false) do
-				@ctx.exec_action(@ctx.parse_action(line, '<debug>', @@debug_line))
+				@ctx.exec_action(line, true, '<debug>', @@debug_line)
 			end
 			@@debug_line += 1
 		end

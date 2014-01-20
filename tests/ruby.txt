@@ -1,0 +1,2 @@
+ruby ruby/custom.rb "message=a message to ruby!"
+assertv "^response from ruby!$" "${response}"

@@ -27,6 +27,9 @@ class Context
 	# Context variables.
 	attr_accessor :variables
 	
+	# Action aliases.
+	attr_accessor :aliases
+	
 	# Constructs a new test context instance.
 	#
 	# +options+ is a hash with the following values:
@@ -43,6 +46,7 @@ class Context
 		@variables = {
 			'__TIMEOUT__' => (options[:timeout] || 10).to_i
 		}
+		@aliases = {}
 		
 		handle_errors { @logger = _load_logger(options[:logger]) }
 	end
@@ -134,7 +138,7 @@ class Context
 	#     ctx.debug
 	#     # => this breaks into the debug console
 	def debug
-		parse_action('debug').execute.call
+		exec_action('debug', false)
 	end
 	
 	# Returns the value of the specified +element+.
@@ -167,57 +171,40 @@ class Context
 	# Executes the specified action handling errors, logging and debug history.
 	# Actions can be obtained by calling #parse_action.
 	#
+	# If +log+ is +true+, log the action execution (default behavior).
+	#
 	# For example:
 	#     action = ctx.parse_action('open "http://www.ruby-lang.org"')
 	#     ctx.exec_action action
 	#     # => navigates to www.ruby-lang.org
 	#
-	def exec_action(action)
-		action = parse_action(action) if (action.is_a? String)
+	def exec_action(action, log = true)
+		if (action.is_a? String)
+			action = { :text => action, :file => '<unknown>', :line => 0 }
+		end
 		
 		ret = handle_errors(true) do
+
+			action = _load_action(action)
+
+			# Inject built-in variables
 			file = action.file
 			dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
 			@variables['__FILE__'] = file
 			@variables['__DIR__'] = File.absolute_path(dir)
 			
-			@logger.log_cmd(action) do
-		    	Readline::HISTORY << action.text
+			if log
+				@logger.log_cmd(action) do
+		    		Readline::HISTORY << action.text
+					action.execute
+				end
+			else
 				action.execute
 			end
 		end
 		ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
 	end
 
-	# Parses the specified text into a test action.
-	#
-	# The action items returned by this method can be passed to #exec_action to
-	# execute the action. The arguments and execution lambdas apply variable
-	# expansion throught the #expand method.
-	#
-	# For example:
-	#     ctx.parse_action('echo "!"', 'test.txt' 3)
-	#     # => {
-	#     #        :cmd  => 'echo',
-	#     #        :args => lambda, # returns expandad action arguments
-	#     #        :exec => lambda, # executes the action
-	#     #        :text => 'echo "!"'
-	#     #    }
-	#
-	def parse_action(text, file = '<unknown>', line = 0)
-		data = text.split(' ', 2)
-		cmd = data[0].strip.downcase
-		
-		args = data[1] ? data[1].strip : ''
-		begin
-			args = Context::parse_args(args) || []
-		rescue StandardError => e
-			raise "#{file} (line #{line+1}): #{e.message}"
-		end
-		
-		Action.new(self, cmd, args, text, file, line)
-	end
-	
 	# Parses the specified text into a test action array.
 	#
 	# See #parse_action for more details.
@@ -231,7 +218,7 @@ class Context
 		io.each_line.each_with_index.map do |text,line|
 			text = text.sub(/\r?\n$/, '')
 			next nil if text =~ /^\s*(#|$)/
-			parse_action(text, file, line)
+			exec_action({ :text => text, :file => file, :line => line })
 		end
 		.select { |item| item != nil }
 	end
@@ -445,6 +432,38 @@ private
 	
 	def _load_driver
 		@driver = Selenium::WebDriver.for @driver_name
+	end
+
+	def _load_action(action)
+		text = action[:text]
+		file = action[:file]
+		line = action[:line]
+
+		data = text.split(' ', 2)
+		cmd  = data[0].strip.downcase
+		args = data[1] ? data[1].strip : ''
+
+		begin
+			args = Context::parse_args(args) || []
+		rescue StandardError => e
+			raise "#{file} (line #{line+1}): #{e.message}"
+		end
+
+		alias_cmd = @aliases[cmd]
+		return Action.new(self, cmd, args, text, file, line) unless alias_cmd
+
+		action[:text] = args.each_with_index.inject(alias_cmd) do |ret,vi|
+			# expand ${1} to args[0], ${2} to args[1], etc.
+			ret.gsub("${#{vi[1]+1}}", vi[0])
+		end.gsub(/\$\{(\d+)\*(q)?\}/) do |match|
+			# expand ${4*} to "#{args[4]} #{args[5]} ..."
+			# expand ${4*q} to "\"#{args[4]}\" \"#{args[5]}\" ..."
+			a = args[$1..-1]
+			a = a.map { |arg| '"'+arg.gsub('"', '""')+'"' } if $2 == 'q'
+			a.join(' ')
+		end.gsub(/\$\{\d+\}/, '') # remove unexpanded ${1}, etc.
+	
+		_load_action(action)
 	end
 
 	# ======================================================================= #

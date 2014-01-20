@@ -1,0 +1,6 @@
+alias hey echo "${1}, nice to see you!"
+hey john
+
+alias set_hi set hi "hi ${1}"
+set_hi dude!
+assertv "^hi dude!$" "${hi}"

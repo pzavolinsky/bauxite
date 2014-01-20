@@ -15,8 +15,7 @@ class Action
 	# :category: Action Methods
 	def tryload(file, *vars)
 		_load_file_action(file, *vars) do |f|
-			actions = @ctx.parse_file(f)
-			lambda { actions.each { |a| @ctx.exec_action(a) } }
+			@ctx.parse_file(f)
 		end
 	end
 	
@@ -35,12 +34,10 @@ private
 			h
 		end
 		
-		execution_lambda = yield file
-		
 		lambda do
 			ret_vars = nil
 			@ctx.with_vars var_hash do
-				execution_lambda.call
+				yield file
 				rets = @ctx.variables['__RETURN__']
 				ret_vars = @ctx.variables.select { |k,v| rets.include? k } if rets
 			end

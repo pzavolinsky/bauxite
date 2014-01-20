@@ -21,7 +21,7 @@ module ActionModule
 		@file = file
 		@line = line
 		
-		@cmd_real = (respond_to? cmd) ? cmd : (cmd+'_action')
+		@cmd_real = (respond_to? cmd+'_action') ? (cmd+'_action') : cmd
 		
 		unless respond_to? @cmd_real and Context::actions.include? @cmd
 			raise "#{file} (line #{line+1}): Unknown command #{cmd}."

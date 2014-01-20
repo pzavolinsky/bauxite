@@ -11,7 +11,7 @@ end
 if do_step? 'test'
 	puts "=== Running tests ==="
 	test_files = Dir[File.join(dir,'tests', '*')].select { |f| not File.directory? f }.join(' ')
-	unless system("ruby test.rb #{test_files}")
+	unless system("ruby test.rb #{test_files} -v")
 		puts "=== Tests failed! ==="
 	end
 end

@@ -55,20 +55,24 @@ files = ARGV
 files = ['stdin'] if files.size == 0 and not options[:debug]
 
 actions = ctx.handle_errors do
-	files.map do |file|
-		ctx.parse_action("load \"#{file.gsub('"', '""')}\"")
+	files.each_with_index.map do |file,idx|
+		{
+			:text => "load \"#{file.gsub('"', '""')}\"",
+			:file => 'command-line-args',
+			:line => idx
+		}
 	end
 end
 
 if options[:reset] and files.size > 1
 	actions = actions.map { |a| [a] }.inject do |sum,a|
-		sum += [ctx.parse_action('reset')]
+		sum += ['reset']
 		sum + a
 	end.flatten
 end
 
 if options[:debug] and actions.size == 0
-	actions = [ctx.parse_action('debug')] 
+	actions = ['debug'] 
 end
 
 ctx.start(actions)
