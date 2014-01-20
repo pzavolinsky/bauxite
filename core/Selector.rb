@@ -1,54 +1,5 @@
-# Selector class.
-#
-# Selectors represent different strategies for finding elements. Selenium
-# provides a list of standard selectors (e.g. by id, by css expression, etc).
-# 
-# Additional selectors can be specified by defining custom methods in the
-# Selector class.
-#
-# Each custom selector is defined in a separate file in the 'selectors/'
-# directory.
-# The name of the file must match the name of the selector. These files should
-# avoid adding public methods other than the selector method itself.
-# Also, no +attr_accessors+ should be added.
-#
-# Selector methods can use the +ctx+ attribute to refer to the current test
-# Context. The protected method #selenium_find can also be used to locate elements
-# using standard Selenium selectors.
-#
-# Selector methods should always take a block and forward that block to a call
-# to either #find or #selenium_find.
-#
-# For example (new selector template):
-#     # === selectors/data.rb ======= #
-#     class Selector
-#         # :category: Selector Methods
-#         def data(arg, &block)
-#             # selector code goes here, for example:
-#             selenium_find(:css, "[data='#{arg}']", &block)
-#         end
-#     end
-#     # === end selectors/data.rb === #
-#
-#     Context::selectors.include? 'data' # => true
-#
-# To avoid name clashing with Ruby reserved words, the '_selector' suffix can
-# be included in the selector method name (this suffix will not be considered
-# part of the selector name).
-#
-# For example (_selector suffix):
-#     # === selectors/end.rb ======= #
-#     class Selector
-#         # :category: Selector Methods
-#         def end_selector
-#             # do something
-#         end
-#     end
-#     # === end selector/end.rb === #
-#
-#     Context::selectors.include? 'end' # => true
-#
-class Selector
+# Selector common state and behavior.
+module SelectorModule
 	
 	# Constructs a new test selector instance.
 	def initialize(ctx)
@@ -113,4 +64,58 @@ private
 	def _find_timeout
 		@ctx.variables['__TIMEOUT__'].to_i
 	end
+end
+
+# Selector class.
+#
+# Selectors represent different strategies for finding elements. Selenium
+# provides a list of standard selectors (e.g. by id, by css expression, etc).
+# 
+# Additional selectors can be specified by defining custom methods in the
+# Selector class.
+#
+# Each custom selector is defined in a separate file in the 'selectors/'
+# directory.
+# The name of the file must match the name of the selector. These files should
+# avoid adding public methods other than the selector method itself.
+# Also, no +attr_accessors+ should be added.
+#
+# Selector methods can use the +ctx+ attribute to refer to the current test
+# Context. The protected method #selenium_find can also be used to locate elements
+# using standard Selenium selectors.
+#
+# Selector methods should always take a block and forward that block to a call
+# to either #find or #selenium_find.
+#
+# For example (new selector template):
+#     # === selectors/data.rb ======= #
+#     class Selector
+#         # :category: Selector Methods
+#         def data(arg, &block)
+#             # selector code goes here, for example:
+#             selenium_find(:css, "[data='#{arg}']", &block)
+#         end
+#     end
+#     # === end selectors/data.rb === #
+#
+#     Context::selectors.include? 'data' # => true
+#
+# To avoid name clashing with Ruby reserved words, the '_selector' suffix can
+# be included in the selector method name (this suffix will not be considered
+# part of the selector name).
+#
+# For example (_selector suffix):
+#     # === selectors/end.rb ======= #
+#     class Selector
+#         # :category: Selector Methods
+#         def end_selector
+#             # do something
+#         end
+#     end
+#     # === end selector/end.rb === #
+#
+#     Context::selectors.include? 'end' # => true
+#
+class Selector
+	include SelectorModule
 end

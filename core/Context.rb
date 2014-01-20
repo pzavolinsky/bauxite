@@ -332,8 +332,7 @@ class Context
 	#     # => [ "class", "id", ... ]
 	#
 	def self.selectors(include_standard_selectors = true)
-		ret = Selector.public_instance_methods(false).map { |a| a.to_s.sub(/_selector$/, '') } \
-		- [ 'find' ]
+		ret = Selector.public_instance_methods(false).map { |a| a.to_s.sub(/_selector$/, '') }
 		if include_standard_selectors
 			ret += Selenium::WebDriver::SearchContext::FINDERS.map { |k,v| k.to_s }
 		end
