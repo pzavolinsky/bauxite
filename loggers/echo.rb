@@ -7,7 +7,7 @@ require 'terminfo'
 # Note that this logger does not include execution status information
 # (i.e. action succeeded, failed or was skipped).
 #
-class RUITest::Loggers::EchoLogger < RUITest::Loggers::NullLogger
+class Bauxite::Loggers::EchoLogger < Bauxite::Loggers::NullLogger
 	
 	# Echoes the raw action text.
 	def log_cmd(action)

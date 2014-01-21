@@ -1,4 +1,4 @@
-class RUITest::Selector
+class Bauxite::Selector
 	# Select an element by attribute value.
 	#
 	# The attribute selector syntax is:

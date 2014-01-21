@@ -1,4 +1,4 @@
-module RUITest
+module Bauxite
 	# Selector common state and behavior.
 	module SelectorModule
 		

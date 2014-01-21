@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Opens the specified +url+ in the browser.
 	#
 	# :category: Action Methods

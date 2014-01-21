@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Prompts the user to press ENTER before resuming execution.
 	#
 	# Note that this method provides an action named +break+ and not
@@ -8,6 +8,6 @@ class RUITest::Action
 	#
 	# :category: Action Methods
 	def break_action
-		lambda { RUITest::Context::wait }
+		lambda { Bauxite::Context::wait }
 	end
 end

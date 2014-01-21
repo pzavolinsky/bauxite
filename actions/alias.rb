@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Aliases +name+ to +action+ with additional arguments.
 	#
 	# In +action+ the variables <tt>${1}</tt>..<tt>${n}</tt> will be expanded

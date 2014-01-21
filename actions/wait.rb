@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Wait for the specified number of +seconds+.
 	# 
 	# :category: Action Methods

@@ -5,11 +5,11 @@ require 'terminfo'
 # This logger outputs colorized lines using xterm (VT100/2) escape
 # sequences.
 #
-class RUITest::Loggers::XtermLogger < RUITest::Loggers::NullLogger
+class Bauxite::Loggers::XtermLogger < Bauxite::Loggers::NullLogger
 	
 	# Constructs a new XTerm logger instance.
 	def initialize
-		@max_cmd_size = RUITest::Context::max_action_name_size
+		@max_cmd_size = Bauxite::Context::max_action_name_size
 	end
 	
 	# Pretty prints action information and status.

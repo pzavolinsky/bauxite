@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Sets the variable named +name+ to the +value+ specified.
 	#
 	# Both +name+ and +value+ are subject to variable expansion

@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Breaks into the debug console.
 	#
 	# In the debug console you can type action strings and test their result.
@@ -40,7 +40,7 @@ private
 		action_name = str.sub(/ .*/, '')
 		#puts "\n\nac: ==>#{str}<==\nname: ==>#{action_name}<==\n\n"
 		
-		actions = (RUITest::Context::actions + ['exit']).grep(/^#{Regexp.escape(action_name)}/)
+		actions = (Bauxite::Context::actions + ['exit']).grep(/^#{Regexp.escape(action_name)}/)
 		
 		return actions unless actions.size == 1 and actions[0] == action_name and action_name != 'exit'
 		
@@ -50,7 +50,7 @@ private
 		
 		if args != ''
 			begin
-				data = RUITest::Context::parse_args(args)
+				data = Bauxite::Context::parse_args(args)
 			rescue
 			#puts "\nhasta aca\n"
 				return []
@@ -58,7 +58,7 @@ private
 		end
 		return [] if data.size == 0
 		
-		arg_name = RUITest::Context::action_args(actions[0])[data.size - 1]
+		arg_name = Bauxite::Context::action_args(actions[0])[data.size - 1]
 		return [] if arg_name != 'selector'
 		
 		arg_value = data[-1]
@@ -68,7 +68,7 @@ private
 		data = data.join('" "')
 		data = '"'+data+'" ' if data.size > 0
 		
-		selectors = RUITest::Context::selectors.grep(/^#{Regexp.escape(arg_value)}/)
+		selectors = Bauxite::Context::selectors.grep(/^#{Regexp.escape(arg_value)}/)
 			.map { |s| "#{action_name} #{data}#{s}=" }
 	end
 end

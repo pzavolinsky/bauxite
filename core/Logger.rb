@@ -1,4 +1,4 @@
-module RUITest
+module Bauxite
 	# Test loggers module
 	# 
 	# The default Logger class and all custom loggers must be included in this

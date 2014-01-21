@@ -11,7 +11,7 @@ lambda do
 	Dir[File.join(dir, '..', 'loggers'  , '*.rb')].each { |file| require file }
 end.call
 
-module RUITest
+module Bauxite
 	# The Main test context. This class includes state and helper functions
 	# used by clients execute tests and by actions and selectors to interact
 	# with the test engine (i.e. Selenium WebDriver).

@@ -1,4 +1,4 @@
-module RUITest
+module Bauxite
 	# Action common state and behavior.
 	module ActionModule
 		# Parsed action command (i.e. action name)

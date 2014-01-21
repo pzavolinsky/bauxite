@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Asserts that the page source matches +text+.
 	#
 	# +text+ can be a regular expression.
@@ -8,7 +8,7 @@ class RUITest::Action
 		actual = @ctx.driver.page_source
 		verbose = @ctx.options[:verbose] ? "\nPage source:\n#{actual}" : ''
 		unless actual =~ _pattern(text)
-			raise AssertionError, "Assertion failed: page source does not match '#{text}'#{verbose}"
+			raise Bauxite::Errors::AssertionError, "Assertion failed: page source does not match '#{text}'#{verbose}"
 		end
 	end
 end

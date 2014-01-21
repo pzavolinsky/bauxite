@@ -31,17 +31,17 @@ OptionParser.new do |opts|
 	
 	opts.separator ""
 	opts.separator "Loggers:"
-	RUITest::Context::loggers.sort.each do |s|
+	Bauxite::Context::loggers.sort.each do |s|
 		opts.separator "    #{s}"
 	end
 	
 	opts.separator ""
 	opts.separator "Selectors:".ljust(32)+" Actions:"
-	max_action_size = RUITest::Context::max_action_name_size
-	selectors = RUITest::Context::selectors.sort
-	actions   = RUITest::Context::actions.sort
+	max_action_size = Bauxite::Context::max_action_name_size
+	selectors = Bauxite::Context::selectors.sort
+	actions   = Bauxite::Context::actions.sort
 	[selectors.size, actions.size].max.times.zip(selectors, actions).each do |idx,s,a|
-		a = a ? "#{a.ljust(max_action_size)} #{RUITest::Context.action_args(a).join(' ')}" : ''
+		a = a ? "#{a.ljust(max_action_size)} #{Bauxite::Context.action_args(a).join(' ')}" : ''
 		s = '' unless s
 		opts.separator "    #{s.ljust(28)}     #{a}"
 	end
@@ -49,7 +49,7 @@ OptionParser.new do |opts|
 	opts.separator ""
 end.parse!
 
-ctx = RUITest::Context.new(options)
+ctx = Bauxite::Context.new(options)
 
 files = ARGV
 files = ['stdin'] if files.size == 0 and not options[:debug]

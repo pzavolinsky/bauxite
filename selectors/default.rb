@@ -1,4 +1,4 @@
-class RUITest::Selector
+class Bauxite::Selector
 	# Select an element by id suffix.
 	#
 	# This is the default selector. Any selector strings that do not contain an

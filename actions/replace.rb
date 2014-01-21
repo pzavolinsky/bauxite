@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Replaces the occurrences of +pattern+ in +text+ with +replacement+ and
 	# assigns the result to the variable named +name+.
 	#

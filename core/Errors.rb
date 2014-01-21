@@ -1,4 +1,4 @@
-module RUITest
+module Bauxite
 	# Errors Module
 	module Errors
 		# Error raised when an assertion fails.

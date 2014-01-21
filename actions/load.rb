@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Load the specified file into an isolated variable context and execute
 	# the actions specified. If the file does not exist, this action fails.
 	# See #tryload for a similar action that skips if the file does not exist.

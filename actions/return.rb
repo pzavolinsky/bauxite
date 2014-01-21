@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Returns the specified variables to the parent scope (if any).
 	#
 	# If +vars+ is <tt>*</tt> every variable defined in the current scope

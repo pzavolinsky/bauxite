@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Sets the variable named +name+ to the value of the selected element.
 	#
 	# +name+ is subject to variable expansion (see Context#expand).

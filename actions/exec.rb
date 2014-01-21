@@ -1,4 +1,4 @@
-class RUITest::Action
+class Bauxite::Action
 	# Executes +command+, optionally storing the results in a variable.
 	#
 	# If the first argument of +command+ is <tt>name=...</tt> the results
