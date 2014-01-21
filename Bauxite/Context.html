@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Bauxite::Context - RDoc Documentation</title>
+
+<link href="../fonts.css" rel="stylesheet">
+<link href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/search_index.js"></script>
+<script src="../js/search.js"></script>
+<script src="../js/searcher.js"></script>
+<script src="../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    <div id="sections-section" class="nav-section">
+  <h3>Sections</h3>
+
+  <ul class="link-list" role="directory">
+    
+      <li><a href="#5Buntitled-5D"></a></li>
+    
+      <li><a href="#Advanced+Helpers">Advanced Helpers</a></li>
+    
+      <li><a href="#Metadata">Metadata</a></li>
+    
+      <li><a href="#Variable+manipulation+methods">Variable manipulation methods</a></li>
+    
+  </ul>
+</div>
+
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">Object
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-action_args">::action_args</a>
+    
+    <li ><a href="#method-c-actions">::actions</a>
+    
+    <li ><a href="#method-c-loggers">::loggers</a>
+    
+    <li ><a href="#method-c-max_action_name_size">::max_action_name_size</a>
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-c-parse_args">::parse_args</a>
+    
+    <li ><a href="#method-c-selectors">::selectors</a>
+    
+    <li ><a href="#method-c-wait">::wait</a>
+    
+    <li ><a href="#method-i-debug">#debug</a>
+    
+    <li ><a href="#method-i-exec_action">#exec_action</a>
+    
+    <li ><a href="#method-i-expand">#expand</a>
+    
+    <li ><a href="#method-i-find">#find</a>
+    
+    <li ><a href="#method-i-get_value">#get_value</a>
+    
+    <li ><a href="#method-i-handle_errors">#handle_errors</a>
+    
+    <li ><a href="#method-i-parse_file">#parse_file</a>
+    
+    <li ><a href="#method-i-reset_driver">#reset_driver</a>
+    
+    <li ><a href="#method-i-start">#start</a>
+    
+    <li ><a href="#method-i-stop">#stop</a>
+    
+    <li ><a href="#method-i-with_timeout">#with_timeout</a>
+    
+    <li ><a href="#method-i-with_vars">#with_vars</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Bauxite::Context">
+  <h1 id="class-Bauxite::Context" class="class">
+    class Bauxite::Context
+  </h1>
+
+  <section class="description">
+    
+<p>The Main test context. This class includes state and helper functions used
+by clients execute tests and by actions and selectors to interact with the
+test engine (i.e. Selenium WebDriver).</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-aliases" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">aliases</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p><a href="Action.html">Action</a> aliases.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-driver" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">driver</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Test engine driver instance (Selenium WebDriver).</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-logger" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">logger</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Logger instance.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-options" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">options</span><span
+            class="attribute-access-type">[R]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p>Test options.</p>
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-variables" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">variables</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        <p><a href="Context.html">Context</a> variables.</p>
+        
+        </div>
+      </div>
+      
+    </section>
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(options)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Constructs a new test context instance.</p>
+
+<p><code>options</code> is a hash with the following values:</p>
+<dl class="rdoc-list label-list"><dt>:driver
+<dd>
+<p>selenium driver symbol (defaults to <code>:firefox</code>)</p>
+</dd><dt>:timeout
+<dd>
+<p>selector timeout in seconds (defaults to <code>10s</code>)</p>
+</dd><dt>:logger
+<dd>
+<p>logger implementation name without the &#39;Logger&#39; suffix (defaults to
+&#39;null&#39; for <a
+href="Loggers/NullLogger.html">Loggers::NullLogger</a>).</p>
+</dd><dt>:verbose
+<dd>
+<p>if <code>true</code>, show verbose error information (e.g. backtraces) if
+an error occurs (defaults to <code>false</code>)</p>
+</dd><dt>:debug
+<dd>
+<p>if <code>true</code>, break into the <a
+href="Context.html#method-i-debug">debug</a> console if an error occurs
+(defaults to <code>false</code>)</p>
+</dd><dt>:wait
+<dd>
+<p>if <code>true</code>, call <a href="Context.html#method-c-wait">::wait</a>
+before stopping the test engine with <a
+href="Context.html#method-i-stop">stop</a> (defaults to <code>false</code>)</p>
+</dd></dl>
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
+        <span class="ruby-ivar">@options</span> = <span class="ruby-identifier">options</span>
+        <span class="ruby-ivar">@driver_name</span> = (<span class="ruby-identifier">options</span>[<span class="ruby-value">:driver</span>] <span class="ruby-operator">||</span> <span class="ruby-value">:firefox</span>).<span class="ruby-identifier">to_sym</span>
+        <span class="ruby-ivar">@variables</span> = {
+                <span class="ruby-string">&#39;__TIMEOUT__&#39;</span> =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">options</span>[<span class="ruby-value">:timeout</span>] <span class="ruby-operator">||</span> <span class="ruby-value">10</span>).<span class="ruby-identifier">to_i</span>
+        }
+        <span class="ruby-ivar">@aliases</span> = {}
+        
+        <span class="ruby-identifier">handle_errors</span> { <span class="ruby-ivar">@logger</span> = <span class="ruby-identifier">_load_logger</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:logger</span>]) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-debug" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">debug</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Breaks into the debug console.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">debug</span>
+<span class="ruby-comment"># =&gt; this breaks into the debug console</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="debug-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 143</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">debug</span>
+        <span class="ruby-identifier">exec_action</span>(<span class="ruby-string">&#39;debug&#39;</span>, <span class="ruby-keyword">false</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-find" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find</span><span
+            class="method-args">(selector) { |element| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Finds an element by <code>selector</code>.</p>
+
+<p>The element found is yielded to the given <code>block</code> (if any) and
+returned.</p>
+
+<p>Note that the recommeneded way to call this method is by passing a 
+<code>block</code>. This is because the method ensures that the element
+context is maintained for the duration of the <code>block</code> but it
+makes no guarantees after the <code>block</code> completes (the same
+applies if no <code>block</code> was given).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;css=.my_button&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">click</span> }
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;css=.my_button&#39;</span>).<span class="ruby-identifier">click</span>
+</pre>
+
+<p>For example (where using a <code>block</code> is mandatory):</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;frame=|myframe|css=.my_button&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">click</span> }
+<span class="ruby-comment"># =&gt; .my_button clicked</span>
+
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;frame=|myframe|css=.my_button&#39;</span>).<span class="ruby-identifier">click</span>
+<span class="ruby-comment"># =&gt; error, cannot click .my_button (no longer in myframe scope)</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="find-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment"># yields: element</span>
+        <span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">NoSuchElementError</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-constant">Selector</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get_value" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_value</span><span
+            class="method-args">(element)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the value of the specified <code>element</code>.</p>
+
+<p>This method takes into account the type of element and selectively returns
+the inner text or the value of the <code>value</code> attribute.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&#39;text&#39; value=&#39;Hello&#39; /&gt;</span>
+<span class="ruby-comment">#          &lt;span id=&#39;label&#39;&gt;World!&lt;/span&gt;</span>
+
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;css=input[type=text]&#39;</span>))
+<span class="ruby-comment"># =&gt; returns &#39;Hello&#39;</span>
+
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;label&#39;</span>))
+<span class="ruby-comment"># =&gt; returns &#39;World!&#39;</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="get_value-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 162</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">element</span>)
+        <span class="ruby-keyword">if</span> [<span class="ruby-string">&#39;input&#39;</span>,<span class="ruby-string">&#39;select&#39;</span>,<span class="ruby-string">&#39;textarea&#39;</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">tag_name</span>.<span class="ruby-identifier">downcase</span>
+                <span class="ruby-identifier">element</span>.<span class="ruby-identifier">attribute</span>(<span class="ruby-string">&#39;value&#39;</span>) 
+        <span class="ruby-keyword">else</span>
+                <span class="ruby-identifier">element</span>.<span class="ruby-identifier">text</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-reset_driver" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reset_driver</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Stops the test engine and starts a new engine with the same provider.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">reset_driver</span>
+=<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">closes</span> <span class="ruby-identifier">the</span> <span class="ruby-identifier">browser</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">opens</span> <span class="ruby-identifier">a</span> <span class="ruby-identifier">new</span> <span class="ruby-identifier">one</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="reset_driver-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 87</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">reset_driver</span>
+        <span class="ruby-ivar">@driver</span>.<span class="ruby-identifier">quit</span>
+        <span class="ruby-identifier">_load_driver</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-start" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">start</span><span
+            class="method-args">(actions = [])</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Starts the test engine and executes the actions specified. If no action was
+specified, returns without stopping the test engine (see <a
+href="Context.html#method-i-stop">stop</a>).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">lines</span> = [
+    <span class="ruby-string">&#39;open &quot;http://www.ruby-lang.org&quot;&#39;</span>,
+    <span class="ruby-string">&#39;write &quot;name=q&quot; &quot;ljust&quot;&#39;</span>,
+    <span class="ruby-string">&#39;click &quot;name=sa&quot;&#39;</span>,
+    <span class="ruby-string">&#39;break&#39;</span>
+]
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">lines</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">parse_action</span>(<span class="ruby-identifier">l</span>) })
+<span class="ruby-comment"># =&gt; navigates to www.ruby-lang.org, types ljust in the search box</span>
+<span class="ruby-comment">#    and clicks the &quot;Search&quot; button.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="start-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 69</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">start</span>(<span class="ruby-identifier">actions</span> = [])
+        <span class="ruby-identifier">_load_driver</span>
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actions</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+        <span class="ruby-keyword">begin</span>
+                <span class="ruby-identifier">actions</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span><span class="ruby-operator">|</span>
+                        <span class="ruby-identifier">exec_action</span>(<span class="ruby-identifier">action</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">ensure</span>
+                <span class="ruby-identifier">stop</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-stop" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">stop</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Stops the test engine.</p>
+
+<p>Calling this method at the end of the test is mandatory if <a
+href="Context.html#method-i-start">start</a> was called without
+<code>actions</code>.</p>
+
+<p>Note that the recommeneded way of executing tests is by passing a list of
+<code>actions</code> to <a href="Context.html#method-i-start">start</a>
+instead of using the <a href="Context.html#method-i-start">start</a> / <a
+href="Context.html#method-i-stop">stop</a> pattern.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">start</span>(:<span class="ruby-identifier">firefox</span>) <span class="ruby-comment"># =&gt; opens firefox</span>
+
+<span class="ruby-comment"># test stuff goes here</span>
+
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">stop</span>            <span class="ruby-comment"># =&gt; closes firefox</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="stop-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 107</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">stop</span>
+        <span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">wait</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:wait</span>]
+        <span class="ruby-ivar">@driver</span>.<span class="ruby-identifier">quit</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+
+  
+  
+  <section id="Advanced+Helpers" class="documentation-section">
+    
+    <header class="documentation-section-title">
+      <h2>
+        Advanced Helpers
+      </h2>
+      <span class="section-click-top">
+        <a href="#top">&uarr; top</a>
+      </span>
+    </header>
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-Advanced+Helpers-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-parse_args" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_args</span><span
+            class="method-args">(line)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Parses a line of action text into an array. The input <code>line</code>
+should be a space-separated list of values, surrounded by optional quotes
+(“).</p>
+
+<p>The first element in <code>line</code> will be interpreted as an action
+name. Valid action names are retuned by <a
+href="Context.html#method-c-actions">::actions</a>.</p>
+
+<p>The other elements in <code>line</code> will be interpreted as action
+arguments.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">parse_args</span>(<span class="ruby-string">&#39;echo &quot;Hello World!&quot;&#39;</span>)
+<span class="ruby-comment"># =&gt; &#39; [&quot;echo&quot;, &quot;Hello World!&quot;]</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="parse_args-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 241</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_args</span>(<span class="ruby-identifier">line</span>)
+        <span class="ruby-comment"># col_sep must be a regex because String.split has a special case for</span>
+        <span class="ruby-comment"># a single space char (&#39; &#39;) that produced unexpected results (i.e.</span>
+        <span class="ruby-comment"># if line is &#39;&quot;a      b&quot;&#39; the resulting array contains [&quot;a b&quot;]).</span>
+        <span class="ruby-comment">#</span>
+        <span class="ruby-comment"># ...but... </span>
+        <span class="ruby-comment">#</span>
+        <span class="ruby-comment"># CSV expects col_sep to be a string so we need to work some dark magic</span>
+        <span class="ruby-comment"># here. Basically we proxy the StringIO received by CSV to returns</span>
+        <span class="ruby-comment"># strings for which the split method does not fold the whitespaces.</span>
+        <span class="ruby-comment">#</span>
+        <span class="ruby-keyword">return</span> [] <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">strip</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;&#39;</span>
+        <span class="ruby-constant">CSV</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">StringIOProxy</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">line</span>), { <span class="ruby-value">:col_sep</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39; &#39;</span> })
+        .<span class="ruby-identifier">shift</span>
+        .<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-wait" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">wait</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Prompts the user to press ENTER before resuming execution.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">wait</span>
+<span class="ruby-comment"># =&gt; echoes &quot;Press ENTER to continue&quot; and waits for user input</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="wait-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 319</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">wait</span>
+        <span class="ruby-constant">Readline</span>.<span class="ruby-identifier">readline</span>(<span class="ruby-string">&quot;Press ENTER to continue\n&quot;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-Advanced+Helpers-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-exec_action" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">exec_action</span><span
+            class="method-args">(action, log = true)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes the specified action handling errors, logging and debug history.
+Actions can be obtained by calling parse_action.</p>
+
+<p>If <code>log</code> is <code>true</code>, log the action execution (default
+behavior).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">action</span> = <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">parse_action</span>(<span class="ruby-string">&#39;open &quot;http://www.ruby-lang.org&quot;&#39;</span>)
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">exec_action</span> <span class="ruby-identifier">action</span>
+<span class="ruby-comment"># =&gt; navigates to www.ruby-lang.org</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="exec_action-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 184</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">exec_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">log</span> = <span class="ruby-keyword">true</span>)
+        <span class="ruby-keyword">if</span> (<span class="ruby-identifier">action</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>)
+                <span class="ruby-identifier">action</span> = { <span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">action</span>, <span class="ruby-value">:file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;&lt;unknown&gt;&#39;</span>, <span class="ruby-value">:line</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }
+        <span class="ruby-keyword">end</span>
+        
+        <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">handle_errors</span>(<span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span>
+
+                <span class="ruby-identifier">action</span> = <span class="ruby-identifier">_load_action</span>(<span class="ruby-identifier">action</span>)
+
+                <span class="ruby-comment"># Inject built-in variables</span>
+                <span class="ruby-identifier">file</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">file</span>
+                <span class="ruby-identifier">dir</span>  = (<span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">file</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">file</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>
+                <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__FILE__&#39;</span>] = <span class="ruby-identifier">file</span>
+                <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__DIR__&#39;</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">absolute_path</span>(<span class="ruby-identifier">dir</span>)
+                
+                <span class="ruby-keyword">if</span> <span class="ruby-identifier">log</span>
+                        <span class="ruby-ivar">@logger</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>) <span class="ruby-keyword">do</span>
+                     <span class="ruby-constant">Readline</span><span class="ruby-operator">::</span><span class="ruby-constant">HISTORY</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">text</span>
+                                <span class="ruby-identifier">action</span>.<span class="ruby-identifier">execute</span>
+                        <span class="ruby-keyword">end</span>
+                <span class="ruby-keyword">else</span>
+                        <span class="ruby-identifier">action</span>.<span class="ruby-identifier">execute</span>
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span> <span class="ruby-comment"># delayed actions (after log_cmd)</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-handle_errors" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">handle_errors</span><span
+            class="method-args">(break_into_debug = false, exit_on_error = true) { || ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes the <code>block</code> inside a rescue block applying standard
+criteria of error handling.</p>
+
+<p>The default behavior is to print the exception message and exit.</p>
+
+<p>If the <code>:verbose</code> option is set, the exception backtrace will
+also be printed.</p>
+
+<p>If the <code>break_into_debug</code> argument is <code>true</code> and the
+<code>:debug</code> option is set, the handler will break into the debug
+console instead of exiting.</p>
+
+<p>If the <code>exit_on_error</code> argument is <code>false</code> the
+handler will not exit after printing the error message.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span> = <span class="ruby-constant">Context</span>.<span class="ruby-identifier">new</span>({ :<span class="ruby-identifier">debug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> })
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">handle_errors</span>(<span class="ruby-keyword">true</span>) { <span class="ruby-identifier">raise</span> <span class="ruby-string">&#39;break into debug now!&#39;</span> }
+<span class="ruby-comment"># =&gt; this breaks into the debug console</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="handle_errors-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 277</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">handle_errors</span>(<span class="ruby-identifier">break_into_debug</span> = <span class="ruby-keyword">false</span>, <span class="ruby-identifier">exit_on_error</span> = <span class="ruby-keyword">true</span>)
+        <span class="ruby-keyword">yield</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:verbose</span>]
+                <span class="ruby-identifier">p</span> <span class="ruby-identifier">e</span>
+                <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span> 
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">break_into_debug</span> <span class="ruby-keyword">and</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:debug</span>]
+                <span class="ruby-identifier">debug</span>
+        <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">exit_on_error</span>
+                <span class="ruby-identifier">exit</span> <span class="ruby-keyword">false</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-parse_file" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">parse_file</span><span
+            class="method-args">(file)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Parses the specified text into a test action array.</p>
+
+<p>See parse_action for more details.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-string">&#39;file&#39;</span>)
+<span class="ruby-comment"># =&gt; [ { :cmd =&gt; &#39;echo&#39;, ... } ]</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="parse_file-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 219</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-identifier">io</span> = (<span class="ruby-identifier">file</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;stdin&#39;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">$stdin</span> <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-identifier">io</span>.<span class="ruby-identifier">each_line</span>.<span class="ruby-identifier">each_with_index</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">text</span>,<span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">text</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/\r?\n$/</span>, <span class="ruby-string">&#39;&#39;</span>)
+                <span class="ruby-keyword">next</span> <span class="ruby-keyword">nil</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">text</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/^\s*(#|$)/</span>
+                <span class="ruby-identifier">exec_action</span>({ <span class="ruby-value">:text</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">text</span>, <span class="ruby-value">:file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>, <span class="ruby-value">:line</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">line</span> })
+        <span class="ruby-keyword">end</span>
+        .<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span> <span class="ruby-identifier">item</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-with_timeout" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">with_timeout</span><span
+            class="method-args">(*error_types) { || ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes the given block retrying for at most <code>${__TIMEOUT__}</code>
+seconds. Note that this method does not take into account the time it takes
+to execute the block itself.</p>
+
+<p>For example</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">StandardError</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span> (<span class="ruby-string">&#39;element_with_delay&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+        <span class="ruby-comment"># do something with e</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="with_timeout-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 303</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_timeout</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">error_types</span>)
+        <span class="ruby-identifier">tries</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__TIMEOUT__&#39;</span>].<span class="ruby-identifier">to_i</span><span class="ruby-operator">*</span><span class="ruby-value">10</span>
+        <span class="ruby-keyword">yield</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-operator">*</span><span class="ruby-identifier">error_types</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">tries</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">zero?</span>
+        <span class="ruby-ivar">@logger</span>.<span class="ruby-identifier">progress</span>(<span class="ruby-identifier">tries</span><span class="ruby-operator">/</span><span class="ruby-value">10</span>) <span class="ruby-keyword">if</span> (<span class="ruby-identifier">tries</span> <span class="ruby-operator">%</span> <span class="ruby-value">10</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">sleep</span>(<span class="ruby-value">1.0</span><span class="ruby-operator">/</span><span class="ruby-value">10.0</span>)
+        <span class="ruby-keyword">retry</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+
+  
+  
+  <section id="Metadata" class="documentation-section">
+    
+    <header class="documentation-section-title">
+      <h2>
+        Metadata
+      </h2>
+      <span class="section-click-top">
+        <a href="#top">&uarr; top</a>
+      </span>
+    </header>
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-Metadata-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-action_args" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">action_args</span><span
+            class="method-args">(action)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns an array with the names of the arguments of the specified action.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">action_args</span> <span class="ruby-string">&#39;assert&#39;</span>
+<span class="ruby-comment"># =&gt; [ &quot;selector&quot;, &quot;text&quot; ]</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="action_args-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 343</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">action_args</span>(<span class="ruby-identifier">action</span>)
+        <span class="ruby-identifier">action</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;_action&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">_action_methods</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">action</span>
+        <span class="ruby-constant">Action</span>.<span class="ruby-identifier">public_instance_method</span>(<span class="ruby-identifier">action</span>).<span class="ruby-identifier">parameters</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">att</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-actions" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">actions</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns an array with the names of every action available.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">actions</span>
+<span class="ruby-comment"># =&gt; [ &quot;assert&quot;, &quot;break&quot;, ... ]</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="actions-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 333</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">actions</span>
+        <span class="ruby-identifier">_action_methods</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/_action$/</span>, <span class="ruby-string">&#39;&#39;</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-loggers" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">loggers</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns an array with the names of every logger available.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">loggers</span>
+<span class="ruby-comment"># =&gt; [ &quot;null&quot;, &quot;bash&quot;, ... ]</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="loggers-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 372</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">loggers</span>
+        <span class="ruby-constant">Loggers</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/logger$/</span>, <span class="ruby-string">&#39;&#39;</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-max_action_name_size" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">max_action_name_size</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns the maximum size in characters of an action name.</p>
+
+<p>This method is useful to pretty print lists of actions</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming actions = [ &quot;echo&quot;, &quot;assert&quot;, &quot;tryload&quot; ]</span>
+<span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">max_action_name_size</span>
+<span class="ruby-comment"># =&gt; 7</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="max_action_name_size-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 384</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">max_action_name_size</span>
+        <span class="ruby-identifier">actions</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">s</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-selectors" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">selectors</span><span
+            class="method-args">(include_standard_selectors = true)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns an array with the names of every selector available.</p>
+
+<p>If <code>include_standard_selectors</code> is <code>true</code> (default
+behavior) both standard and custom selector are returned, otherwise only
+custom  selectors are returned.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">selectors</span>
+<span class="ruby-comment"># =&gt; [ &quot;class&quot;, &quot;id&quot;, ... ]</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="selectors-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 358</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">selectors</span>(<span class="ruby-identifier">include_standard_selectors</span> = <span class="ruby-keyword">true</span>)
+        <span class="ruby-identifier">ret</span> = <span class="ruby-constant">Selector</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/_selector$/</span>, <span class="ruby-string">&#39;&#39;</span>) }
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">include_standard_selectors</span>
+                <span class="ruby-identifier">ret</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">SearchContext</span><span class="ruby-operator">::</span><span class="ruby-constant">FINDERS</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span> }
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">ret</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+
+  
+  
+  <section id="Variable+manipulation+methods" class="documentation-section">
+    
+    <header class="documentation-section-title">
+      <h2>
+        Variable manipulation methods
+      </h2>
+      <span class="section-click-top">
+        <a href="#top">&uarr; top</a>
+      </span>
+    </header>
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-Variable+manipulation+methods-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-expand" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">expand</span><span
+            class="method-args">(s)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Recursively replaces occurencies of variable expansions in <code>s</code>
+with the corresponding variable value.</p>
+
+<p>The variable expansion expression format is:</p>
+
+<pre>&#39;${variable_name}&#39;</pre>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span> = { <span class="ruby-string">&#39;a&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;1&#39;</span>, <span class="ruby-string">&#39;b&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;2&#39;</span>, <span class="ruby-string">&#39;c&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;a&#39;</span> }
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">expand</span> <span class="ruby-string">&#39;${a}&#39;</span>    <span class="ruby-comment"># =&gt; &#39;1&#39;</span>
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">expand</span> <span class="ruby-string">&#39;${b}&#39;</span>    <span class="ruby-comment"># =&gt; &#39;2&#39;</span>
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">expand</span> <span class="ruby-string">&#39;${c}&#39;</span>    <span class="ruby-comment"># =&gt; &#39;a&#39;</span>
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">expand</span> <span class="ruby-string">&#39;${${c}}&#39;</span> <span class="ruby-comment"># =&gt; &#39;1&#39;</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="expand-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 405</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">expand</span>(<span class="ruby-identifier">s</span>)
+        <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">s</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">kv</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/\$\{#{kv[0]}\}/</span>, <span class="ruby-identifier">kv</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_s</span>)
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">result</span> = <span class="ruby-identifier">expand</span>(<span class="ruby-identifier">result</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">s</span>
+        <span class="ruby-identifier">result</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-with_vars" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">with_vars</span><span
+            class="method-args">(vars) { || ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Temporarily alter the value of context variables.</p>
+
+<p>This method alters the value of the variables specified in the
+<code>vars</code> hash for the duration of the given <code>block</code>.
+When the <code>block</code> completes, the original value of the context
+variables is restored.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span> = { <span class="ruby-string">&#39;a&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;1&#39;</span>, <span class="ruby-string">&#39;b&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;2&#39;</span>, <span class="ruby-identifier">c</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;a&#39;</span> }
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">with_vars</span>({ <span class="ruby-string">&#39;a&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;10&#39;</span>, <span class="ruby-identifier">d</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;20&#39;</span> }) <span class="ruby-keyword">do</span>
+   <span class="ruby-identifier">p</span> <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>
+   <span class="ruby-comment"># =&gt; {&quot;a&quot;=&gt;&quot;10&quot;, &quot;b&quot;=&gt;&quot;2&quot;, &quot;c&quot;=&gt;&quot;a&quot;, &quot;d&quot;=&gt;&quot;20&quot;}</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">p</span> <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>
+<span class="ruby-comment"># =&gt; {&quot;a&quot;=&gt;&quot;1&quot;, &quot;b&quot;=&gt;&quot;2&quot;, &quot;c&quot;=&gt;&quot;a&quot;}</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="with_vars-source">
+            <pre><span class="ruby-comment"># File core/Context.rb, line 428</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">with_vars</span>(<span class="ruby-identifier">vars</span>)
+        <span class="ruby-identifier">current</span> = <span class="ruby-ivar">@variables</span>
+        <span class="ruby-ivar">@variables</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">vars</span>)
+        <span class="ruby-keyword">yield</span>
+<span class="ruby-keyword">ensure</span>
+        <span class="ruby-ivar">@variables</span> = <span class="ruby-identifier">current</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
