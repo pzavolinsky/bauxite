@@ -301,12 +301,17 @@ module Bauxite
 		#     end
 		#
 		def with_timeout(*error_types)
-			tries ||= @variables['__TIMEOUT__'].to_i*10
+			stime = Time.new
+			timeout ||= stime + @variables['__TIMEOUT__']
 			yield
 		rescue *error_types => e
-			raise if (tries -= 1).zero?
-			@logger.progress(tries/10) if (tries % 10) == 0
-			sleep(1.0/10.0)
+			t = Time.new
+			rem = timeout - t
+			raise if rem < 0
+
+			@logger.progress(rem.round)
+
+			sleep(1.0/10.0) if (t - stime).to_i < 1
 			retry
 		end
 
@@ -455,6 +460,7 @@ module Bauxite
 		
 		def _load_driver
 			@driver = Selenium::WebDriver.for @driver_name
+			@driver.manage.timeouts.implicit_wait = 1
 		end
 
 		def _load_action(action)

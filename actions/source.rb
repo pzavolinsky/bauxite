@@ -10,5 +10,6 @@ class Bauxite::Action
 		unless actual =~ _pattern(text)
 			raise Bauxite::Errors::AssertionError, "Assertion failed: page source does not match '#{text}'#{verbose}"
 		end
+		true
 	end
 end

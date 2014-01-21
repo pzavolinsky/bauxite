@@ -11,6 +11,7 @@ class Bauxite::Action
 				unless actual =~ _pattern(text)
 					raise Bauxite::Errors::AssertionError, "Assertion failed: expected '#{text}', got '#{actual}'"
 				end
+				true
 			end
 		end
 	end

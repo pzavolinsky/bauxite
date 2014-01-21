@@ -1,0 +1,2 @@
+open "file://${__DIR__}/delay/page.html"
+assert label "done!"
