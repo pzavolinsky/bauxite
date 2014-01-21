@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Bauxite::Loggers::XtermLogger - RDoc Documentation</title>
+
+<link href="../../fonts.css" rel="stylesheet">
+<link href="../../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script src="../../js/jquery.js"></script>
+<script src="../../js/navigation.js"></script>
+<script src="../../js/search_index.js"></script>
+<script src="../../js/search.js"></script>
+<script src="../../js/searcher.js"></script>
+<script src="../../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../table_of_contents.html#pages">Pages</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="NullLogger.html">Bauxite::Loggers::NullLogger</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-debug_prompt">#debug_prompt</a>
+    
+    <li ><a href="#method-i-log_cmd">#log_cmd</a>
+    
+    <li ><a href="#method-i-progress">#progress</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Bauxite::Loggers::XtermLogger">
+  <h1 id="class-Bauxite::Loggers::XtermLogger" class="class">
+    class Bauxite::Loggers::XtermLogger
+  </h1>
+
+  <section class="description">
+    
+<p>XTerm logger.</p>
+
+<p>This logger outputs colorized lines using xterm (VT100/2) escape sequences.</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Constructs a new XTerm logger instance.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File loggers/xterm.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>
+        <span class="ruby-ivar">@max_cmd_size</span> = <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">max_action_name_size</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-debug_prompt" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">debug_prompt</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns a colorized debug prompt.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="debug_prompt-source">
+            <pre><span class="ruby-comment"># File loggers/xterm.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">debug_prompt</span>
+        <span class="ruby-identifier">_fmt</span>(<span class="ruby-value">:white</span>, <span class="ruby-string">&#39;debug&gt; &#39;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-log_cmd" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">log_cmd</span><span
+            class="method-args">(action) { || ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Pretty prints action information and status.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="log_cmd-source">
+            <pre><span class="ruby-comment"># File loggers/xterm.rb, line 16</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
+        <span class="ruby-identifier">width</span> = <span class="ruby-constant">TermInfo</span>.<span class="ruby-identifier">screen_size</span>[<span class="ruby-value">1</span>]
+        <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">downcase</span>
+        <span class="ruby-identifier">color</span> = (<span class="ruby-identifier">cmd</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;load&#39;</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:light_cyan</span> <span class="ruby-operator">:</span> <span class="ruby-value">:light_blue</span>
+
+        <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-ivar">@max_cmd_size</span>)
+        <span class="ruby-identifier">max_args_size</span> = <span class="ruby-identifier">width</span><span class="ruby-operator">-</span><span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">-</span><span class="ruby-value">1</span><span class="ruby-operator">-</span><span class="ruby-value">6</span><span class="ruby-operator">-</span><span class="ruby-value">1</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>
+
+        <span class="ruby-identifier">print</span> <span class="ruby-node">&quot;#{_fmt(color, cmd)} &quot;</span>
+        <span class="ruby-identifier">s</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">args</span>(<span class="ruby-keyword">true</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)
+        <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">max_args_size</span><span class="ruby-operator">-</span><span class="ruby-value">3</span>]<span class="ruby-operator">+</span><span class="ruby-string">&#39;...&#39;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_args_size</span>
+        <span class="ruby-identifier">print</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-identifier">max_args_size</span>)
+        <span class="ruby-identifier">_save_cursor</span>
+        <span class="ruby-identifier">color</span> = <span class="ruby-value">:light_green</span>
+        <span class="ruby-identifier">text</span>  = <span class="ruby-string">&#39;OK&#39;</span>
+        <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">ret</span>
+                <span class="ruby-identifier">color</span> = <span class="ruby-value">:yellow</span>
+                <span class="ruby-identifier">text</span>  = <span class="ruby-string">&#39;SKIP&#39;</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">_restore_cursor</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot; #{block(color, text, 5)}&quot;</span>
+        <span class="ruby-identifier">ret</span>
+<span class="ruby-keyword">rescue</span>
+        <span class="ruby-identifier">_restore_cursor</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot; #{block(:light_red, &#39;ERROR&#39;, 5)}&quot;</span>
+        <span class="ruby-identifier">raise</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-progress" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">progress</span><span
+            class="method-args">(value)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Updates action progress.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="progress-source">
+            <pre><span class="ruby-comment"># File loggers/xterm.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>)
+        <span class="ruby-identifier">_restore_cursor</span>
+        <span class="ruby-identifier">print</span> <span class="ruby-node">&quot; #{block(:light_gray, value.to_s, 5)}&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

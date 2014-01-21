@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Bauxite::Selector - RDoc Documentation</title>
+
+<link href="../fonts.css" rel="stylesheet">
+<link href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../js/search_index.js"></script>
+<script src="../js/search.js"></script>
+<script src="../js/searcher.js"></script>
+<script src="../js/darkfish.js"></script>
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    <div id="sections-section" class="nav-section">
+  <h3>Sections</h3>
+
+  <ul class="link-list" role="directory">
+    
+      <li><a href="#5Buntitled-5D"></a></li>
+    
+      <li><a href="#Selector+Methods">Selector Methods</a></li>
+    
+  </ul>
+</div>
+
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">Object
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-attr">#attr</a>
+    
+    <li ><a href="#method-i-default">#default</a>
+    
+    <li ><a href="#method-i-frame">#frame</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Bauxite::Selector">
+  <h1 id="class-Bauxite::Selector" class="class">
+    class Bauxite::Selector
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+  </section>
+
+  
+  
+  <section id="Selector+Methods" class="documentation-section">
+    
+    <header class="documentation-section-title">
+      <h2>
+        Selector Methods
+      </h2>
+      <span class="section-click-top">
+        <a href="#top">&uarr; top</a>
+      </span>
+    </header>
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-Selector+Methods-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-attr" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">attr</span><span
+            class="method-args">(arg, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Select an element by attribute value.</p>
+
+<p>The attribute selector syntax is:</p>
+
+<pre>attr=name:value</pre>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;div custom=&quot;true&quot;&gt;...&lt;/div&gt;</span>
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;attr=custom:true&#39;</span>)
+<span class="ruby-comment"># =&gt; matches the element above.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="attr-source">
+            <pre><span class="ruby-comment"># File selectors/attr.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">attr</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">data</span> = <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;:&#39;</span>, <span class="ruby-value">2</span>)
+        <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;[#{data[0]}=&#39;#{data[1]}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-default" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">default</span><span
+            class="method-args">(arg, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Select an element by id suffix.</p>
+
+<p>This is the default selector. Any selector strings that do not contain an
+equal sign (i.e. &#39;=&#39;) will use this selector.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;div id=&quot;strange_uuid_like_stuff_myDiv&quot;&gt;...&lt;/div&gt;</span>
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;myDiv&#39;</span>)
+<span class="ruby-comment"># =&gt; matches the element above.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="default-source">
+            <pre><span class="ruby-comment"># File selectors/default.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">default</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;[id$=&#39;#{arg.gsub(&quot;&#39;&quot;, &quot;\\&#39;&quot;)}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-frame" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">frame</span><span
+            class="method-args">(arg, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Change the selector scope to the given frame and finds an element in that
+frame.</p>
+
+<p>This is a composite selector. The frame selector syntax is:</p>
+
+<pre>frame=|frame_selector|child_selector</pre>
+
+<p>Where <code>frame_selector</code> is any selector available that matches
+the target frame, <code>child_selector</code> is any selector available
+that matches the target element inside the target frame.</p>
+
+<p>Note that the &#39;|&#39; character can be replaced with any
+single-character delimiter.</p>
+
+<p>Also note that frame selectors can be embedded to select a frame inside a
+frame. To accompilish this, <code>child_selector</code> can be a frame
+selector.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;iframe class=&quot;myframe&quot;&gt;</span>
+<span class="ruby-comment">#            &lt;div id=&quot;child&quot;&gt;...&lt;/div&gt;</span>
+<span class="ruby-comment">#          &lt;/iframe&gt;</span>
+<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;frame=|css=.myframe|child&#39;</span>)
+<span class="ruby-comment"># =&gt; matches the &#39;child&#39; element above.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="frame-source">
+            <pre><span class="ruby-comment"># File selectors/frame.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">frame</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">delimiter</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">0</span>]
+        <span class="ruby-identifier">items</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-identifier">delimiter</span>, <span class="ruby-value">2</span>)
+        <span class="ruby-identifier">frame</span> = <span class="ruby-identifier">find</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>])
+        
+        <span class="ruby-keyword">begin</span>
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">frame</span> <span class="ruby-identifier">frame</span>
+                <span class="ruby-identifier">find</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">1</span>], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-keyword">ensure</span>
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">default_content</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
