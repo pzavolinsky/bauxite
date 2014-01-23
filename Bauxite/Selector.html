@@ -76,7 +76,18 @@
   
 </div>
 
-    
+    <div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><span class="include">SelectorModule</span>
+  
+  
+  </ul>
+</div>
+
     
     <!-- Method Quickref -->
 <div id="method-list-section" class="nav-section">
@@ -103,6 +114,61 @@
 
   <section class="description">
     
+<p><a href="Selector.html">Selector</a> class.</p>
+
+<p>Selectors represent different strategies for finding elements. Selenium
+provides a list of standard selectors (e.g. by id, by css expression, etc).</p>
+
+<p>Additional selectors can be specified by defining custom methods in the <a
+href="Selector.html">Selector</a> class.</p>
+
+<p>Each custom selector is defined in a separate file in the
+&#39;selectors/&#39; directory. The name of the file must match the name of
+the selector. These files should avoid adding public methods other than the
+selector method itself. Also, no <code>attr_accessors</code> should be
+added.</p>
+
+<p><a href="Selector.html">Selector</a> methods can use the <code>ctx</code>
+attribute to refer to the current test Context. The protected method
+selenium_find can also be used to locate elements using standard Selenium
+selectors.</p>
+
+<p><a href="Selector.html">Selector</a> methods should always take a block and
+forward that block to a call to either find or selenium_find.</p>
+
+<p>For example (new selector template):</p>
+
+<pre class="ruby"><span class="ruby-comment"># === selectors/data.rb ======= #</span>
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Selector</span>
+    <span class="ruby-comment"># :category: Selector Methods</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier">data</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-comment"># selector code goes here, for example:</span>
+        <span class="ruby-identifier">selenium_find</span>(:<span class="ruby-identifier">css</span>, <span class="ruby-node">&quot;[data=&#39;#{arg}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-comment"># === end selectors/data.rb === #</span>
+
+<span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">selectors</span>.<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;data&#39;</span> <span class="ruby-comment"># =&gt; true</span>
+</pre>
+
+<p>To avoid name clashing with Ruby reserved words, the &#39;_selector&#39;
+suffix can be included in the selector method name (this suffix will not be
+considered part of the selector name).</p>
+
+<p>For example (_selector suffix):</p>
+
+<pre class="ruby"><span class="ruby-comment"># === selectors/end.rb ======= #</span>
+<span class="ruby-keyword">class</span> <span class="ruby-constant">Selector</span>
+    <span class="ruby-comment"># :category: Selector Methods</span>
+    <span class="ruby-keyword">def</span> <span class="ruby-identifier">end_selector</span>
+        <span class="ruby-comment"># do something</span>
+    <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-comment"># === end selector/end.rb === #</span>
+
+<span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">selectors</span>.<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;end&#39;</span> <span class="ruby-comment"># =&gt; true</span>
+</pre>
+
   </section>
 
   
@@ -168,8 +234,8 @@
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># assuming &lt;div custom=&quot;true&quot;&gt;...&lt;/div&gt;</span>
-<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;attr=custom:true&#39;</span>)
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;div custom=&quot;true&quot;&gt;foo&lt;/div&gt;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">attr</span>=<span class="ruby-identifier">custom</span>:<span class="ruby-keyword">true</span> <span class="ruby-string">&quot;foo&quot;</span>
 <span class="ruby-comment"># =&gt; matches the element above.</span>
 </pre>
           
@@ -212,8 +278,8 @@ equal sign (i.e. &#39;=&#39;) will use this selector.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># assuming &lt;div id=&quot;strange_uuid_like_stuff_myDiv&quot;&gt;...&lt;/div&gt;</span>
-<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;myDiv&#39;</span>)
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;div id=&quot;strange_uuid_like_stuff_myDiv&quot;&gt;foo&lt;/div&gt;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">myDiv</span> <span class="ruby-string">&quot;foo&quot;</span>
 <span class="ruby-comment"># =&gt; matches the element above.</span>
 </pre>
           
@@ -269,9 +335,9 @@ selector.</p>
 <p>For example:</p>
 
 <pre class="ruby"><span class="ruby-comment"># assuming &lt;iframe class=&quot;myframe&quot;&gt;</span>
-<span class="ruby-comment">#            &lt;div id=&quot;child&quot;&gt;...&lt;/div&gt;</span>
+<span class="ruby-comment">#            &lt;div id=&quot;child&quot;&gt;foo&lt;/div&gt;</span>
 <span class="ruby-comment">#          &lt;/iframe&gt;</span>
-<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-string">&#39;frame=|css=.myframe|child&#39;</span>)
+<span class="ruby-identifier">assert</span> <span class="ruby-string">&quot;frame=|css=.myframe|child&quot;</span> <span class="ruby-string">&quot;foo&quot;</span>
 <span class="ruby-comment"># =&gt; matches the &#39;child&#39; element above.</span>
 </pre>
           

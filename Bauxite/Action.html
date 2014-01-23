@@ -329,11 +329,12 @@ Also note that this action does not check for cyclic aliases (e.g. alias
 <code>a</code> to <code>b</code> and alias <code>b</code> to
 <code>a</code>). You sould check that yourself.</p>
 
+<p>Also note that this method provides an action named <code>alias</code> and
+not alias_action.</p>
+
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># assuming the following text is action text such as</span>
-<span class="ruby-comment"># ctx.parse_action(text_below).</span>
-<span class="ruby-keyword">alias</span> <span class="ruby-identifier">hey</span> <span class="ruby-string">&quot;echo &quot;</span><span class="ruby-string">&quot;$1, nice to see you!&quot;</span><span class="ruby-string">&quot;&quot;</span>
+<pre class="ruby"><span class="ruby-keyword">alias</span> <span class="ruby-identifier">hey</span> <span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;$1, nice to see you!&quot;</span>
 <span class="ruby-identifier">hey</span> <span class="ruby-identifier">john</span>
 <span class="ruby-comment"># =&gt; this would expand to</span>
 <span class="ruby-comment"># echo &quot;john, nice to see you!&quot;</span>
@@ -343,7 +344,7 @@ Also note that this action does not check for cyclic aliases (e.g. alias
 
           
           <div class="method-source-code" id="alias_action-source">
-            <pre><span class="ruby-comment"># File actions/alias.rb, line 24</span>
+            <pre><span class="ruby-comment"># File actions/alias.rb, line 26</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">alias_action</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">aliases</span>[<span class="ruby-identifier">name</span>] = ([<span class="ruby-identifier">action</span>] <span class="ruby-operator">+</span> (<span class="ruby-identifier">args</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-string">&#39;&quot;&#39;</span><span class="ruby-operator">+</span><span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&#39;&quot;&quot;&#39;</span>, <span class="ruby-string">&#39;&#39;</span>)<span class="ruby-operator">+</span><span class="ruby-string">&#39;&quot;&#39;</span> })).<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -373,12 +374,19 @@ Also note that this action does not check for cyclic aliases (e.g. alias
           <p>Asserts that the value of the selected element matches <code>text</code>.</p>
 
 <p><code>text</code> can be a regular expression.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&quot;text&quot; id=&quot;hello&quot; value=&quot;world&quot; /&gt;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">world</span>
+<span class="ruby-comment"># =&gt; this assertion would pass</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="assert-source">
-            <pre><span class="ruby-comment"># File actions/assert.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/assert.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">assert</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-identifier">text</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
                 <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
@@ -386,6 +394,7 @@ Also note that this action does not check for cyclic aliases (e.g. alias
                         <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">text</span>)
                                 <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: expected &#39;#{text}&#39;, got &#39;#{actual}&#39;&quot;</span>
                         <span class="ruby-keyword">end</span>
+                        <span class="ruby-keyword">true</span>
                 <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -416,15 +425,22 @@ Also note that this action does not check for cyclic aliases (e.g. alias
 text.</p>
 
 <p><code>expected</code> can be a regular expression.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming ctx.variables[&#39;myvar&#39;] = &#39;myvalue1234&#39;</span>
+<span class="ruby-identifier">assertv</span> <span class="ruby-string">&quot;^myvalue\d+$&quot;</span> <span class="ruby-string">&quot;${myvar}&quot;</span>
+<span class="ruby-comment"># =&gt; this assertion would pass</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="assertv-source">
-            <pre><span class="ruby-comment"># File actions/assertv.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/assertv.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">assertv</span>(<span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>)
         <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">expected</span>)
-                <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: &#39;#{actual}&#39; does not match &#39;#{expected}&#39;&quot;</span> 
+                <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: &#39;#{actual}&#39; does not match &#39;#{expected}&#39;&quot;</span> 
         <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
@@ -457,12 +473,18 @@ text.</p>
 break_action.</p>
 
 <p>See <a href="Context.html#method-c-wait">Bauxite::Context.wait</a>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">break</span>
+<span class="ruby-comment"># =&gt; echoes &quot;Press ENTER to continue&quot; and waits for user input</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="break_action-source">
-            <pre><span class="ruby-comment"># File actions/break.rb, line 10</span>
+            <pre><span class="ruby-comment"># File actions/break.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">break_action</span>
         <span class="ruby-identifier">lambda</span> { <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">wait</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -490,12 +512,19 @@ break_action.</p>
         <div class="method-description">
           
           <p>Triggers the <code>click</code> event on the selected element.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;button type=&quot;button&quot; id=&quot;btn&quot;&gt;click me&lt;/button&gt;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-identifier">btn</span>
+<span class="ruby-comment"># =&gt; this would click the button</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="click-source">
-            <pre><span class="ruby-comment"># File actions/click.rb, line 5</span>
+            <pre><span class="ruby-comment"># File actions/click.rb, line 10</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">click</span>(<span class="ruby-identifier">selector</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">click</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -528,12 +557,18 @@ break_action.</p>
 
 <p>The debug console supports a history of previously executed actions and
 autocomplete (pressing the <code>TAB</code> key).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">debug</span>
+<span class="ruby-comment"># =&gt; this breaks into the debug console</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="debug-source">
-            <pre><span class="ruby-comment"># File actions/debug.rb, line 10</span>
+            <pre><span class="ruby-comment"># File actions/debug.rb, line 13</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug</span>
         <span class="ruby-identifier">lambda</span> { <span class="ruby-identifier">_debug_process</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -564,12 +599,18 @@ autocomplete (pressing the <code>TAB</code> key).</p>
 
 <p><code>text</code> is subject to variable expansion (see <a
 href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;Hello World!&quot;</span>
+<span class="ruby-comment"># =&gt; this would print &quot;Hello World!&quot; in the terminal window.</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="echo-source">
-            <pre><span class="ruby-comment"># File actions/echo.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/echo.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">echo</span>(<span class="ruby-identifier">text</span>)
         <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
@@ -605,15 +646,16 @@ results of the execution will be assigned to the variable named
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">action</span>.<span class="ruby-identifier">exec</span>(<span class="ruby-string">&quot;date=date --date=&#39;2001-01-01&#39; | cut -f 1 -d &#39; &#39;&quot;</span>)
-<span class="ruby-comment"># =&gt; @ctx.variables[&#39;date&#39;] == &#39;Mon&#39;</span>
+<pre class="ruby"><span class="ruby-identifier">exec</span> <span class="ruby-string">&quot;that_day=date --date=&#39;2001-01-01&#39; | cut -f 1 -d &#39; &#39;&quot;</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${that_day}&quot;</span>
+<span class="ruby-comment"># =&gt; this would print &#39;Mon&#39;</span>
 </pre>
           
           
 
           
           <div class="method-source-code" id="exec-source">
-            <pre><span class="ruby-comment"># File actions/exec.rb, line 12</span>
+            <pre><span class="ruby-comment"># File actions/exec.rb, line 13</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">exec</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">command</span>)
         <span class="ruby-identifier">data</span> = <span class="ruby-identifier">command</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;=&#39;</span>, <span class="ruby-value">2</span>)
         <span class="ruby-identifier">name</span> = <span class="ruby-keyword">nil</span>
@@ -656,15 +698,16 @@ using the Javascript <code>return</code> statement.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">action</span>.<span class="ruby-identifier">js</span>(<span class="ruby-string">&#39;return document.title&#39;</span>, <span class="ruby-string">&#39;title_var&#39;</span>)
-<span class="ruby-comment"># =&gt; @ctx.variables[&#39;title_var&#39;] should hold the title of the page</span>
+<pre class="ruby"><span class="ruby-identifier">js</span> <span class="ruby-string">&quot;return document.title&quot;</span> <span class="ruby-identifier">title_var</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${title_var}&quot;</span>
+<span class="ruby-comment"># =&gt; this would print the title of the page</span>
 </pre>
           
           
 
           
           <div class="method-source-code" id="js-source">
-            <pre><span class="ruby-comment"># File actions/js.rb, line 13</span>
+            <pre><span class="ruby-comment"># File actions/js.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">js</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">name</span> = <span class="ruby-keyword">nil</span>)
         <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">execute_script</span>(<span class="ruby-identifier">script</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">result</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>
@@ -708,14 +751,24 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
 <p>The syntax of the variable specification is:</p>
 
 <pre>&quot;var1_name=var1_value&quot; &quot;var2_name=var2_value&quot; ...</pre>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">load</span> <span class="ruby-identifier">other_test</span>.<span class="ruby-identifier">bxt</span> <span class="ruby-string">&quot;othervar=value_just_for_other&quot;</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${othervar}&quot;</span>
+<span class="ruby-comment"># =&gt; this would load and execute other_test.bxt, injecting othervar</span>
+<span class="ruby-comment">#    into its context. After other_test.txt completes, othervar will</span>
+<span class="ruby-comment">#    be restored to its original value (or be undefined if it didn&#39;t</span>
+<span class="ruby-comment">#    exist prior to the &#39;load&#39; call).</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="load-source">
-            <pre><span class="ruby-comment"># File actions/load.rb, line 16</span>
+            <pre><span class="ruby-comment"># File actions/load.rb, line 24</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">load</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
-        <span class="ruby-identifier">tryload</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-operator">||</span> (<span class="ruby-identifier">raise</span> <span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">FileNotFoundError</span>, <span class="ruby-node">&quot;File not found: #{file}&quot;</span>)
+        <span class="ruby-identifier">tryload</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-operator">||</span> (<span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">FileNotFoundError</span>, <span class="ruby-node">&quot;File not found: #{file}&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -741,12 +794,18 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
         <div class="method-description">
           
           <p>Opens the specified <code>url</code> in the browser.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://www.ruby-lang.org&quot;</span>
+<span class="ruby-comment"># =&gt; this would open http://www.ruby-lang.org in the browser window</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="open-source">
-            <pre><span class="ruby-comment"># File actions/open.rb, line 5</span>
+            <pre><span class="ruby-comment"># File actions/open.rb, line 9</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">url</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">navigate</span>.<span class="ruby-identifier">to</span> <span class="ruby-identifier">url</span>
 <span class="ruby-keyword">end</span></pre>
@@ -775,12 +834,19 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
           
           <p>Asserts that the variables named <code>vars</code> are defined and not
 empty.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">params</span> <span class="ruby-identifier">host</span> <span class="ruby-identifier">db_name</span> <span class="ruby-identifier">username</span> <span class="ruby-identifier">password</span>
+<span class="ruby-comment"># =&gt; this would fail if any of the four variables listed above</span>
+<span class="ruby-comment">#    is not defined or is empty</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="params-source">
-            <pre><span class="ruby-comment"># File actions/params.rb, line 5</span>
+            <pre><span class="ruby-comment"># File actions/params.rb, line 10</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">params</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">missing</span> = <span class="ruby-identifier">vars</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> (<span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">v</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>) <span class="ruby-operator">==</span> <span class="ruby-string">&#39;&#39;</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>)
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">missing</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&#39;&#39;</span>
@@ -815,12 +881,20 @@ empty.</p>
           <p>Replaces the occurrences of <code>pattern</code> in <code>text</code> with
 <code>replacement</code> and assigns the result to the variable named
 <code>name</code>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">place</span> <span class="ruby-string">&quot;World&quot;</span>
+<span class="ruby-identifier">replace</span> <span class="ruby-string">&quot;Hello ${place}&quot;</span> <span class="ruby-string">&quot;World&quot;</span> <span class="ruby-string">&quot;Universe&quot;</span> <span class="ruby-identifier">greeting</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${greeting}!&quot;</span>
+<span class="ruby-comment"># =&gt; this would print &#39;Hello Universe!&#39;</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="replace-source">
-            <pre><span class="ruby-comment"># File actions/replace.rb, line 6</span>
+            <pre><span class="ruby-comment"># File actions/replace.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">replace</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">replacement</span>, <span class="ruby-identifier">name</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">pattern</span>), <span class="ruby-identifier">replacement</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -850,12 +924,19 @@ empty.</p>
           <p>Resets the test engine by closing and reopening the browser. As a side
 effect of resetting the test engine, all cookies, logins and cache items
 are destroyed.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">reset</span>
+<span class="ruby-comment"># =&gt; this would close and re-open the browser window, removing </span>
+<span class="ruby-comment">#    cookies, cache, login sessions, etc.</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="reset-source">
-            <pre><span class="ruby-comment"># File actions/reset.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/reset.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reset</span>()
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">reset_driver</span>
 <span class="ruby-keyword">end</span></pre>
@@ -890,12 +971,44 @@ current scope will be returned to the parent scope.</p>
 <p>The syntax of the variable specification is:</p>
 
 <pre>&quot;var1_name&quot; &quot;var2_name&quot; ...</pre>
+
+<p>Note that this method provides an action named <code>return</code> and not
+return_action.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">result</span> <span class="ruby-string">&quot;42&quot;</span>
+<span class="ruby-keyword">return</span> <span class="ruby-identifier">result</span>
+<span class="ruby-comment"># =&gt; this would inject the result variable (whose value is 42)</span>
+<span class="ruby-comment">#    into the calling context.</span>
+</pre>
+
+<p>Full example (see <a href="Action.html#method-i-load">load</a>, <a
+href="Action.html#method-i-write">write</a>, <a
+href="Action.html#method-i-click">click</a>, <a
+href="Action.html#method-i-store">store</a> and <a
+href="Action.html#method-i-assert">assert</a> for more details):</p>
+
+<pre class="ruby"><span class="ruby-comment"># in main.bxt</span>
+<span class="ruby-identifier">load</span> <span class="ruby-identifier">login</span>.<span class="ruby-identifier">txt</span> <span class="ruby-string">&quot;username=jdoe&quot;</span> <span class="ruby-string">&quot;password=hello world!&quot;</span>
+
+    <span class="ruby-comment"># in login.bxt</span>
+    <span class="ruby-identifier">write</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">user</span> <span class="ruby-string">&quot;${username}&quot;</span>
+    <span class="ruby-identifier">write</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">pass</span> <span class="ruby-string">&quot;${password}&quot;</span>
+    <span class="ruby-identifier">click</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">login</span>
+    <span class="ruby-identifier">store</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">loginName</span> <span class="ruby-identifier">fullName</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-identifier">fullName</span>
+
+<span class="ruby-comment"># back in main.bxt</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">greeting</span> <span class="ruby-string">&quot;Welcome ${fullName}!&quot;</span>
+<span class="ruby-comment"># =&gt; this assertion uses the variable returned from login.bxt</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="return_action-source">
-            <pre><span class="ruby-comment"># File actions/return.rb, line 11</span>
+            <pre><span class="ruby-comment"># File actions/return.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">return_action</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">rets</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__RETURN__&#39;</span>] <span class="ruby-operator">||</span> []
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__RETURN__&#39;</span>] = <span class="ruby-identifier">rets</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">vars</span>
@@ -938,24 +1051,31 @@ href="Context.html">Context</a> instance as its only argument.</p>
 
 <pre class="ruby"><span class="ruby-comment"># === my_test.rb ======= #</span>
 <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ctx</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">exec_action</span> <span class="ruby-string">&#39;echo &quot;Hello World!&quot;&#39;</span>
+    <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">exec_action</span> <span class="ruby-string">&#39;echo &quot;${message}&quot;&#39;</span>
     <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">navigate</span>.<span class="ruby-identifier">to</span> <span class="ruby-string">&#39;http://www.ruby-lang.org&#39;</span>
+    <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;new&#39;</span>] = <span class="ruby-string">&#39;from ruby!&#39;</span>
+    <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">exec_action</span> <span class="ruby-string">&#39;return new&#39;</span>
 <span class="ruby-keyword">end</span>
 <span class="ruby-comment"># === end my_test.rb === #</span>
+
+<span class="ruby-comment"># in main.bxt</span>
+<span class="ruby-identifier">ruby</span> <span class="ruby-identifier">my_test</span>.<span class="ruby-identifier">rb</span> <span class="ruby-string">&quot;message=Hello World!&quot;</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${new}&quot;</span>
+<span class="ruby-comment"># =&gt; this would print &#39;from ruby!&#39;</span>
 </pre>
           
           
 
           
           <div class="method-source-code" id="ruby-source">
-            <pre><span class="ruby-comment"># File actions/ruby.rb, line 21</span>
+            <pre><span class="ruby-comment"># File actions/ruby.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">ruby</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-comment"># _load_file_action is defined in tryload.rb</span>
         <span class="ruby-identifier">_load_file_action</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
                 <span class="ruby-identifier">content</span> = <span class="ruby-string">&#39;&#39;</span>
                 <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">f</span>, <span class="ruby-string">&#39;r&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">ff</span><span class="ruby-operator">|</span> <span class="ruby-identifier">content</span> = <span class="ruby-identifier">ff</span>.<span class="ruby-identifier">read</span> }
                 <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">content</span>).<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@ctx</span>)
-        <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">FileNotFoundError</span>, <span class="ruby-node">&quot;File not found: #{file}&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -986,12 +1106,20 @@ specified.</p>
 <p>Both <code>name</code> and <code>value</code> are subject to variable
 expansion (see <a
 href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">one</span> <span class="ruby-string">&quot;uno&quot;</span>
+<span class="ruby-identifier">set</span> <span class="ruby-identifier">two</span> <span class="ruby-string">&quot;${one} + ${one}&quot;</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${two}&quot;</span>
+<span class="ruby-comment"># =&gt; this would print &#39;uno + uno&#39;</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="set-source">
-            <pre><span class="ruby-comment"># File actions/set.rb, line 8</span>
+            <pre><span class="ruby-comment"># File actions/set.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">value</span>
 <span class="ruby-keyword">end</span></pre>
@@ -1021,17 +1149,27 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
           <p>Asserts that the page source matches <code>text</code>.</p>
 
 <p><code>text</code> can be a regular expression.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;html&gt;&lt;body&gt;Hello World!&lt;/body&gt;&lt;/html&gt;</span>
+<span class="ruby-identifier">source</span> <span class="ruby-string">&quot;Hello.*!&quot;</span>
+<span class="ruby-comment"># =&gt; this assertion would pass</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="source-source">
-            <pre><span class="ruby-comment"># File actions/source.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/source.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">source</span>(<span class="ruby-identifier">text</span>)
-        <span class="ruby-identifier">actual</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">page_source</span>
-        <span class="ruby-identifier">verbose</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>] <span class="ruby-operator">?</span> <span class="ruby-node">&quot;\nPage source:\n#{actual}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>
-        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">text</span>)
-                <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: page source does not match &#39;#{text}&#39;#{verbose}&quot;</span>
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-identifier">actual</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">page_source</span>
+                <span class="ruby-identifier">verbose</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>] <span class="ruby-operator">?</span> <span class="ruby-node">&quot;\nPage source:\n#{actual}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>
+                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">text</span>)
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: page source does not match &#39;#{text}&#39;#{verbose}&quot;</span>
+                <span class="ruby-keyword">end</span>
+                <span class="ruby-keyword">true</span>
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -1062,12 +1200,20 @@ element.</p>
 
 <p><code>name</code> is subject to variable expansion (see <a
 href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;span id=&quot;name&quot;&gt;John&lt;/span&gt;</span>
+<span class="ruby-identifier">store</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">name</span> <span class="ruby-identifier">firstName</span>
+<span class="ruby-identifier">echo</span> <span class="ruby-node">&quot;${firstName}
+# =&gt; this would print &#39;John&#39;
+</span></pre>
           
           
 
           
           <div class="method-source-code" id="store-source">
-            <pre><span class="ruby-comment"># File actions/store.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/store.rb, line 13</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">store</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-identifier">name</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">e</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -1109,12 +1255,20 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
 <p>The syntax of the variable specification is:</p>
 
 <pre>&quot;var1_name=var1_value&quot; &quot;var2_name=var2_value&quot; ...</pre>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">tryload</span> <span class="ruby-identifier">other_test</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-identifier">tryload</span> <span class="ruby-identifier">nonexistent_file</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-comment"># =&gt; this would load and execute other_test.bxt, then silently fail</span>
+<span class="ruby-comment">#    to execute nonexistent_file.bxt without failing the test.</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="tryload-source">
-            <pre><span class="ruby-comment"># File actions/tryload.rb, line 16</span>
+            <pre><span class="ruby-comment"># File actions/tryload.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tryload</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">_load_file_action</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">f</span>)
@@ -1144,12 +1298,18 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
         <div class="method-description">
           
           <p>Wait for the specified number of <code>seconds</code>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">wait</span> <span class="ruby-value">5</span>
+<span class="ruby-comment"># =&gt; this would wait for 5 seconds and then continue</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="wait-source">
-            <pre><span class="ruby-comment"># File actions/wait.rb, line 5</span>
+            <pre><span class="ruby-comment"># File actions/wait.rb, line 9</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">seconds</span>)
         <span class="ruby-identifier">seconds</span> = <span class="ruby-identifier">seconds</span>.<span class="ruby-identifier">to_i</span>
         <span class="ruby-identifier">seconds</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
@@ -1184,12 +1344,19 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
 
 <p><code>text</code> is subject to variable expansion (see <a
 href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-identifier">name</span>=<span class="ruby-identifier">username</span> <span class="ruby-string">&quot;John&quot;</span>
+<span class="ruby-comment"># =&gt; this would type the word &#39;John&#39; in the username textbox</span>
+</pre>
           
           
 
           
           <div class="method-source-code" id="write-source">
-            <pre><span class="ruby-comment"># File actions/write.rb, line 7</span>
+            <pre><span class="ruby-comment"># File actions/write.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">write</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-identifier">text</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
                 <span class="ruby-identifier">e</span>.<span class="ruby-identifier">clear</span>
