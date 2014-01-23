@@ -11,11 +11,13 @@ class Bauxite::Action
 	# Note that +action+ can be any action except +alias+. Also note that
 	# this action does not check for cyclic aliases (e.g. alias +a+ to +b+
 	# and alias +b+ to +a+). You sould check that yourself.
+	#
+	# Also note that this method provides an action named +alias+ and not
+	# alias_action.
+	#
 	# 
 	# For example:
-	#     # assuming the following text is action text such as
-	#     # ctx.parse_action(text_below).
-	#     alias hey "echo ""$1, nice to see you!"""
+	#     alias hey echo "$1, nice to see you!"
 	#     hey john
 	#     # => this would expand to
 	#     # echo "john, nice to see you!"

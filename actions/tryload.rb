@@ -12,6 +12,12 @@ class Bauxite::Action
 	# The syntax of the variable specification is:
 	#     "var1_name=var1_value" "var2_name=var2_value" ...
 	#
+	# For example:
+	#     tryload other_test.bxt
+	#     tryload nonexistent_file.bxt
+	#     # => this would load and execute other_test.bxt, then silently fail
+	#     #    to execute nonexistent_file.bxt without failing the test.
+	#
 	# :category: Action Methods
 	def tryload(file, *vars)
 		_load_file_action(file, *vars) do |f|

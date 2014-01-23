@@ -3,6 +3,11 @@ class Bauxite::Action
 	#
 	# +text+ can be a regular expression.
 	#
+	# For example:
+	#     # assuming <input type="text" id="hello" value="world" />
+	#     assert hello world
+	#     # => this assertion would pass
+	#
 	# :category: Action Methods
 	def assert(selector, text)
 		@ctx.with_timeout Bauxite::Errors::AssertionError do

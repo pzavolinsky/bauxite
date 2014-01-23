@@ -6,6 +6,10 @@ class Bauxite::Action
 	#
 	# See Context::wait.
 	#
+	# For example:
+	#     break
+	#     # => echoes "Press ENTER to continue" and waits for user input
+	#
 	# :category: Action Methods
 	def break_action
 		lambda { Bauxite::Context::wait }

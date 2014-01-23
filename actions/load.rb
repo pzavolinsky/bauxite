@@ -12,8 +12,16 @@ class Bauxite::Action
 	# The syntax of the variable specification is:
 	#     "var1_name=var1_value" "var2_name=var2_value" ...
 	#
+	# For example:
+	#     load other_test.bxt "othervar=value_just_for_other"
+	#     echo "${othervar}"
+	#     # => this would load and execute other_test.bxt, injecting othervar
+	#     #    into its context. After other_test.txt completes, othervar will
+	#     #    be restored to its original value (or be undefined if it didn't
+	#     #    exist prior to the 'load' call).
+	#
 	# :category: Action Methods
 	def load(file, *vars)
-		tryload(file, *vars) || (raise Errors::FileNotFoundError, "File not found: #{file}")
+		tryload(file, *vars) || (raise Bauxite::Errors::FileNotFoundError, "File not found: #{file}")
 	end
 end

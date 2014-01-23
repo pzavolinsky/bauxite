@@ -6,8 +6,9 @@ class Bauxite::Action
 	# the Javascript +return+ statement.
 	#
 	# For example:
-	#     action.js('return document.title', 'title_var')
-	#     # => @ctx.variables['title_var'] should hold the title of the page
+	#     js "return document.title" title_var
+	#     echo "${title_var}"
+	#     # => this would print the title of the page
 	#
 	# :category: Action Methods
 	def js(script, name = nil)

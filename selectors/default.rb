@@ -5,8 +5,8 @@ class Bauxite::Selector
 	# equal sign (i.e. '=') will use this selector.
 	#
 	# For example:
-	#     # assuming <div id="strange_uuid_like_stuff_myDiv">...</div>
-	#     ctx.find('myDiv')
+	#     # assuming <div id="strange_uuid_like_stuff_myDiv">foo</div>
+	#     assert myDiv "foo"
 	#     # => matches the element above.
 	#
 	# :category: Selector Methods

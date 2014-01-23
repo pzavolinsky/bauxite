@@ -24,13 +24,20 @@ module Bauxite
 		#     # === end selectors/example.rb === #
 		#
 		def find(selector, &block)
+			# I know I should be using Class scope operators to refer to class
+			# methods (i.e. Context::selectors), but for some reason RDoc
+			# refuses to document the Selector class (below) if any such
+			# operators appear in this method (quite strange). So for now, I'll
+			# just settle for using the old and trusty "."
+			
 			data = selector.split('=', 2)
 			type = data.length == 2 ? data[0] : "default"
-			raise ArgumentError, "Invalid selector type '#{type}'" unless Context::selectors.include? type
+			raise ArgumentError, "Invalid selector type '#{type}'" unless Context.selectors.include? type
 			
 			arg  = data[-1]
-			return send(type            , arg, &block) if Context::selectors(false).include? type
-			return send(type+'_selector', arg, &block) if Context::selectors(false).include? type+'_selector'
+			custom_selectors = Context.selectors(false)
+			return send(type            , arg, &block) if custom_selectors.include? type
+			return send(type+'_selector', arg, &block) if custom_selectors.include? type+'_selector'
 			selenium_find(type, arg, &block)
 		end
 		

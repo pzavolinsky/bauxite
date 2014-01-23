@@ -17,9 +17,9 @@ class Bauxite::Selector
 	#
 	# For example:
 	#     # assuming <iframe class="myframe">
-	#     #            <div id="child">...</div>
+	#     #            <div id="child">foo</div>
 	#     #          </iframe>
-	#     ctx.find('frame=|css=.myframe|child')
+	#     assert "frame=|css=.myframe|child" "foo"
 	#     # => matches the 'child' element above.
 	#
 	# :category: Selector Methods

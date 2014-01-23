@@ -3,6 +3,11 @@ class Bauxite::Action
 	#
 	# +text+ can be a regular expression.
 	#
+	# For example:
+	#     # assuming <html><body>Hello World!</body></html>
+	#     source "Hello.*!"
+	#     # => this assertion would pass
+	#
 	# :category: Action Methods
 	def source(text)
 		@ctx.with_timeout Bauxite::Errors::AssertionError do

@@ -22,7 +22,7 @@ if do_step? 'doc'
 	puts "=== Building documentation ==="
 	doc_dirs = ['core','actions','selectors','loggers'].map { |d| File.join(dir,d,'*') }.join(' ')
 	FileUtils.rm_r doc_target if Dir.exists? doc_target
-	system("rdoc -V -o #{doc_target} #{doc_dirs}")
+	system("rdoc -U -V -D -o #{doc_target} #{doc_dirs}")
 end
 
 if do_step?('doc-view', false) and 

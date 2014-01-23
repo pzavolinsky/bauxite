@@ -5,8 +5,9 @@ class Bauxite::Action
 	# of the execution will be assigned to the variable named +name+.
 	#
 	# For example:
-	#     action.exec("date=date --date='2001-01-01' | cut -f 1 -d ' '")
-	#     # => @ctx.variables['date'] == 'Mon'
+	#     exec "that_day=date --date='2001-01-01' | cut -f 1 -d ' '"
+	#     echo "${that_day}"
+	#     # => this would print 'Mon'
 	#
 	# :category: Action Methods
 	def exec(*command)

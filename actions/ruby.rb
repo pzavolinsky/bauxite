@@ -12,10 +12,17 @@ class Bauxite::Action
 	# For example:
 	#     # === my_test.rb ======= #
 	#     lambda do |ctx|
-	#         ctx.exec_action 'echo "Hello World!"'
+	#         ctx.exec_action 'echo "${message}"'
 	#         ctx.driver.navigate.to 'http://www.ruby-lang.org'
+	#         ctx.variables['new'] = 'from ruby!'
+	#         ctx.exec_action 'return new'
 	#     end
 	#     # === end my_test.rb === #
+	#
+	#     # in main.bxt
+	#     ruby my_test.rb "message=Hello World!"
+	#     echo "${new}"
+	#     # => this would print 'from ruby!'
 	#
 	# :category: Action Methods
 	def ruby(file, *vars)
@@ -24,6 +31,6 @@ class Bauxite::Action
 			content = ''
 			File.open(f, 'r') { |ff| content = ff.read }
 			eval(content).call(@ctx)
-		end
+		end || (raise Bauxite::Errors::FileNotFoundError, "File not found: #{file}")
 	end
 end

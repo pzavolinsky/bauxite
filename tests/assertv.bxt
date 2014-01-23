@@ -1,0 +1,2 @@
+set myvar myvalue1234
+assertv "^myvalue\d+$" "${myvar}"

@@ -5,8 +5,8 @@ class Bauxite::Selector
 	#     attr=name:value
 	#
 	# For example:
-	#     # assuming <div custom="true">...</div>
-	#     ctx.find('attr=custom:true')
+	#     # assuming <div custom="true">foo</div>
+	#     assert attr=custom:true "foo"
 	#     # => matches the element above.
 	#
 	# :category: Selector Methods

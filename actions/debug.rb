@@ -6,6 +6,9 @@ class Bauxite::Action
 	# The debug console supports a history of previously executed actions and
 	# autocomplete (pressing the +TAB+ key).
 	#
+	# For example:
+	#     debug
+	#     # => this breaks into the debug console
 	# :category: Action Methods
 	def debug
 		lambda { _debug_process }
