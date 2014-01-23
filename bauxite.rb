@@ -4,13 +4,14 @@ require 'optparse'
 require_relative  File.join('core', 'Context.rb')
 
 options = {
-	:logger   => 'xterm',
-	:verbose  => false,
-	:break    => false,
-	:provider => 'firefox',
-	:debug    => false,
-	:timeout  => 10,
-	:reset    => false
+	:logger     => 'xterm',
+	:verbose    => false,
+	:break      => false,
+	:driver     => 'firefox',
+	:debug      => false,
+	:timeout    => 10,
+	:reset      => false,
+	:driver_opt => []
 }
 
 cmd = File.basename(__FILE__)
@@ -20,14 +21,15 @@ OptionParser.new do |opts|
 	
 	opts.separator ""
 	opts.separator "Options: "
-	opts.on("-v", "--verbose", "Show verbose errors")                              { |v| options[:verbose ] = v }
-	opts.on("-l", "--logger LOGGER", "Logger type ('#{options[:logger]}')")        { |v| options[:logger  ] = v }
-	opts.on("-w", "--wait", "Wait for ENTER before exiting")                       { |v| options[:wait    ] = v }
-	opts.on("-p", "--provider", "Driver provider")                                 { |v| options[:driver  ] = v }
+	opts.on("-v", "--verbose", "Show verbose errors")                              { |v| options[:verbose   ] = v }
+	opts.on("-l", "--logger LOGGER", "Logger type ('#{options[:logger]}')")        { |v| options[:logger    ] = v }
+	opts.on("-w", "--wait", "Wait for ENTER before exiting")                       { |v| options[:wait      ] = v }
+	opts.on("-p", "--provider PROVIDER", "Driver provider")                        { |v| options[:driver    ] = v }
+	opts.on("-o", "--option OPTION", "Provider options (name=value)")              { |v| options[:driver_opt]<< v }
 	opts.on("-d", "--debug", "Break to debug on error. "+
-	                         "Start the debug console if no input files given.")   { |v| options[:debug   ] = v }
-	opts.on("-t", "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)") { |v| options[:timeout ] = v }
-	opts.on("-r", "--reset", "Reset driver between tests")                         { |v| options[:reset   ] = v }
+	                         "Start the debug console if no input files given.")   { |v| options[:debug     ] = v }
+	opts.on("-t", "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)") { |v| options[:timeout   ] = v }
+	opts.on("-r", "--reset", "Reset driver between tests")                         { |v| options[:reset     ] = v }
 	
 	opts.separator ""
 	opts.separator "Loggers:"

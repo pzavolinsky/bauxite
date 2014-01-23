@@ -44,6 +44,12 @@ module Bauxite
 		def initialize(options)
 			@options = options
 			@driver_name = (options[:driver] || :firefox).to_sym
+			@driver_opt = (options[:driver_opt] || []).inject({}) do |s,o|
+				n,v = o.split('=',2)
+				s[n.to_sym] = v
+				s
+			end
+			
 			@variables = {
 				'__TIMEOUT__' => (options[:timeout] || 10).to_i
 			}
@@ -459,7 +465,7 @@ module Bauxite
 		end
 		
 		def _load_driver
-			@driver = Selenium::WebDriver.for @driver_name
+			@driver = Selenium::WebDriver.for(@driver_name, @driver_opt)
 			@driver.manage.timeouts.implicit_wait = 1
 		end
 
