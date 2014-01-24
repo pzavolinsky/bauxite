@@ -1,0 +1,4 @@
+test test/test1.bxt
+test test/test2.bxt "broken test"
+test test/test1.bxt "final test"
+

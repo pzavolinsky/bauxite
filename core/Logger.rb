@@ -43,6 +43,15 @@ module Bauxite
 			# Updates the progress of the current action.
 			def progress(value)
 			end
+
+			# Logs the specified string.
+			#
+			# +type+, if specified, should be one of +:error+, +:warning+,
+			# +:info+ (default), +:debug+.
+			#
+			def log(s, type = :info)
+				print s
+			end
 		end
 	end
 end

@@ -16,8 +16,7 @@ class Bauxite::Loggers::XtermLogger < Bauxite::Loggers::NullLogger
 	def log_cmd(action)
 		width = TermInfo.screen_size[1]
 		cmd = action.cmd.downcase
-		color = (cmd == 'load') ? :light_cyan : :light_blue
-
+		color = _cmd_color(cmd)
 		cmd = cmd.ljust(@max_cmd_size)
 		max_args_size = width-cmd.size-1-6-1-1
 
@@ -34,11 +33,11 @@ class Bauxite::Loggers::XtermLogger < Bauxite::Loggers::NullLogger
 			text  = 'SKIP'
 		end
 		_restore_cursor
-		puts " #{block(color, text, 5)}"
+		puts " #{_block(color, text, 5)}"
 		ret
 	rescue
 		_restore_cursor
-		puts " #{block(:light_red, 'ERROR', 5)}"
+		puts " #{_block(:light_red, 'ERROR', 5)}"
 		raise
 	end
 
@@ -50,9 +49,26 @@ class Bauxite::Loggers::XtermLogger < Bauxite::Loggers::NullLogger
 	# Updates action progress.
 	def progress(value)
 		_restore_cursor
-		print " #{block(:light_gray, value.to_s, 5)}"
+		print " #{_block(:light_gray, value.to_s, 5)}"
 	end
 	
+	# Prints the specified string.
+	#
+	# See Bauxite::Loggers::NullLogger#print
+	#
+	def log(s, type = :info)
+		color = :light_gray
+		case type
+		when :error
+			color = :light_red
+		when :warning
+			color = :yellow
+		when :debug
+			color = :light_purple
+		end
+		super _fmt(color, s), type
+	end
+
 private
 	COLORS = { # :nodoc:
 		:black        => '0;30',
@@ -86,7 +102,18 @@ private
 		print "\033[u"
 	end
 
-	def block(color, text, size)
+	def _block(color, text, size)
 		"#{_fmt(:white, '[')}#{_fmt(color, text, size)}#{_fmt(:white, ']')}"
+	end
+
+	def _cmd_color(cmd)
+		case cmd
+		when 'load'
+			return :light_cyan
+		when 'test'
+			return :light_purple
+		else
+			return :light_blue
+		end
 	end
 end

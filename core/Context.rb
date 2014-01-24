@@ -31,6 +31,9 @@ module Bauxite
 		# Action aliases.
 		attr_accessor :aliases
 		
+		# Test containers.
+		attr_accessor :tests
+
 		# Constructs a new test context instance.
 		#
 		# +options+ is a hash with the following values:
@@ -54,6 +57,7 @@ module Bauxite
 				'__TIMEOUT__' => (options[:timeout] || 10).to_i
 			}
 			@aliases = {}
+			@tests = []
 			
 			handle_errors { @logger = _load_logger(options[:logger]) }
 		end
@@ -283,15 +287,19 @@ module Bauxite
 		def handle_errors(break_into_debug = false, exit_on_error = true)
 			yield
 		rescue StandardError => e
-			puts e.message
+			@logger.log "#{e.message}\n", :error
 			if @options[:verbose]
 				p e
-				puts e.backtrace 
+				puts e.backtrace
 			end
 			if break_into_debug and @options[:debug]
 				debug
 			elsif exit_on_error
-				exit false
+				if @variables['__RAISE_ERROR__']
+					raise
+				else
+					exit false
+				end
 			end
 		end
 

@@ -1,5 +1,3 @@
-require 'terminfo'
-
 # Echo logger.
 #
 # This logger outputs the raw action text for every action executed.

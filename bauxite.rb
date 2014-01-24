@@ -77,4 +77,19 @@ if options[:debug] and actions.size == 0
 	actions = ['debug'] 
 end
 
-ctx.start(actions)
+begin
+	ctx.start(actions)
+ensure
+	if ctx.tests.any?
+		puts
+		puts 'Test summary:'
+		puts '============='
+		puts 'Name'.ljust(60) + 'Time'.ljust(6) + 'Status'.ljust(7)+'Error'
+		ctx.tests.each do |t|
+			error = t[:error]
+			error = error ? error.message : ''
+			puts t[:name].ljust(60) + t[:time].round(3).to_s.ljust(6) + t[:status].ljust(7) + error
+		end
+	end
+end
+
