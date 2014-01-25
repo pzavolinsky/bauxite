@@ -143,7 +143,7 @@ names</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File loggers/composite.rb, line 10</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-ivar">@loggers</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:loggers</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;,&#39;</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
                 <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">l</span>, <span class="ruby-identifier">options</span>)
@@ -190,7 +190,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="debug_prompt-source">
-            <pre><span class="ruby-comment"># File loggers/composite.rb, line 32</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug_prompt</span>
         <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">debug_prompt</span>
 <span class="ruby-keyword">end</span></pre>
@@ -225,7 +225,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File loggers/composite.rb, line 45</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -262,7 +262,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File loggers/composite.rb, line 22</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>) { <span class="ruby-identifier">ret</span> } }
@@ -297,7 +297,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="progress-source">
-            <pre><span class="ruby-comment"># File loggers/composite.rb, line 37</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 59</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>) }
 <span class="ruby-keyword">end</span></pre>

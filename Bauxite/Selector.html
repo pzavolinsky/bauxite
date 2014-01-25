@@ -283,7 +283,7 @@ elements using XPATH expressions.</a></p>
 
           
           <div class="method-source-code" id="attr-source">
-            <pre><span class="ruby-comment"># File selectors/attr.rb, line 13</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/attr.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">attr</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">data</span> = <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;:&#39;</span>, <span class="ruby-value">2</span>)
         <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;[#{data[0]}=&#39;#{data[1]}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -327,7 +327,7 @@ equal sign (i.e. &#39;=&#39;) will use this selector.</p>
 
           
           <div class="method-source-code" id="default-source">
-            <pre><span class="ruby-comment"># File selectors/default.rb, line 13</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/default.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">default</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;[id$=&#39;#{arg.gsub(&quot;&#39;&quot;, &quot;\\&#39;&quot;)}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -385,7 +385,7 @@ selector.</p>
 
           
           <div class="method-source-code" id="frame-source">
-            <pre><span class="ruby-comment"># File selectors/frame.rb, line 26</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/frame.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">frame</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">delimiter</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">0</span>]
         <span class="ruby-identifier">items</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-identifier">delimiter</span>, <span class="ruby-value">2</span>)
