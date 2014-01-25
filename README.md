@@ -1,7 +1,7 @@
 bauxite
 =======
 
-Bauxite is a façade over Selenium intended for non-developers
+Bauxite is a faÃ§ade over Selenium intended for non-developers
 
 The idea behind this project was to create a tool that allows non-developers to write web tests in a human-readable language. Another major requirement is to be able to easily extend the test language to create functional abstractions over technical details.
 
@@ -28,6 +28,15 @@ open "http://google.com"
 write name=q "Hello WebDriver!"
 click gbqfb
 ```
+Installation
+------------
+
+In a nutshell:
+```
+gem install bauxite
+```
+
+Remember you'll also need Ruby 2.x installed and Firefox (you can use other browsers or Selenium server by specifying the `-p` switch to the `bauxite` executable).
 
 Hello World
 -----------
@@ -41,7 +50,7 @@ open "http://www.gnu.org/fun/jokes/helloworld.html"
 
 Launch a console and type:
 ```
-./bauxite.rb hello.bxt
+bauxite hello.bxt
 ```
 
 Documentation
@@ -96,31 +105,30 @@ This section presented a  brief introduction into the basic Bauxite concepts. Fo
 - [Creating new Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html)
 - [Creating new Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html)
 
+Installing Ruby
+---------------
 
-Installation
-------------
+I won't cover all the details of installing Ruby on your system (Google knows best), but the following should probably work.
 
-First of all you'll need to install Firefox, Ruby, and a few gems:
- - selenium-webdriver
- - ruby-terminfo (optional, if you want the terminal to handle more than 80 chars)
-
-In GNU/Linux, you can install [RVM](http://rvm.io/), then Ruby then the required gems:
+In GNU/Linux, you can install [RVM](http://rvm.io/), then Ruby:
 ```
 curl -sSL https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
 rvm install ruby-2.1.0
-gem install selenium-webdriver
+```
+
+In Windows, you can install Ruby 2.x with [RubyInstaller](http://rubyinstaller.org/downloads/) but you'll probably need to install a Ruby 2.x Development Kit. After everything is installed, launch the Ruby terminal (or the MSYS terminal from the DevKit).
+
+Regadless of your OS, you should be able to install Bauxite with:
+
+```
+gem install bauxite
+```
+
+Additionally, if you are using GNU/Linux, you might want to install `ruby-terminfo` to improve the terminal output(i.e. handle more than 80 chars):
+
+```
 gem install ruby-terminfo
-```
-
-In Windows, you can install Ruby 2.x with [RubyInstaller](http://rubyinstaller.org/downloads/) but you'll probably need to install a Ruby 2.x Development Kit. After everything is installed, launch the Ruby terminal (or the MSYS terminal from the DevKit) and type:
-```
-gem install selenium-webdriver
-```
-
-Then clone the repo (I'll package this as a gem eventually):
-```
-git clone https://github.com/pzavolinsky/bauxite.git
 ```
 
 Implementation
@@ -128,9 +136,9 @@ Implementation
 
 Bauxite is both a console program and a library. You can use the program to run Bauxite tests directly from a terminal, or you can embed the library in your own application.
 
-The console program is called `bauxite.rb` and has a few command-line options (run `bauxite.rb -h` to see them all).
+The console program is called `bauxite` and has a few command-line options (run `bauxite -h` to see them all).
 
-If you are looking to embed Bauxite in your application take a look a the code in `bauxite.rb`, that should give you a full example of how to create a Bauxite Context and execute some actions.
+If you are looking to embed Bauxite in your application take a look a the code in `lib/bauxite/application.rb`, that should give you a full example of how to create a Bauxite Context and execute some actions.
 
 Extending Bauxite
 -----------------
