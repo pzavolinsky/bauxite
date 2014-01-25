@@ -72,13 +72,16 @@ module Bauxite
 				.multi( :logger_opt, "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
 				.single(:reset     , "-r",  "--reset"                 , "Reset driver between tests")
 				.single(:wait      , "-w",  "--wait"                  , "Wait for ENTER before exiting")
-
 				opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url.") do |v|
 					v = 'localhost:4444' unless v
 					v = 'http://'+v unless v.match /^https?:\/\//
 					v = v + '/wd/hub' unless v.end_with? '/wd/hub'
 					options[:driver] = 'remote'
 					options[:driver_opt][:url] = v
+				end
+				opts.on("--version", "Show version") do
+					puts "bauxite #{Bauxite::VERSION}"
+					exit
 				end
 				
 				opts.separator ""
