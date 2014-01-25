@@ -1,7 +1,7 @@
 bauxite
 =======
 
-Bauxite is a faÃ§ade over Selenium intended for non-developers
+Bauxite is a façade over Selenium intended for non-developers
 
 The idea behind this project was to create a tool that allows non-developers to write web tests in a human-readable language. Another major requirement is to be able to easily extend the test language to create functional abstractions over technical details.
 
@@ -20,14 +20,106 @@ puts driver.title
 
 driver.quit
 ```
-
 While developers might find that code expressive enough, non-developers might be a bit shocked.
 
-The equivallent Bauxite test is easier on the eyes:
+The equivalent Bauxite test is easier on the eyes:
 ```
 open "http://google.com"
 write name=q "Hello WebDriver!"
 click gbqfb
+```
+
+Hello World
+-----------
+
+(This section assumes that Bauxite and its dependencies are installed in the system. Refer to the [Installation](#installation) section below for more details).
+
+Paste the following text into `hello.bxt`:
+```
+open "http://www.gnu.org/fun/jokes/helloworld.html"
+```
+
+Launch a console and type:
+```
+./bauxite.rb hello.bxt
+```
+
+Documentation
+-------------
+
+The Bauxite language is composed of two elements `Actions` and `Selectors`: Actions are testing operations such as "open this page", "click this button", "write this text into that textbox", etc. Selectors are ways of locating interesting elements of a page such as a button, a textbox, a label, etc.
+
+A typical Bauxite test is a plain text file that contains a series of Actions (one per line). Depending on the Action, a few action arguments might need to be specified as well. For example in:
+```
+open "http://google.com"
+write name=q "Hello WebDriver!"
+click gbqfb
+```
+
+`open`, `write` and `click` are Actions:
+- `open` takes a single URL argument (`"http://google.com"`) and opens that URL in the browser.
+- `write` takes two arguments, a Selector (`name=q`, more on this in a bit) and a text (`"Hello WebDriver!"`), and writes the text into the element specified by the Selector.
+- `click` takes a single Selector argument (`gbqfb`) and clicks the element specified by the Selector.
+
+In general, Action arguments can be surrounded by optional double quote characters (`"`). If an argument contains a space character, the quotes are mandatory (this is the case for the second argument to `write` in the example above).
+
+Some Actions operate on page elements (e.g. `write`, `click`, etc.). In order to locate these elements, Bauxite uses Selectors.
+
+The trivial Selector is just a text that matches the last portion of the `id` attribute of the target element. 
+
+For example, in this HTML fragment:
+```html
+<input type="submit" id="gbqfb" value="Search" />
+```
+
+If we want to click the "Search" button we can do the following:
+```
+click gbqfb
+```
+
+Bauxite supports several other Selectors such as `name=` in the example above. The `name` Selector finds elements whose `name` attribute matches the text following the `=` sign.
+
+For example, in this HTML fragment:
+```html
+<input type="text" name="q" />
+```
+
+If we want to type the text "Hello WebDriver!" in textbox we can do the following:
+```
+write name=q "Hello WebDriver!"
+```
+
+This section presented a  brief introduction into the basic Bauxite concepts. For more details and a list of every Action and Selector available, refer to the RDoc generated documentation in:
+- [Available Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html#Action+Methods)
+- [Available Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html#Selector+Methods)
+- [Creating new Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html)
+- [Creating new Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html)
+
+
+Installation
+------------
+
+First of all you'll need to install Firefox, Ruby, and a few gems:
+ - selenium-webdriver
+ - ruby-terminfo (optional, if you want the terminal to handle more than 80 chars)
+
+In GNU/Linux, you can install [RVM](http://rvm.io/), then Ruby then the required gems:
+```
+curl -sSL https://get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm
+rvm install ruby-2.1.0
+gem install selenium-webdriver
+gem install ruby-terminfo
+```
+
+In Windows, you can install Ruby 2.x with [RubyInstaller](http://rubyinstaller.org/downloads/) but you'll probably need to install a Ruby 2.x Development Kit. After everything is installed, launch the Ruby terminal (or the MSYS terminal from the DevKit) and type:
+```
+gem install selenium-webdriver
+```
+
+Then clone the repo (I'll package this as a gem eventually):
+```
+git clone https://github.com/pzavolinsky/bauxite.git
 ```
 
 Implementation
@@ -38,29 +130,6 @@ Bauxite is both a console program and a library. You can use the program to run 
 The console program is called `bauxite.rb` and has a few command-line options (run `bauxite.rb -h` to see them all).
 
 If you are looking to embed Bauxite in your application take a look a the code in `bauxite.rb`, that should give you a full example of how to create a Bauxite Context and execute some actions.
-
-Basic usage
------------
-
-This is a brief intro into Bauxite, a hello world if you like.
-
-First of all you'll need to install Firefox, Ruby, and a few gems:
- - selenium-webdriver
- - ruby-terminfo
-
-Then clone the repo (I'll package this as a gem eventually).
-
-Create a new file called `google.txt` and paste the following:
-```
-open "http://google.com"
-write name=q "Hello WebDriver!"
-click gbqfb
-```
-
-Finally, open a terminal window and run:
-```
-./bauxite.rb google.txt
-```
 
 Extending Bauxite
 -----------------
@@ -93,23 +162,23 @@ If we were creating a suite of automated web tests for our *hostname* site, we'l
 Of course we can do better. We can split Bauxite tests into many files and include one test into another with the `load` action.
 
 ```
-# my_test.txt (by the way, this is a comment)
-load other_test_fragment.txt
+# my_test.bxt (by the way, this is a comment)
+load other_test_fragment.bxt
 ...
 ```
 
 Back to our login example, first we can package the login part of our tests into a separate Bauxite file:
 ```
-# login.txt
+# login.bxt
 open "http://hostname/login.html"
 write username "jdoe"
 write password "hello world!"
 click login
 ```
 
-Of course we would like to be able to login with different username/password combinations, so we can replace the literals in `login.txt` with variables:
+Of course we would like to be able to login with different username/password combinations, so we can replace the literals in `login.bxt` with variables:
 ```
-# login.txt
+# login.bxt
 open "http://hostname/login.html"
 write username "${username}"
 write password "${password}"
@@ -118,7 +187,7 @@ click login
 
 Now, we would like to assert that both `username` and `password` variables are set before calling our test (just in case someone forgets). We can do this with `params`
 ```
-# login.txt
+# login.bxt
 params username password
 open "http://hostname/login.html"
 write username "${username}"
@@ -126,35 +195,36 @@ write password "${password}"
 click login
 ```
 
-In our main test we can load `login.txt` and specify the variables required using this code:
+In our main test we can load `login.bxt` and specify the variables required using this code:
 ```
-# main_test.txt
-load login.txt username=jdoe "password=hello world!"
+# main_test.bxt
+load login.bxt username=jdoe "password=hello world!"
 
 # additional actions go here
 ```
 
-We could improve this even further by creating an `alias` to simplify the login process. To do this, lets create an new file called `alias.txt`:
+We could improve this even further by creating an `alias` to simplify the login process. To do this, lets create an new file called `alias.bxt`:
 ```
-# alias.txt
-alias login load login.txt "username=${1}" "password=${2}"
+# alias.bxt
+alias login load login.bxt "username=${1}" "password=${2}"
 ```
 
 Note that the `alias` action supports positional arguments.
 
 Now we can change our main test to use our alias:
 ```
-# main_test.txt
-load alias.txt
+# main_test.bxt
+load alias.bxt
 
 login jdoe "hello world!"
 
 # additional actions go here
 ```
 
-That was a bit of work but the resuting test is purely functional (minus the load alias part, of course).
+That was a bit of work but the resulting test is purely functional (minus the load alias part, of course).
 
 ### Coded plugins
 
 Coded plugins can be used to extend Bauxite actions, selectors and loggers. Coded plugins are Ruby files placed in the respective directory. See any of the current artifacts for a reference implementation.
+
 
