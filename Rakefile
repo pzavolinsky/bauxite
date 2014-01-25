@@ -6,7 +6,7 @@ require 'rubygems/package_task'
 
 spec = Gem::Specification.new do |s|
 	s.name        = 'bauxite'
-	s.summary     = 'Bauxite is a facade over Selenium intended for non-developers'
+	s.summary     = 'Bauxite is a façade over Selenium intended for non-developers'
 	s.author      = 'Patricio Zavolinsky'
 	s.email       = 'pzavolinsky at yahoo dot com dot ar'
 	s.homepage    = 'http://rubygems.org/gems/bauxite'
