@@ -16,6 +16,13 @@ module Bauxite
 		# defined in the 'loggers/' directory.
 		#
 		class NullLogger
+			
+			# Constructs a new null logger instance.
+			#
+			def initialize(options)
+				@options = options
+			end
+			
 			# Executes the given block in a logging context.
 			#
 			# This default implementation does not provide any logging 

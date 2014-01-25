@@ -27,7 +27,7 @@ class Bauxite::Action
 	
 private
 	def _load_file_action(file, *vars)
-		unless File.exists? file
+		unless file == 'stdin' or  File.exists? file
 			current = @ctx.variables['__FILE__']
 			current = (File.exists? current) ? File.dirname(current) : Dir.pwd
 			file = File.join(current, file)

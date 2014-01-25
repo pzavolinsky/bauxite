@@ -4,14 +4,15 @@ require 'optparse'
 require_relative  File.join('core', 'Context.rb')
 
 options = {
-	:logger     => 'xterm',
+	:logger     => (ENV['TERM'] == 'xterm') ?  'xterm' : 'terminal',
 	:verbose    => false,
 	:break      => false,
 	:driver     => 'firefox',
 	:debug      => false,
 	:timeout    => 10,
 	:reset      => false,
-	:driver_opt => []
+	:driver_opt => {},
+	:logger_opt => {}
 }
 
 cmd = File.basename(__FILE__)
@@ -19,17 +20,45 @@ cmd = File.basename(__FILE__)
 OptionParser.new do |opts|
 	opts.banner = "Usage: #{cmd} [options] [files...]"
 	
+	def opts.o=(o)
+		@o = o
+	end
+	def opts.single(*args)
+		on(*args[1..-1]) do |v|
+			@o[args[0]] = v
+		end
+		self
+	end
+	def opts.multi(*args)
+		on(*args[1..-1]) do |v|
+			n,v = v.split('=', 2)
+			@o[args[0]][n.to_sym] = v || true
+		end
+		self
+	end
+	opts.o = options
+
 	opts.separator ""
 	opts.separator "Options: "
-	opts.on("-v", "--verbose", "Show verbose errors")                              { |v| options[:verbose   ] = v }
-	opts.on("-l", "--logger LOGGER", "Logger type ('#{options[:logger]}')")        { |v| options[:logger    ] = v }
-	opts.on("-w", "--wait", "Wait for ENTER before exiting")                       { |v| options[:wait      ] = v }
-	opts.on("-p", "--provider PROVIDER", "Driver provider")                        { |v| options[:driver    ] = v }
-	opts.on("-o", "--option OPTION", "Provider options (name=value)")              { |v| options[:driver_opt]<< v }
-	opts.on("-d", "--debug", "Break to debug on error. "+
-	                         "Start the debug console if no input files given.")   { |v| options[:debug     ] = v }
-	opts.on("-t", "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)") { |v| options[:timeout   ] = v }
-	opts.on("-r", "--reset", "Reset driver between tests")                         { |v| options[:reset     ] = v }
+	opts
+	.single(:verbose   , "-v",  "--verbose", "Show verbose errors")
+	.single(:timeout   , "-t",  "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)")
+	.single(:debug     , "-d",  "--debug", "Break to debug on error. "+
+	                                       "Start the debug console if no input files given.")
+	.single(:driver    , "-p",  "--provider PROVIDER"     , "Driver provider")
+	.multi( :driver_opt, "-P",  "--provider-option OPTION", "Provider options (name=value)")
+	.single(:logger    , "-l",  "--logger LOGGER"         , "Logger type ('#{options[:logger]}')")
+	.multi( :logger_opt, "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
+	.single(:reset     , "-r",  "--reset"                 , "Reset driver between tests")
+	.single(:wait      , "-w",  "--wait"                  , "Wait for ENTER before exiting")
+
+	opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url.") do |v|
+		v = 'localhost:4444' unless v
+		v = 'http://'+v unless v.match /^https?:\/\//
+		v = v + '/wd/hub' unless v.end_with? '/wd/hub'
+		options[:driver] = 'remote'
+		options[:driver_opt][:url] = v
+	end
 	
 	opts.separator ""
 	opts.separator "Loggers:"

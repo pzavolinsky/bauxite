@@ -47,19 +47,15 @@ module Bauxite
 		def initialize(options)
 			@options = options
 			@driver_name = (options[:driver] || :firefox).to_sym
-			@driver_opt = (options[:driver_opt] || []).inject({}) do |s,o|
-				n,v = o.split('=',2)
-				s[n.to_sym] = v
-				s
-			end
-			
 			@variables = {
 				'__TIMEOUT__' => (options[:timeout] || 10).to_i
 			}
 			@aliases = {}
 			@tests = []
 			
-			handle_errors { @logger = _load_logger(options[:logger]) }
+			handle_errors do
+				@logger = Context::load_logger(options[:logger], options[:logger_opt])
+			end
 		end
 		
 		# Starts the test engine and executes the actions specified. If no action
@@ -227,13 +223,11 @@ module Bauxite
 		#     # => [ { :cmd => 'echo', ... } ]
 		#
 		def parse_file(file)
-			io = (file == 'stdin') ? $stdin : File.open(file)
-			io.each_line.each_with_index.map do |text,line|
-				text = text.sub(/\r?\n$/, '')
-				next nil if text =~ /^\s*(#|$)/
-				exec_action({ :text => text, :file => file, :line => line })
+			if (file == 'stdin')
+				_parse_file($stdin, file)
+			else
+				File.open(file) { |io| _parse_file(io, file) }
 			end
-			.select { |item| item != nil }
 		end
 		
 		# Parses a line of action text into an array. The input +line+ should be a
@@ -287,7 +281,11 @@ module Bauxite
 		def handle_errors(break_into_debug = false, exit_on_error = true)
 			yield
 		rescue StandardError => e
-			@logger.log "#{e.message}\n", :error
+			if @logger
+				@logger.log "#{e.message}\n", :error
+			else
+				puts e.message
+			end
 			if @options[:verbose]
 				p e
 				puts e.backtrace
@@ -337,6 +335,22 @@ module Bauxite
 		#
 		def self.wait
 			Readline.readline("Press ENTER to continue\n")
+		end
+		
+		# Constructs a Logger instance using +name+ as a hint for the logger
+		# type.
+		#
+		def self.load_logger(name, options)
+			log_name = (name || 'null').downcase
+			
+			class_name = "#{log_name.capitalize}Logger"
+			
+			unless Loggers.const_defined? class_name.to_sym
+				raise NameError,
+					"Invalid logger '#{log_name}'"
+			end
+			
+			Loggers.const_get(class_name).new(options)
 		end
 		
 		# ======================================================================= #
@@ -459,21 +473,8 @@ module Bauxite
 			.map { |a| a.to_s }
 		end
 		
-		def _load_logger(log_name)
-			log_name = (log_name || 'null').downcase
-			
-			class_name = "#{log_name.capitalize}Logger"
-			
-			unless Loggers.const_defined? class_name.to_sym
-				raise NameError,
-					"Invalid logger '#{log_name}'"
-			end
-			
-			Loggers.const_get(class_name).new
-		end
-		
 		def _load_driver
-			@driver = Selenium::WebDriver.for(@driver_name, @driver_opt)
+			@driver = Selenium::WebDriver.for(@driver_name, @options[:driver_opt])
 			@driver.manage.timeouts.implicit_wait = 1
 		end
 
@@ -507,6 +508,15 @@ module Bauxite
 			end.gsub(/\$\{\d+\}/, '') # remove unexpanded ${1}, etc.
 		
 			_load_action(action)
+		end
+
+		def _parse_file(io, file)
+			io.each_line.each_with_index.map do |text,line|
+				text = text.sub(/\r?\n$/, '')
+				next nil if text =~ /^\s*(#|$)/
+				exec_action({ :text => text, :file => file, :line => line })
+			end
+			.select { |item| item != nil }
 		end
 
 		# ======================================================================= #

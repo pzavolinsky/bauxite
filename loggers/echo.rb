@@ -6,7 +6,6 @@
 # (i.e. action succeeded, failed or was skipped).
 #
 class Bauxite::Loggers::EchoLogger < Bauxite::Loggers::NullLogger
-	
 	# Echoes the raw action text.
 	def log_cmd(action)
 		puts action.text
