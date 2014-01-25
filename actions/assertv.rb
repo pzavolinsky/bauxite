@@ -1,7 +1,7 @@
 class Bauxite::Action
 	# Asserts that the +actual+ text matches the +expected+ text.
 	#
-	# +expected+ can be a regular expression.
+	# +expected+ can be a regular expression. See #assert for more details.
 	#
 	# For example:
 	#     # assuming ctx.variables['myvar'] = 'myvalue1234'

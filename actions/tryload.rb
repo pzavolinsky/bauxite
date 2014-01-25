@@ -3,7 +3,7 @@ class Bauxite::Action
 	# the actions specified. If the file does not exist, this action skips.
 	# See #load for a similar action that fails if the file does not exist.
 	#
-	# +file+ can a path relative to the current test file.
+	# +file+ can be a path relative to the current test file.
 	#
 	# An optional list of variables can be provided in +vars+. These variables
 	# will override the value of the context variables for the execution of the

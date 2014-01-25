@@ -1,12 +1,16 @@
 class Bauxite::Action
 	# Asserts that the value of the selected element matches +text+.
 	#
-	# +text+ can be a regular expression.
+	# +text+ is a regular expression. +text+ can be surrounded by +/+ 
+	# characters followed by regular expression flags.
 	#
 	# For example:
 	#     # assuming <input type="text" id="hello" value="world" />
 	#     assert hello world
-	#     # => this assertion would pass
+	#     assert hello wor
+	#     assert hello ^wor
+	#     assert hello /WorlD/i
+	#     # => these assertions would pass
 	#
 	# :category: Action Methods
 	def assert(selector, text)

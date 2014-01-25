@@ -113,7 +113,22 @@ module Bauxite
 	#
 	#     Context::selectors.include? 'end' # => true
 	#
+	# ---
+	#
+	# === Standard Selenium Selectors
+	#  
+	# [id=+targetValue+]                              {Locate elements whose +id+ attribute matches +targetValue+.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-id]
+	# [name=+targetValue+]                            {Locate elements whose +name+ attribute matches +targetValue+.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-name]
+	# [css=+cssSelectorSyntax+]                       {Locate elements using CSS selector syntax.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-css]
+	# [partial_link_text=+textFragment+]              {Locate A elements whose text includes +textFragment+.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-partial-link-text]
+	# [class=+className+ and class_name=+className+]  {Locate elements whose +class+ attribute matches +className+.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-class-name]
+	# [link=+exactText+ and link_text=+exactText+]    {Locate A elements whose text is exactly +exactText+.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-link-text]
+	# [tag_name=+targetValue+]                        {Locate elements whose tag name matches +targetValue+.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-tag-name]
+	# [xpath=+xpathExpression+]                       {Locate elements using XPATH expressions.}[http://docs.seleniumhq.org/docs/03_webdriver.jsp#by-xpath]
+	#
 	class Selector
 		include SelectorModule
+		
+		# :section: Selector Methods
 	end
 end

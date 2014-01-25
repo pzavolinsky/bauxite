@@ -1,7 +1,7 @@
 class Bauxite::Action
 	# Asserts that the page source matches +text+.
 	#
-	# +text+ can be a regular expression.
+	# +text+ can be a regular expression. See #assert for more details.
 	#
 	# For example:
 	#     # assuming <html><body>Hello World!</body></html>

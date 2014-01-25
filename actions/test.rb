@@ -1,7 +1,10 @@
 class Bauxite::Action
-	# Loads +file+ using the #load action into a new test context.
+	# Load +file+ using the #load action into a new test context.
 	#
 	# If +name+ is specified, it will be used as the test name.
+	#
+	# If any action in the test context fails, the whole test context fails,
+	# and the execution continues with the next test context (if any).
 	#
 	# For example:
 	#     test mytest.bxt "My Test"

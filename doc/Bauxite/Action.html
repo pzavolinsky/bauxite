@@ -319,17 +319,17 @@ TER to continue
           
           <p>Aliases <code>name</code> to <code>action</code> with additional arguments.</p>
 
-<p>In <code>action</code> the variables <code>${1}</code>..<code>${n}</code>
+<p>In <code>args</code> the variables <code>${1}</code>..<code>${n}</code>
 will be expanded to the arguments given to the alias. Also
 <code>${n*}</code> will be expanded to the space separated list of
-arguments from the 5th on. Finally,  <code>${n*q}</code> will behave like
+arguments from the n-th on. Finally,  <code>${n*q}</code> will behave like
 <code>${n*}</code> except that each argument will be surrounded by quotes
-(“) and quotes inside the argument will be doubled.</p>
+(+“+) and quotes inside the argument will be doubled (+”“+).</p>
 
 <p>Note that <code>action</code> can be any action except <code>alias</code>.
 Also note that this action does not check for cyclic aliases (e.g. alias
 <code>a</code> to <code>b</code> and alias <code>b</code> to
-<code>a</code>). You sould check that yourself.</p>
+<code>a</code>). You should check that yourself.</p>
 
 <p>Also note that this method provides an action named <code>alias</code> and
 not alias_action.</p>
@@ -375,20 +375,25 @@ not alias_action.</p>
           
           <p>Asserts that the value of the selected element matches <code>text</code>.</p>
 
-<p><code>text</code> can be a regular expression.</p>
+<p><code>text</code> is a regular expression. <code>text</code> can be
+surrounded by <code>/</code>  characters followed by regular expression
+flags.</p>
 
 <p>For example:</p>
 
 <pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&quot;text&quot; id=&quot;hello&quot; value=&quot;world&quot; /&gt;</span>
 <span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">world</span>
-<span class="ruby-comment"># =&gt; this assertion would pass</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">wor</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-operator">^</span><span class="ruby-identifier">wor</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-regexp">/WorlD/i</span>
+<span class="ruby-comment"># =&gt; these assertions would pass</span>
 </pre>
           
           
 
           
           <div class="method-source-code" id="assert-source">
-            <pre><span class="ruby-comment"># File actions/assert.rb, line 12</span>
+            <pre><span class="ruby-comment"># File actions/assert.rb, line 16</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">assert</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-identifier">text</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
                 <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
@@ -426,7 +431,8 @@ not alias_action.</p>
           <p>Asserts that the <code>actual</code> text matches the <code>expected</code>
 text.</p>
 
-<p><code>expected</code> can be a regular expression.</p>
+<p><code>expected</code> can be a regular expression. See <a
+href="Action.html#method-i-assert">assert</a> for more details.</p>
 
 <p>For example:</p>
 
@@ -743,7 +749,7 @@ actions specified. If the file does not exist, this action fails. See <a
 href="Action.html#method-i-tryload">tryload</a> for a similar action that
 skips if the file does not exist.</p>
 
-<p><code>file</code> can a path relative to the current test file.</p>
+<p><code>file</code> can be a path relative to the current test file.</p>
 
 <p>An optional list of variables can be provided in <code>vars</code>. These
 variables will override the value of the context variables for the
@@ -759,7 +765,7 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
 <pre class="ruby"><span class="ruby-identifier">load</span> <span class="ruby-identifier">other_test</span>.<span class="ruby-identifier">bxt</span> <span class="ruby-string">&quot;othervar=value_just_for_other&quot;</span>
 <span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${othervar}&quot;</span>
 <span class="ruby-comment"># =&gt; this would load and execute other_test.bxt, injecting othervar</span>
-<span class="ruby-comment">#    into its context. After other_test.txt completes, othervar will</span>
+<span class="ruby-comment">#    into its context. After other_test.bxt completes, othervar will</span>
 <span class="ruby-comment">#    be restored to its original value (or be undefined if it didn&#39;t</span>
 <span class="ruby-comment">#    exist prior to the &#39;load&#39; call).</span>
 </pre>
@@ -1041,7 +1047,7 @@ href="Action.html#method-i-assert">assert</a> for more details):</p>
           <p>Load the specified ruby file into an isolated variable context and execute
 the ruby code.</p>
 
-<p><code>file</code> can a path relative to the current test file.</p>
+<p><code>file</code> can be a path relative to the current test file.</p>
 
 <p>An optional list of variables can be provided in <code>vars</code>. See <a
 href="Action.html#method-i-load">load</a>.</p>
@@ -1150,7 +1156,8 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
           
           <p>Asserts that the page source matches <code>text</code>.</p>
 
-<p><code>text</code> can be a regular expression.</p>
+<p><code>text</code> can be a regular expression. See <a
+href="Action.html#method-i-assert">assert</a> for more details.</p>
 
 <p>For example:</p>
 
@@ -1242,10 +1249,13 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
 
         <div class="method-description">
           
-          <p>Loads <code>file</code> using the <a
+          <p>Load <code>file</code> using the <a
 href="Action.html#method-i-load">load</a> action into a new test context.</p>
 
 <p>If <code>name</code> is specified, it will be used as the test name.</p>
+
+<p>If any action in the test context fails, the whole test context fails, and
+the execution continues with the next test context (if any).</p>
 
 <p>For example:</p>
 
@@ -1258,7 +1268,7 @@ href="Action.html#method-i-load">load</a> action into a new test context.</p>
 
           
           <div class="method-source-code" id="test-source">
-            <pre><span class="ruby-comment"># File actions/test.rb, line 12</span>
+            <pre><span class="ruby-comment"># File actions/test.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">test</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">name</span> = <span class="ruby-keyword">nil</span>)
         <span class="ruby-identifier">delayed</span> = <span class="ruby-identifier">load</span>(<span class="ruby-identifier">file</span>)
 
@@ -1311,7 +1321,7 @@ actions specified. If the file does not exist, this action skips. See <a
 href="Action.html#method-i-load">load</a> for a similar action that fails
 if the file does not exist.</p>
 
-<p><code>file</code> can a path relative to the current test file.</p>
+<p><code>file</code> can be a path relative to the current test file.</p>
 
 <p>An optional list of variables can be provided in <code>vars</code>. These
 variables will override the value of the context variables for the

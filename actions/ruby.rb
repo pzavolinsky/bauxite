@@ -2,7 +2,7 @@ class Bauxite::Action
 	# Load the specified ruby file into an isolated variable context and
 	# execute the ruby code.
 	#
-	# +file+ can a path relative to the current test file.
+	# +file+ can be a path relative to the current test file.
 	#
 	# An optional list of variables can be provided in +vars+. See #load.
 	#

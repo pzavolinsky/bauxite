@@ -3,7 +3,7 @@ class Bauxite::Action
 	# the actions specified. If the file does not exist, this action fails.
 	# See #tryload for a similar action that skips if the file does not exist.
 	#
-	# +file+ can a path relative to the current test file.
+	# +file+ can be a path relative to the current test file.
 	#
 	# An optional list of variables can be provided in +vars+. These variables
 	# will override the value of the context variables for the execution of the
@@ -16,7 +16,7 @@ class Bauxite::Action
 	#     load other_test.bxt "othervar=value_just_for_other"
 	#     echo "${othervar}"
 	#     # => this would load and execute other_test.bxt, injecting othervar
-	#     #    into its context. After other_test.txt completes, othervar will
+	#     #    into its context. After other_test.bxt completes, othervar will
 	#     #    be restored to its original value (or be undefined if it didn't
 	#     #    exist prior to the 'load' call).
 	#

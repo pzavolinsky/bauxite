@@ -91,7 +91,8 @@ write name=q "Hello WebDriver!"
 
 This section presented a  brief introduction into the basic Bauxite concepts. For more details and a list of every Action and Selector available, refer to the RDoc generated documentation in:
 - [Available Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html#Action+Methods)
-- [Available Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html#Selector+Methods)
+- [Available Bauxite Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html#Selector+Methods)
+- [Selenium Standard Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html#class-Bauxite::Selector-label-Standard+Selenium+Selectors)
 - [Creating new Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html)
 - [Creating new Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html)
 
