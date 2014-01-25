@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>class Bauxite::Loggers::NullLogger - RDoc Documentation</title>
+<title>class Bauxite::Loggers::CompositeLogger - RDoc Documentation</title>
 
 <link href="../../fonts.css" rel="stylesheet">
 <link href="../../rdoc.css" rel="stylesheet">
@@ -89,23 +89,19 @@
   </div>
 </nav>
 
-<main role="main" aria-labelledby="class-Bauxite::Loggers::NullLogger">
-  <h1 id="class-Bauxite::Loggers::NullLogger" class="class">
-    class Bauxite::Loggers::NullLogger
+<main role="main" aria-labelledby="class-Bauxite::Loggers::CompositeLogger">
+  <h1 id="class-Bauxite::Loggers::CompositeLogger" class="class">
+    class Bauxite::Loggers::CompositeLogger
   </h1>
 
   <section class="description">
     
-<p>Test logger class.</p>
+<p>Composite logger.</p>
 
-<p>Test loggers handle test output format.</p>
+<p>This composite logger forwards logging calls to each of its children.</p>
 
-<p>The default logger does not provide any output logging.</p>
-
-<p>This default behavior can be overriden in a custom logger passed to the <a
-href="../Context.html">Context</a> constructor (see <a
-href="../Context.html#method-c-new">Bauxite::Context.new</a>). By
-convention, custom loggers are defined in the &#39;loggers/&#39; directory.</p>
+<p>Set the <code>:loggers</code> option to a comma-separated list of logger
+names</p>
 
   </section>
 
@@ -141,15 +137,17 @@ convention, custom loggers are defined in the &#39;loggers/&#39; directory.</p>
 
         <div class="method-description">
           
-          <p>Constructs a new null logger instance.</p>
+          <p>Constructs a new composite logger instance.</p>
           
           
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File core/Logger.rb, line 22</span>
+            <pre><span class="ruby-comment"># File loggers/composite.rb, line 10</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
-        <span class="ruby-ivar">@options</span> = <span class="ruby-identifier">options</span>
+        <span class="ruby-ivar">@loggers</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:loggers</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;,&#39;</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+                <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">l</span>, <span class="ruby-identifier">options</span>)
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -182,22 +180,19 @@ convention, custom loggers are defined in the &#39;loggers/&#39; directory.</p>
 
         <div class="method-description">
           
-          <p>Returns the prompt shown by the debug console (see <a
-href="../Context.html#method-i-debug">Bauxite::Context#debug</a>).</p>
+          <p>Returns a colorized debug prompt.</p>
 
-<p>For example:</p>
-
-<pre class="ruby"><span class="ruby-identifier">log</span>.<span class="ruby-identifier">debug_prompt</span>
-<span class="ruby-comment"># =&gt; returns the debug prompt</span>
-</pre>
+<p>This implementation returns the <a
+href="CompositeLogger.html#method-i-debug_prompt">#debug_prompt</a> of the
+first logger.</p>
           
           
 
           
           <div class="method-source-code" id="debug_prompt-source">
-            <pre><span class="ruby-comment"># File core/Logger.rb, line 46</span>
+            <pre><span class="ruby-comment"># File loggers/composite.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug_prompt</span>
-        <span class="ruby-string">&#39;debug&gt; &#39;</span>
+        <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">debug_prompt</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -222,18 +217,17 @@ href="../Context.html#method-i-debug">Bauxite::Context#debug</a>).</p>
 
         <div class="method-description">
           
-          <p>Logs the specified string.</p>
+          <p>Prints the specified string.</p>
 
-<p><code>type</code>, if specified, should be one of <code>:error</code>,
-<code>:warning</code>, <code>:info</code> (default), <code>:debug</code>.</p>
+<p>See Bauxite::Loggers::NullLogger#print</p>
           
           
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File core/Logger.rb, line 59</span>
+            <pre><span class="ruby-comment"># File loggers/composite.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
-        <span class="ruby-identifier">print</span> <span class="ruby-identifier">s</span>
+        <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span>) }
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -249,7 +243,7 @@ href="../Context.html#method-i-debug">Bauxite::Context#debug</a>).</p>
         
         <div class="method-heading">
           <span class="method-name">log_cmd</span><span
-            class="method-args">(action) { || ... }</span>
+            class="method-args">(action, &block)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -258,25 +252,21 @@ href="../Context.html#method-i-debug">Bauxite::Context#debug</a>).</p>
 
         <div class="method-description">
           
-          <p>Executes the given block in a logging context.</p>
+          <p>Pretty prints action information and status.</p>
 
-<p>This default implementation does not provide any logging  capabilities.</p>
+<p>This implementation only yileds in the first logger.</p>
 
-<p>For example:</p>
-
-<pre class="ruby"><span class="ruby-identifier">log</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-string">&#39;echo&#39;</span>, <span class="ruby-string">&#39;Hello World!&#39;</span>) <span class="ruby-keyword">do</span>
-    <span class="ruby-identifier">puts</span> <span class="ruby-string">&#39;Hello World!&#39;</span>
-<span class="ruby-keyword">end</span>
-<span class="ruby-comment"># =&gt; echoes &#39;Hello World!&#39;</span>
-</pre>
+<p>Additional loggers are called after the block completed.</p>
           
           
 
           
           <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File core/Logger.rb, line 37</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
-        <span class="ruby-keyword">yield</span>
+            <pre><span class="ruby-comment"># File loggers/composite.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>) { <span class="ruby-identifier">ret</span> } }
+        <span class="ruby-identifier">ret</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -301,14 +291,15 @@ href="../Context.html#method-i-debug">Bauxite::Context#debug</a>).</p>
 
         <div class="method-description">
           
-          <p>Updates the progress of the current action.</p>
+          <p>Updates action progress.</p>
           
           
 
           
           <div class="method-source-code" id="progress-source">
-            <pre><span class="ruby-comment"># File core/Logger.rb, line 51</span>
+            <pre><span class="ruby-comment"># File loggers/composite.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>)
+        <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>) }
 <span class="ruby-keyword">end</span></pre>
           </div>
           
