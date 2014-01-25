@@ -140,7 +140,7 @@ file specified in the <code>file</code> logger option.</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File loggers/file.rb, line 9</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 31</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-keyword">super</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-ivar">@file</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:file</span>]
@@ -186,7 +186,7 @@ file specified in the <code>file</code> logger option.</p>
 
           
           <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File loggers/file.rb, line 19</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 41</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@file</span>, <span class="ruby-string">&#39;a+&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">action</span>.<span class="ruby-identifier">text</span><span class="ruby-operator">+</span><span class="ruby-string">&quot;\n&quot;</span>) }
         <span class="ruby-keyword">yield</span>

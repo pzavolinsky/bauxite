@@ -8,7 +8,7 @@ end
 
 desc "Generate Bauxite documentation"
 task :doc do
-	doc_dirs = ['core','actions','selectors','loggers'].map { |d| File.join(d,'*') }.join(' ')
+	doc_dirs = ['core','actions','selectors','loggers'].map { |d| File.join('lib', 'bauxite',d,'*') }.join(' ')
 	`rdoc -O -U #{doc_dirs}`
 end
 
@@ -20,7 +20,7 @@ end
 desc "Inject license"
 task :inject_license do
 	license = File.open('LICENSE', 'r') { |f| f.read }
-	license = license.each_line.to_a[2..-1].map { |l| "# #{l}" }
+	license = license.each_line.to_a[2..-1].map { |l| "# #{l}".sub(/ *$/, '') }
 	license = "#--\n#{license.join('')}#++\n\n"
 	
 	Dir['lib/**/*'].select { |f| not File.directory? f }.each do |f|
