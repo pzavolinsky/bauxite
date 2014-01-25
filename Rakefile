@@ -12,7 +12,6 @@ spec = Gem::Specification.new do |s|
 	s.homepage    = 'http://rubygems.org/gems/bauxite'
 	s.license     = 'MIT'
 	s.version     = `ruby -Ilib bin/bauxite --version`.gsub(/^.* /, '')
-	s.files       = PKG_FILES
 	s.executables = ["bauxite"]
 	s.add_runtime_dependency     'selenium-webdriver', '~> 2.39'
 	s.add_development_dependency 'rake'              , '~> 10.1'
@@ -40,6 +39,11 @@ desc "Run integration tests"
 task :test do
 	test_files = Dir[File.join('test', '*.bxt')].select { |f| not File.directory? f }.join(' ')
 	ruby "-Ilib bin/bauxite -v #{test_files}"
+	
+	ruby "-Ilib bin/bauxite -v -e #{File.join('test', 'extension')} #{File.join('test', 'extension.bxt.manual')}"
+	
+	system("ruby -Ilib bin/bauxite #{File.join('test', 'test.bxt.manual')}")
+	fail "The 'test' action test failed to return the expected exit status: the exit status was #{$?.exitstatus}" unless $?.exitstatus == 2
 end
 
 # === Documentation ========================================================= #
@@ -65,5 +69,23 @@ task :inject_license do
 		puts f
 		content = license + File.open(f, 'r') { |f| f.read }
 		#File.open(f, 'w') { |f| f.write content }
+	end
+end
+
+desc "Helper: Update Bauxite version"
+task :update_version do
+	content = File.open('lib/bauxite.rb', 'r') { |f| f.read }
+	version = nil
+	content = content.each_line.map do |line|
+		match = line.match(/(.*VERSION = ")(.*)(".*)/)
+		next line unless match
+		version = match[2].split('.')
+		version[1] = (version[1].to_i + 1).to_s
+		version = version.join('.')
+		"#{match[1]}#{version}#{match[3]}\n"
+	end.join
+	if version
+		puts "Updated version to #{version}"
+		File.open('lib/bauxite.rb', 'w') { |f| f.write content }
 	end
 end

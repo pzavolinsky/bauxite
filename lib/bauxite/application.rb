@@ -35,7 +35,8 @@ module Bauxite
 				:timeout    => 10,
 				:reset      => false,
 				:driver_opt => {},
-				:logger_opt => {}
+				:logger_opt => {},
+				:extensions => []
 			}
 
 			OptionParser.new do |opts|
@@ -79,6 +80,7 @@ module Bauxite
 					options[:driver] = 'remote'
 					options[:driver_opt][:url] = v
 				end
+				opts.on("-e", "--extension DIR", "Load extensions from DIR") { |v| options[:extensions] << v }
 				opts.on("--version", "Show version") do
 					puts "bauxite #{Bauxite::VERSION}"
 					exit
@@ -134,15 +136,21 @@ module Bauxite
 				ctx.start(actions)
 			ensure
 				if ctx.tests.any?
+					
+					failed = 0
+					
 					puts
 					puts 'Test summary:'
 					puts '============='
-					puts 'Name'.ljust(60) + 'Time'.ljust(6) + 'Status'.ljust(7)+'Error'
+					puts 'Name'.ljust(40 ) + ' Time'.ljust(7 ) + ' Status'.ljust(7)+' Error'
+					puts ''.ljust(40, '-') + ' '.ljust(7, '-') + ' '.ljust(7, '-' )+' '.ljust(5, '-')
 					ctx.tests.each do |t|
 						error = t[:error]
 						error = error ? error.message : ''
-						puts t[:name].ljust(60) + t[:time].round(3).to_s.ljust(6) + t[:status].ljust(7) + error
+						puts t[:name].ljust(40) + ' ' + t[:time].round(2).to_s.rjust(6) + ' ' + t[:status].ljust(6) + ' ' + error
+						failed += 1 if t[:status] != 'OK'
 					end
+					exit failed if failed > 0
 				end
 			end
 		end

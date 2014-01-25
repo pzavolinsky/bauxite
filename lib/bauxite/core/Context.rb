@@ -65,6 +65,7 @@ module Bauxite
 		# [:verbose] if +true+, show verbose error information (e.g. backtraces) if an error occurs (defaults to +false+)
 		# [:debug] if +true+, break into the #debug console if an error occurs (defaults to +false+)
 		# [:wait] if +true+, call ::wait before stopping the test engine with #stop (defaults to +false+)
+		# [:extensions] an array of directories that contain extensions to be loaded
 		#
 		def initialize(options)
 			@options = options
@@ -74,6 +75,8 @@ module Bauxite
 			}
 			@aliases = {}
 			@tests = []
+			
+			_load_extensions(options[:extensions] || [])
 			
 			handle_errors do
 				@logger = Context::load_logger(options[:logger], options[:logger_opt])
@@ -539,6 +542,14 @@ module Bauxite
 				exec_action({ :text => text, :file => file, :line => line })
 			end
 			.select { |item| item != nil }
+		end
+		
+		def _load_extensions(dirs)
+			dirs.each do |d|
+				d = File.join(Dir.pwd, d) unless Dir.exists? d
+				d = File.absolute_path(d)
+				Dir[File.join(d, '**', '*.rb')].each { |file| require file }
+			end
 		end
 
 		# ======================================================================= #
