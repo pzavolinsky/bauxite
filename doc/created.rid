@@ -1,6 +1,6 @@
-Sat, 25 Jan 2014 13:18:13 -0300
+Sat, 25 Jan 2014 14:45:07 -0300
 lib/bauxite/core/Action.rb	Sat, 25 Jan 2014 12:19:06 -0300
-lib/bauxite/core/Context.rb	Sat, 25 Jan 2014 12:19:06 -0300
+lib/bauxite/core/Context.rb	Sat, 25 Jan 2014 14:04:33 -0300
 lib/bauxite/core/Errors.rb	Sat, 25 Jan 2014 12:19:06 -0300
 lib/bauxite/core/Logger.rb	Sat, 25 Jan 2014 12:19:06 -0300
 lib/bauxite/core/Selector.rb	Sat, 25 Jan 2014 12:19:06 -0300
