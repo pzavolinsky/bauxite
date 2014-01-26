@@ -68,12 +68,25 @@ protected
 		true
 	end
 	
+	#--
+	# Adapted from:
+	#   https://github.com/jimweirich/rake/blob/master/lib/rake/application.rb
+	# See Rake::Application#terminal_width
+	#++
 	def _screen_width
-		begin
-			require 'terminfo'
-			TermInfo.screen_size[1]
-		rescue Exception
+		if RbConfig::CONFIG['host_os'] =~
+        /(aix|darwin|linux|(net|free|open)bsd|cygwin|solaris|irix|hpux)/i
+			(_dynamic_width_stty.nonzero? || _dynamic_width_tput)
+		else
 			super
 		end
+	rescue Exception => e
+		super
 	end
+    def _dynamic_width_stty
+      %x{stty size 2>/dev/null}.split[1].to_i
+    end
+    def _dynamic_width_tput
+      %x{tput cols 2>/dev/null}.to_i
+    end
 end

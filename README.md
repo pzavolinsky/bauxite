@@ -117,18 +117,12 @@ source ~/.rvm/scripts/rvm
 rvm install ruby-2.1.0
 ```
 
-In Windows, you can install Ruby 2.x with [RubyInstaller](http://rubyinstaller.org/downloads/) but you'll probably need to install a Ruby 2.x Development Kit. After everything is installed, launch the Ruby terminal (or the MSYS terminal from the DevKit).
+In Windows, you can install Ruby 2.x with [RubyInstaller](http://rubyinstaller.org/downloads/). After everything is installed, launch the `Start Command Prompt with Ruby` option in your start menu.
 
 Regadless of your OS, you should be able to install Bauxite with:
 
 ```
 gem install bauxite
-```
-
-Additionally, if you are using GNU/Linux, you might want to install `ruby-terminfo` to improve the terminal output(i.e. handle more than 80 chars):
-
-```
-gem install ruby-terminfo
 ```
 
 Implementation
