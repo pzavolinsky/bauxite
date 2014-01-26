@@ -23,46 +23,55 @@ driver.quit
 While developers might find that code expressive enough, non-developers might be a bit shocked.
 
 The equivalent Bauxite test is easier on the eyes:
-```
+```ruby
 open "http://google.com"
-write name=q "Hello WebDriver!"
-click gbqfb
+write "name=q" "Hello WebDriver!"
+click "gbqfb"
 ```
+
 Installation
 ------------
 
 In a nutshell:
-```
+```shell
 gem install bauxite
 ```
 
-Remember you'll also need Ruby 2.x installed and Firefox (you can use other browsers or Selenium server by specifying the `-p` switch to the `bauxite` executable).
+If you don't have Ruby 2.x yet, check the [Installing Ruby](#installing-ruby) section below.
+
+Remember you should probably install [Firefox](http://www.mozilla.org) (unless you want to use other browsers or Selenium server by specifying the `-p` switch to the `bauxite` executable).
 
 Hello World
 -----------
 
-(This section assumes that Bauxite and its dependencies are installed in the system. Refer to the [Installation](#installation) section below for more details).
-
 Paste the following text into `hello.bxt`:
-```
+```ruby
 open "http://www.gnu.org/fun/jokes/helloworld.html"
 ```
 
-Launch a console and type:
+Launch a terminal/command prompt and type:
 ```
 bauxite hello.bxt
 ```
 
-Documentation
--------------
+Command-line Interface
+----------------------
+
+The `bauxite` command-line program supports several configuration options.
+
+Refer to the [RDoc documentation](http://pzavolinsky.github.io/bauxite/Bauxite/Application.html) for more details.
+
+
+The Bauxite Language
+--------------------
 
 The Bauxite language is composed of two elements `Actions` and `Selectors`: Actions are testing operations such as "open this page", "click this button", "write this text into that textbox", etc. Selectors are ways of locating interesting elements of a page such as a button, a textbox, a label, etc.
 
 A typical Bauxite test is a plain text file that contains a series of Actions (one per line). Depending on the Action, a few action arguments might need to be specified as well. For example in:
-```
+```ruby
 open "http://google.com"
-write name=q "Hello WebDriver!"
-click gbqfb
+write "name=q" "Hello WebDriver!"
+click "gbqfb"
 ```
 
 `open`, `write` and `click` are Actions:
@@ -82,8 +91,8 @@ For example, in this HTML fragment:
 ```
 
 If we want to click the "Search" button we can do the following:
-```
-click gbqfb
+```ruby
+click "gbqfb"
 ```
 
 Bauxite supports several other Selectors such as `name=` in the example above. The `name` Selector finds elements whose `name` attribute matches the text following the `=` sign.
@@ -94,8 +103,8 @@ For example, in this HTML fragment:
 ```
 
 If we want to type the text "Hello WebDriver!" in textbox we can do the following:
-```
-write name=q "Hello WebDriver!"
+```ruby
+write "name=q" "Hello WebDriver!"
 ```
 
 This section presented a  brief introduction into the basic Bauxite concepts. For more details and a list of every Action and Selector available, refer to the RDoc generated documentation in:
@@ -111,7 +120,7 @@ Installing Ruby
 I won't cover all the details of installing Ruby on your system (Google knows best), but the following should probably work.
 
 In GNU/Linux, you can install [RVM](http://rvm.io/), then Ruby:
-```
+```shell
 curl -sSL https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
 rvm install ruby-2.1.0
@@ -121,16 +130,16 @@ In Windows, you can install Ruby 2.x with [RubyInstaller](http://rubyinstaller.o
 
 Regadless of your OS, you should be able to install Bauxite with:
 
-```
+```shell
 gem install bauxite
 ```
 
 Implementation
 --------------
 
-Bauxite is both a console program and a library. You can use the program to run Bauxite tests directly from a terminal, or you can embed the library in your own application.
+Bauxite is both a command-line program and a library. You can use the program to run Bauxite tests directly from a terminal, or you can embed the library in your own application.
 
-The console program is called `bauxite` and has a few command-line options (run `bauxite -h` to see them all).
+The command-line program is called `bauxite` and has several command-line options, refer to the [RDoc documentation](http://pzavolinsky.github.io/bauxite/Bauxite/Application.html) for more details.
 
 If you are looking to embed Bauxite in your application take a look a the code in `lib/bauxite/application.rb`, that should give you a full example of how to create a Bauxite Context and execute some actions.
 
@@ -153,11 +162,11 @@ Functional extensions are composite constructs created using existing Bauxite ac
 ```
 
 The Bauxite code to login into this site would be:
-```
+```ruby
 open "http://hostname/login.html"
-write username "jdoe"
-write password "hello world!"
-click login
+write "username" "jdoe"
+write "password" "hello world!"
+click "login"
 ```
 
 If we were creating a suite of automated web tests for our *hostname* site, we'll probably need to login into the site several times. This would mean copy/pasting the four lines above into every test in our suite. 
@@ -171,55 +180,55 @@ load other_test_fragment.bxt
 ```
 
 Back to our login example, first we can package the login part of our tests into a separate Bauxite file:
-```
+```ruby
 # login.bxt
 open "http://hostname/login.html"
-write username "jdoe"
-write password "hello world!"
-click login
+write "username" "jdoe"
+write "password" "hello world!"
+click "login"
 ```
 
 Of course we would like to be able to login with different username/password combinations, so we can replace the literals in `login.bxt` with variables:
-```
+```ruby
 # login.bxt
 open "http://hostname/login.html"
-write username "${username}"
-write password "${password}"
-click login
+write "username" "${username}"
+write "password" "${password}"
+click "login"
 ```
 
 Now, we would like to assert that both `username` and `password` variables are set before calling our test (just in case someone forgets). We can do this with `params`
-```
+```ruby
 # login.bxt
 params username password
 open "http://hostname/login.html"
-write username "${username}"
-write password "${password}"
-click login
+write "username" "${username}"
+write "password" "${password}"
+click "login"
 ```
 
 In our main test we can load `login.bxt` and specify the variables required using this code:
-```
+```ruby
 # main_test.bxt
-load login.bxt username=jdoe "password=hello world!"
+load "login.bxt" "username=jdoe" "password=hello world!"
 
 # additional actions go here
 ```
 
 We could improve this even further by creating an `alias` to simplify the login process. To do this, lets create an new file called `alias.bxt`:
-```
+```ruby
 # alias.bxt
-alias login load login.bxt "username=${1}" "password=${2}"
+alias "login" "load" "login.bxt" "username=${1}" "password=${2}"
 ```
 
 Note that the `alias` action supports positional arguments.
 
 Now we can change our main test to use our alias:
-```
+```ruby
 # main_test.bxt
-load alias.bxt
+load "alias.bxt"
 
-login jdoe "hello world!"
+login "jdoe" "hello world!"
 
 # additional actions go here
 ```
@@ -228,6 +237,45 @@ That was a bit of work but the resulting test is purely functional (minus the lo
 
 ### Coded plugins
 
-Coded plugins can be used to extend Bauxite actions, selectors and loggers. Coded plugins are Ruby files placed in the respective directory. See any of the current artifacts for a reference implementation.
+Coded plugins are Ruby files that extend the Bauxite language by providing additional language elements. Coded plugins can be used to create Bauxite actions, selectors and loggers.
 
+For example lets assume that throughout a web application input elements were identified using a custom HTML attribute instead of `id`. For example:
 
+```html
+<form>
+  <input custom-attr="username" type="text"     />
+  <input custom-attr="password" type="password" />
+  <input custom-attr="login"    type="submit" value="Login"/>
+</form>
+```
+
+Using standard Bauxite language we could select these elements using:
+```ruby
+# === my_test.bxt === #
+write "attr=custom-attr:username" "jdoe"
+write "attr=custom-attr:password" "hello world!"
+click "attr=custom-attr:login"
+```
+
+But we can improve the overall readability of our test by using a coded plugin:
+```ruby
+# === plugins/custom_selector.rb === #
+class Bauxite::Selector
+	def custom(value)
+		attr "custom-attr:#{value}"
+	end
+end
+```
+
+Now we can change our test to look like this:
+```ruby
+# === my_test.bxt === #
+write "custom=username" "jdoe"
+write "custom=password" "hello world!"
+click "custom=login"
+```
+
+Finally, to execute Bauxite loading our plugin we can type:
+```
+bauxite -e plugins my_test.bxt
+```

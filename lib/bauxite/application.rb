@@ -24,8 +24,121 @@ require 'optparse'
 require_relative  'core/Context.rb'
 
 module Bauxite
+	# +bauxite+ command-line program.
+	# 
+	# This program executes Bauxite tests and outputs the execution progress
+	# and tests results to the terminal.
+	#
+	# == Synopsis
+	#
+	#    bauxite [OPTIONS] file1 file2 ...
+	#    # => Executes file1, then file2, and so on.
+	#    
+	#    bauxite [OPTIONS] -d
+	#    # => Start Bauxite directly in the debug console.
+	#    
+	#    bauxite [OPTIONS]
+	#    # => Start Bauxite and read test actions from the standard input.
+	#
+	# == Options
+	# For a detailed list of options for your Bauxite version execute:
+	#    bauxite -h
+    #
+	#
+	# [-v, \--verbose]
+	#     Show verbose error messages (i.e. print exception names and
+	#     backtraces).
+	#
+	# [-t, \--timeout SECONDS]
+	#     Number of seconds to wait before issuing a timeout error. This
+	#     timeout applies only to Selectors. 
+	#
+	# [-d, \--debug]
+	#     If an error occurs, break into the debug console. This mode is very
+	#     useful to try different selector combinations and debug
+	#     NoSuchElementError errors.
+	#
+	# [-p, \--provider DRIVER]
+	#     Selenium WebDriver provider. Defaults to +firefox+.
+	#
+	#     Other options include:
+	#     - +remote+
+	#     - +ie+
+	#     - +chrome+
+	#     - +android+
+	#     - +iphone+
+	#     - +opera+
+	#     - +phantomjs+
+	#     - +safari+
+	#
+	#     Driver availability dependes on the system running Bauxite.
+	# [-P, \--provider-option OPTION] 
+	#    A <tt>name=value</tt> pair of options that are directly forwarded to
+	#    the Selenium WebDriver provider. This option argument can appear
+	#    multiple times in the command line to specify multiple options.
+	#
+	# [-l, \--logger LOGGER]
+	#    Logger instance to use. Defaults to +xterm+ if the +TERM+ environment
+	#    variable is set to +xterm+, otherwise it defaults to +terminal+.
+	#
+	#    To see a complete list of the available loggers execute:
+	#        bauxite -h
+	#
+	# [-L, \--logger-option OPTION]
+	#    A <tt>name=value</tt> pair of options that are directly forwarded to
+	#    the logger. This option argument can appear multiple times in the
+	#    command line to specify multiple options.
+	#
+	# [-r, \--reset]
+	#    Issue a Action#reset action between every test specified in
+	#    the command line. This option enforces test isolation by resetting
+	#    the test context before each test (this removes cookies, sessions,
+	#    etc. from the previous test).
+	#
+	# [-w, \--wait]
+	#    Wait for user input when the test completes instead of closing the
+	#    browser window.
+	#
+	# [-u, \--url URL]
+	#    This option is an alias of:
+	#        -p remote -P url=URL
+	#    If +URL+ is not present <tt>http://localhost:4444/wd/hub</tt> will be
+	#    assumed.
+	#
+	# [-e, \--extension DIR]
+	#    Loads every Ruby file (*.rb) inside +DIR+ (and subdirectories). This
+	#    option can be used to load custom Bauxite extensions (e.g. Actions, 
+	#    Selectors, Loggers, etc.) for a specific test run.
+	#
+	#    For example:
+	#        # === custom/my_selector.rb ======= #
+	#        class Bauxite::Selector
+	#            def by_attr(value)
+	#                attr "by_attr:#{value}"
+	#            end
+	#        end
+	#        # === end custom/my_selector.rb === #
+	#
+	#        # === custom/my_test.bxt ========== #
+	#        # ...
+	#        assert "by_attr=attr_value" hello
+	#        # ...
+	#        # === end custom/my_test.bxt ====== #
+	#
+	#        bauxite -e custom custom/my_test.bxt
+	#
+	# [\--version]
+	#     Shows the Bauxite version.
+	#
+	# == Exit Status
+	# The +bauxite+ program exits with +zero+ if every action in the test
+	# succeeded and +non-zero+ otherwise.
+	# 
+	# If the test run includes multiple Action#test actions, the exit status
+	# equals the number of failed test cases (again, +zero+ indicates success).
+	#
 	class Application
-		def self.start
+		def self.start #:nodoc:
 			options = {
 				:logger     => (ENV['TERM'] == 'xterm') ?  'xterm' : 'terminal',
 				:verbose    => false,

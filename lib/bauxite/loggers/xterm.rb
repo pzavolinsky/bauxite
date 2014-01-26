@@ -83,6 +83,8 @@ protected
 	rescue Exception => e
 		super
 	end
+	
+private
     def _dynamic_width_stty
       %x{stty size 2>/dev/null}.split[1].to_i
     end

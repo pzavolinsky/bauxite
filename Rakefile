@@ -49,8 +49,7 @@ end
 # === Documentation ========================================================= #
 desc "Generate Bauxite documentation"
 task :doc do
-	doc_dirs = ['core','actions','selectors','loggers'].map { |d| File.join('lib', 'bauxite',d,'*') }.join(' ')
-	`rdoc -O -U #{doc_dirs}`
+	system("rdoc -O -U -V #{File.join('lib', 'bauxite')}")
 end
 
 desc "Open documentation in a browser"
