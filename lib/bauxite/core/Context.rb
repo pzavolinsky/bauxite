@@ -71,7 +71,8 @@ module Bauxite
 			@options = options
 			@driver_name = (options[:driver] || :firefox).to_sym
 			@variables = {
-				'__TIMEOUT__' => (options[:timeout] || 10).to_i
+				'__TIMEOUT__' => (options[:timeout] || 10).to_i,
+				'__DEBUG__'   => false
 			}
 			@aliases = {}
 			@tests = []
@@ -315,13 +316,15 @@ module Bauxite
 				p e
 				puts e.backtrace
 			end
-			if break_into_debug and @options[:debug]
-				debug
-			elsif exit_on_error
-				if @variables['__RAISE_ERROR__']
-					raise
-				else
-					exit false
+			unless @variables['__DEBUG__']
+				if break_into_debug and @options[:debug]
+					debug
+				elsif exit_on_error
+					if @variables['__RAISE_ERROR__']
+						raise
+					else
+						exit false
+					end
 				end
 			end
 		end

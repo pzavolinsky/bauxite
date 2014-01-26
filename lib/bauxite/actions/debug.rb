@@ -33,7 +33,11 @@ class Bauxite::Action
 	#     # => this breaks into the debug console
 	# :category: Action Methods
 	def debug
-		lambda { _debug_process }
+		lambda do
+			@ctx.with_vars({ '__DEBUG__' => true }) do
+				_debug_process
+			end
+		end
 	end
 	
 private
@@ -44,7 +48,8 @@ private
 		Readline.completion_proc = lambda { |str| _debug_auto_complete(str) }
 		
 		while line = _debug_get_line
-			break if line.strip == 'exit'
+			next if not line or line == ''
+			break if line == 'exit'
 			@ctx.handle_errors(false, false) do
 				@ctx.exec_action({ :text => line, :file => '<debug>', :line => @@debug_line }, true)
 			end
@@ -58,7 +63,7 @@ private
 		if line =~ /^\s*$/ or Readline::HISTORY.to_a[-2] == line
 			Readline::HISTORY.pop
 		end
-		line
+		line.strip
 	end
 	
 	def _debug_auto_complete(str)
