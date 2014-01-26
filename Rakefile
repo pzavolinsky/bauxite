@@ -1,5 +1,7 @@
 task :default => [:test, :doc]
 
+CURRENT_VERSION = `ruby -Ilib bin/bauxite --version`.gsub(/^.* /, '')
+
 # === Gem Package =========================================================== #
 require 'rubygems'
 require 'rubygems/package_task'
@@ -9,9 +11,9 @@ spec = Gem::Specification.new do |s|
 	s.summary     = 'Bauxite is a façade over Selenium intended for non-developers'
 	s.author      = 'Patricio Zavolinsky'
 	s.email       = 'pzavolinsky at yahoo dot com dot ar'
-	s.homepage    = 'http://rubygems.org/gems/bauxite'
+	s.homepage    = 'https://github.com/pzavolinsky/bauxite'
 	s.license     = 'MIT'
-	s.version     = `ruby -Ilib bin/bauxite --version`.gsub(/^.* /, '')
+	s.version     = CURRENT_VERSION
 	s.executables = ["bauxite"]
 	s.add_runtime_dependency     'selenium-webdriver', '~> 2.39'
 	s.add_development_dependency 'rake'              , '~> 10.1'
@@ -72,16 +74,20 @@ task :inject_license do
 end
 
 desc "Helper: Update Bauxite version"
-task :update_version do
+task :update_version, :version do |t,args|
+	version = args[:version]
+	unless version
+		puts "Usage rake update_version[version]"
+		puts ""
+		puts "Current version: #{CURRENT_VERSION}"
+		exit false
+	end
+	
 	content = File.open('lib/bauxite.rb', 'r') { |f| f.read }
-	version = nil
+	expr = /(.*VERSION = ")([^"]*)(".*)/
+	
 	content = content.each_line.map do |line|
-		match = line.match(/(.*VERSION = ")(.*)(".*)/)
-		next line unless match
-		version = match[2].split('.')
-		version[1] = (version[1].to_i + 1).to_s
-		version = version.join('.')
-		"#{match[1]}#{version}#{match[3]}\n"
+		line.sub(/(.*VERSION = ").*(".*)/, "\\1#{version}\\2")
 	end.join
 	if version
 		puts "Updated version to #{version}"
