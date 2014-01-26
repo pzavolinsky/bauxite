@@ -254,14 +254,16 @@
 
           
           <div class="method-source-code" id="_screen_width-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/xterm.rb, line 71</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/xterm.rb, line 76</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_screen_width</span>
-        <span class="ruby-keyword">begin</span>
-                <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;terminfo&#39;</span>
-                <span class="ruby-constant">TermInfo</span>.<span class="ruby-identifier">screen_size</span>[<span class="ruby-value">1</span>]
-        <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-constant">RbConfig</span><span class="ruby-operator">::</span><span class="ruby-constant">CONFIG</span>[<span class="ruby-string">&#39;host_os&#39;</span>] <span class="ruby-operator">=~</span>
+<span class="ruby-regexp">/(aix|darwin|linux|(net|free|open)bsd|cygwin|solaris|irix|hpux)/i</span>
+                (<span class="ruby-identifier">_dynamic_width_stty</span>.<span class="ruby-identifier">nonzero?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">_dynamic_width_tput</span>)
+        <span class="ruby-keyword">else</span>
                 <span class="ruby-keyword">super</span>
         <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-keyword">super</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

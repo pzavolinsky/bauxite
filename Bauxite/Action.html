@@ -578,7 +578,11 @@ autocomplete (pressing the <code>TAB</code> key).</p>
           <div class="method-source-code" id="debug-source">
             <pre><span class="ruby-comment"># File lib/bauxite/actions/debug.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug</span>
-        <span class="ruby-identifier">lambda</span> { <span class="ruby-identifier">_debug_process</span> }
+        <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_vars</span>({ <span class="ruby-string">&#39;__DEBUG__&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> }) <span class="ruby-keyword">do</span>
+                        <span class="ruby-identifier">_debug_process</span>
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
