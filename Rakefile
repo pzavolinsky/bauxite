@@ -28,13 +28,13 @@ spec = Gem::Specification.new do |s|
 	]
 end
 
+task :package => [ :test, :doc ]
+task :gem     => [ :test, :doc ]
+
 Gem::PackageTask.new(spec) do |pkg|
   pkg.need_zip = true
   pkg.need_tar = true
 end
-
-task :package => [ :test, :doc ]
-task :gem     => [ :test, :doc ]
 
 # === Integration tests ===================================================== #
 desc "Run integration tests"
