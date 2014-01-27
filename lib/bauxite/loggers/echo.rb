@@ -31,6 +31,7 @@ class Bauxite::Loggers::EchoLogger < Bauxite::Loggers::NullLogger
 	# Echoes the raw action text.
 	def log_cmd(action)
 		puts action.text
+		$stdout.flush
 		yield
 	end
 end

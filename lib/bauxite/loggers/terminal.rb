@@ -44,6 +44,8 @@ class Bauxite::Loggers::TerminalLogger < Bauxite::Loggers::NullLogger
 		s = action.args(true).join(' ')
 		s = s[0...max_args_size-3]+'...' if s.size > max_args_size
 		print s.ljust(max_args_size)
+		$stdout.flush
+
 		_save_cursor
 		color = :green
 		text  = 'OK'
@@ -54,10 +56,12 @@ class Bauxite::Loggers::TerminalLogger < Bauxite::Loggers::NullLogger
 		end
 		_restore_cursor
 		puts " #{_block(color, text, 5)}"
+		$stdout.flush
 		ret
 	rescue
 		_restore_cursor
 		puts " #{_block(:red, 'ERROR', 5)}"
+		$stdout.flush
 		raise
 	end
 
@@ -70,6 +74,7 @@ class Bauxite::Loggers::TerminalLogger < Bauxite::Loggers::NullLogger
 	def progress(value)
 		if _restore_cursor
 			print " #{_block(:gray, value.to_s, 5)}"
+			$stdout.flush
 		end
 	end
 	
