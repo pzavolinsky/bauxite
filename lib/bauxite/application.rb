@@ -21,7 +21,7 @@
 #++
 
 require 'optparse'
-require_relative  'core/Context.rb'
+require_relative  'core/context'
 
 module Bauxite
 	# +bauxite+ command-line program.
@@ -224,15 +224,7 @@ module Bauxite
 			files = ARGV
 			files = ['stdin'] if files.size == 0 and not options[:debug]
 
-			actions = ctx.handle_errors do
-				files.each_with_index.map do |file,idx|
-					{
-						:text => "load \"#{file.gsub('"', '""')}\"",
-						:file => 'command-line-args',
-						:line => idx
-					}
-				end
-			end
+			actions = files.map { |f| "load \"#{f.gsub('"', '""')}\"" }
 
 			if options[:reset] and files.size > 1
 				actions = actions.map { |a| [a] }.inject do |sum,a|

@@ -31,6 +31,7 @@ lambda do
 	Dir[File.join(dir, '..', 'actions'  , '*.rb')].each { |file| require file }
 	Dir[File.join(dir, '..', 'selectors', '*.rb')].each { |file| require file }
 	Dir[File.join(dir, '..', 'loggers'  , '*.rb')].each { |file| require file }
+	Dir[File.join(dir, '..', 'parsers'  , '*.rb')].each { |file| require file }
 end.call
 
 module Bauxite
@@ -49,9 +50,6 @@ module Bauxite
 		
 		# Context variables.
 		attr_accessor :variables
-		
-		# Action aliases.
-		attr_accessor :aliases
 		
 		# Test containers.
 		attr_accessor :tests
@@ -82,6 +80,8 @@ module Bauxite
 			handle_errors do
 				@logger = Context::load_logger(options[:logger], options[:logger_opt])
 			end
+			
+			@parser = Parser.new(self)
 		end
 		
 		# Starts the test engine and executes the actions specified. If no action
@@ -203,86 +203,30 @@ module Bauxite
 		# :section: Advanced Helpers
 		# ======================================================================= #
 		
-		# Executes the specified action handling errors, logging and debug history.
-		# Actions can be obtained by calling #parse_action.
+		# Executes the specified action string handling errors, logging and debug
+		# history.
 		#
 		# If +log+ is +true+, log the action execution (default behavior).
 		#
 		# For example:
-		#     action = ctx.parse_action('open "http://www.ruby-lang.org"')
-		#     ctx.exec_action action
+		#     ctx.exec_action 'open "http://www.ruby-lang.org"'
 		#     # => navigates to www.ruby-lang.org
 		#
-		def exec_action(action, log = true)
-			if (action.is_a? String)
-				action = { :text => action, :file => '<unknown>', :line => 0 }
-			end
-			
-			ret = handle_errors(true) do
-
-				action = _load_action(action)
-
-				# Inject built-in variables
-				file = action.file
-				dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
-				@variables['__FILE__'] = file
-				@variables['__DIR__'] = File.absolute_path(dir)
-				
-				if log
-					@logger.log_cmd(action) do
-			    		Readline::HISTORY << action.text
-						action.execute
-					end
-				else
-					action.execute
-				end
-			end
-			ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
-		end
-
-		# Parses the specified text into a test action array.
-		#
-		# See #parse_action for more details.
-		#
-		# For example:
-		#     ctx.parse_file('file')
-		#     # => [ { :cmd => 'echo', ... } ]
-		#
-		def parse_file(file)
-			if (file == 'stdin')
-				_parse_file($stdin, file)
-			else
-				File.open(file) { |io| _parse_file(io, file) }
-			end
+		def exec_action(text, log = true, file = '<unknown>', line = 0)
+			data = Context::parse_action_default(text, file, line)
+			_exec_parsed_action(data[:action], data[:args], text, log, file, line)
 		end
 		
-		# Parses a line of action text into an array. The input +line+ should be a
-		# space-separated list of values, surrounded by optional quotes (").
-		# 
-		# The first element in +line+ will be interpreted as an action name. Valid
-		# action names are retuned by ::actions.
-		#
-		# The other elements in +line+ will be interpreted as action arguments.
+		# Executes the specified +file+.
 		#
 		# For example:
-		#     Context::parse_args('echo "Hello World!"')
-		#     # => ' ["echo", "Hello World!"]
+		#     ctx.exec_file('file')
+		#     # => executes every action defined in 'file'
 		#
-		def self.parse_args(line)
-			# col_sep must be a regex because String.split has a special case for
-			# a single space char (' ') that produced unexpected results (i.e.
-			# if line is '"a      b"' the resulting array contains ["a b"]).
-			#
-			# ...but... 
-			#
-			# CSV expects col_sep to be a string so we need to work some dark magic
-			# here. Basically we proxy the StringIO received by CSV to returns
-			# strings for which the split method does not fold the whitespaces.
-			#
-			return [] if line.strip == ''
-			CSV.new(StringIOProxy.new(line), { :col_sep => ' ' })
-			.shift
-			.select { |a| a != nil }
+		def exec_file(file)
+			@parser.parse(file) do |action, args, text, file, line|
+				_exec_parsed_action(action, args, text, true, file, line)
+			end
 		end
 		
 		# Executes the +block+ inside a rescue block applying standard criteria of
@@ -381,6 +325,48 @@ module Bauxite
 			Loggers.const_get(class_name).new(options)
 		end
 		
+		# Adds an alias named +name+ to the specified +action+ with the
+		# arguments specified in +args+.
+		#
+		def add_alias(name, action, args)
+			@aliases[name] = { :action => action, :args => args }
+		end
+		
+		# Default action parsing strategy.
+		#
+		def self.parse_action_default(text, file = '<unknown>', line = 0)
+			data = text.split(' ', 2)
+			begin
+				args_text = data[1] ? data[1].strip : ''
+				args = []
+				
+				unless args_text == ''
+					# col_sep must be a regex because String.split has a
+					# special case for a single space char (' ') that produced
+					# unexpected results (i.e. if line is '"a      b"' the
+					# resulting array contains ["a b"]).
+					#
+					# ...but... 
+					#
+					# CSV expects col_sep to be a string so we need to work
+					# some dark magic here. Basically we proxy the StringIO
+					# received by CSV to returns strings for which the split
+					# method does not fold the whitespaces.
+					#
+					args = CSV.new(StringIOProxy.new(args_text), { :col_sep => ' ' })
+					.shift
+					.select { |a| a != nil } || []
+				end
+				
+				{
+					:action => data[0].strip.downcase,
+					:args   => args
+				}
+			rescue StandardError => e
+				raise "#{file} (line #{line+1}): #{e.message}"
+			end
+		end
+		
 		# ======================================================================= #
 		# :section: Metadata
 		# ======================================================================= #
@@ -432,6 +418,18 @@ module Bauxite
 		#
 		def self.loggers
 			Loggers.constants.map { |l| l.to_s.downcase.sub(/logger$/, '') }
+		end
+		
+		# Returns an array with the names of every parser available.
+		#
+		# For example:
+		#     Context::parsers
+		#     # => [ "default", "html", ... ]
+		#
+		def self.parsers
+			(Parser.public_instance_methods(false) \
+			 - ParserModule.public_instance_methods(false))
+			.map { |p| p.to_s }
 		end
 		
 		# Returns the maximum size in characters of an action name.
@@ -505,47 +503,6 @@ module Bauxite
 			@driver = Selenium::WebDriver.for(@driver_name, @options[:driver_opt])
 			@driver.manage.timeouts.implicit_wait = 1
 		end
-
-		def _load_action(action)
-			text = action[:text]
-			file = action[:file]
-			line = action[:line]
-
-			data = text.split(' ', 2)
-			cmd  = data[0].strip.downcase
-			args = data[1] ? data[1].strip : ''
-
-			begin
-				args = Context::parse_args(args) || []
-			rescue StandardError => e
-				raise "#{file} (line #{line+1}): #{e.message}"
-			end
-
-			alias_cmd = @aliases[cmd]
-			return Action.new(self, cmd, args, text, file, line) unless alias_cmd
-
-			action[:text] = args.each_with_index.inject(alias_cmd) do |ret,vi|
-				# expand ${1} to args[0], ${2} to args[1], etc.
-				ret.gsub("${#{vi[1]+1}}", vi[0])
-			end.gsub(/\$\{(\d+)\*(q)?\}/) do |match|
-				# expand ${4*} to "#{args[4]} #{args[5]} ..."
-				# expand ${4*q} to "\"#{args[4]}\" \"#{args[5]}\" ..."
-				a = args[$1..-1]
-				a = a.map { |arg| '"'+arg.gsub('"', '""')+'"' } if $2 == 'q'
-				a.join(' ')
-			end.gsub(/\$\{\d+\}/, '') # remove unexpanded ${1}, etc.
-		
-			_load_action(action)
-		end
-
-		def _parse_file(io, file)
-			io.each_line.each_with_index.map do |text,line|
-				text = text.sub(/\r?\n$/, '')
-				next nil if text =~ /^\s*(#|$)/
-				exec_action({ :text => text, :file => file, :line => line })
-			end
-			.select { |item| item != nil }
-		end
 		
 		def _load_extensions(dirs)
 			dirs.each do |d|
@@ -554,7 +511,53 @@ module Bauxite
 				Dir[File.join(d, '**', '*.rb')].each { |file| require file }
 			end
 		end
-
+		
+		def _exec_parsed_action(action, args, text, log, file, line)
+			ret = handle_errors(true) do
+				
+				while (alias_action = @aliases[action])
+					action = alias_action[:action]
+					args   = alias_action[:args].map do |a|
+						a.gsub(/\$\{(\d+)(\*q?)?\}/) do |match|
+							# expand ${1} to args[0], ${2} to args[1], etc.
+							# expand ${4*} to "#{args[4]} #{args[5]} ..."
+							# expand ${4*q} to "\"#{args[4]}\" \"#{args[5]}\" ..."
+							idx = $1.to_i-1
+							if $2 == nil
+								args[idx] || ''
+							else
+								range = args[idx..-1]
+								range = range.map { |arg| '"'+arg.gsub('"', '""')+'"' } if $2 == '*q'
+								range.join(' ')
+							end
+						end
+					end
+				end
+				
+				text = ([action] + args.map { |a| '"'+a.gsub('"', '""')+'"' }).join(' ') unless text
+				
+				action =  Action.new(self, action, args, text, file, line)
+				
+				# Inject built-in variables
+				file = action.file
+				dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
+				@variables['__FILE__'] = file
+				@variables['__DIR__'] = File.absolute_path(dir)
+				
+				if log
+					@logger.log_cmd(action) do
+			    		Readline::HISTORY << action.text
+						action.execute
+					end
+				else
+					action.execute
+				end
+			end
+			handle_errors(true) do
+				ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
+			end
+		end
+		
 		# ======================================================================= #
 		# Hacks required to overcome the String#split(' ') behavior of folding the
 		# space characters, coupled with CSV not supporting a regex as :col_sep.

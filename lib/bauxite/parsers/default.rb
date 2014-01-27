@@ -20,17 +20,23 @@
 # SOFTWARE.
 #++
 
-module Bauxite
-	# Errors Module
-	module Errors
-		# Error raised when an assertion fails.
-		# 
-		class AssertionError < StandardError
-		end
+class Bauxite::Parser
+	# Load default Bauxite files.
+	#
+	# :category: Parser Methods
+	def default(file, io = nil)
+		return nil unless file == 'stdin' or file.match(/\.[tb]xt(\..*)?$/)
 		
-		# Error raised when an invalid file tried to be loaded.
-		# 
-		class FileNotFoundError < StandardError
+		return default(file, $stdin) if file == 'stdin' and not io
+		
+		return File.open(file) { |io| default(file, io) } unless io
+		
+		io.each_line.each_with_index.map do |text,line|
+			text = text.sub(/\r?\n$/, '')
+			next nil if text =~ /^\s*(#|$)/
+			data = Bauxite::Context::parse_action_default(text, file, line)
+			[ data[:action], data[:args], text, line ]
 		end
+		.select { |item| item != nil }
 	end
 end

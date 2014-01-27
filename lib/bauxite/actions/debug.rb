@@ -51,7 +51,7 @@ private
 			next if not line or line == ''
 			break if line == 'exit'
 			@ctx.handle_errors(false, false) do
-				@ctx.exec_action({ :text => line, :file => '<debug>', :line => @@debug_line }, true)
+				@ctx.exec_action(line, true, '<debug>', @@debug_line)
 			end
 			@@debug_line += 1
 		end
@@ -80,9 +80,8 @@ private
 		
 		if args != ''
 			begin
-				data = Bauxite::Context::parse_args(args)
+				data = Bauxite::Context::parse_action_default(args)[:args]
 			rescue
-			#puts "\nhasta aca\n"
 				return []
 			end
 		end

@@ -4,3 +4,6 @@ hey john
 alias set_hi set hi "hi ${1}"
 set_hi dude!
 assertv "^hi dude!$" "${hi}"
+
+alias merge_hi echo "${1*}"
+merge_hi how are you doing?

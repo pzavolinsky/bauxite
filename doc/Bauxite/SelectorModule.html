@@ -127,7 +127,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/Selector.rb, line 28</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/selector.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">ctx</span>)
         <span class="ruby-ivar">@ctx</span> = <span class="ruby-identifier">ctx</span>
 <span class="ruby-keyword">end</span></pre>
@@ -185,7 +185,7 @@ href="Context.html#method-i-find">Bauxite::Context#find</a>.</p>
 
           
           <div class="method-source-code" id="find-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/Selector.rb, line 48</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/selector.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-comment"># I know I should be using Class scope operators to refer to class</span>
         <span class="ruby-comment"># methods (i.e. Context::selectors), but for some reason RDoc</span>
@@ -253,7 +253,7 @@ href="Context.html#method-i-find">Bauxite::Context#find</a>.</p>
 
           
           <div class="method-source-code" id="selenium_find-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/Selector.rb, line 81</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/selector.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">selenium_find</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">selector</span>)
         <span class="ruby-identifier">element</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">find_element</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">selector</span>)
         <span class="ruby-keyword">yield</span> <span class="ruby-identifier">element</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>

@@ -43,7 +43,7 @@ class Bauxite::Action
 	# :category: Action Methods
 	def tryload(file, *vars)
 		_load_file_action(file, *vars) do |f|
-			@ctx.parse_file(f)
+			@ctx.exec_file(f)
 		end
 	end
 	
