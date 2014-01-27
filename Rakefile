@@ -51,7 +51,7 @@ end
 # === Documentation ========================================================= #
 desc "Generate Bauxite documentation"
 task :doc do
-	system("rdoc -O -U -V #{File.join('lib', 'bauxite')}")
+	system("rdoc -O -U -V --main README.md README.md  #{File.join('lib', 'bauxite')}")
 end
 
 desc "Open documentation in a browser"

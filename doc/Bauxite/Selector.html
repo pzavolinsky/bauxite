@@ -82,7 +82,7 @@
   <ul class="link-list">
   
   
-    <li><span class="include">SelectorModule</span>
+    <li><a class="include" href="SelectorModule.html">Bauxite::SelectorModule</a>
   
   
   </ul>
@@ -129,12 +129,14 @@ selector method itself. Also, no <code>attr_accessors</code> should be
 added.</p>
 
 <p><a href="Selector.html">Selector</a> methods can use the <code>ctx</code>
-attribute to refer to the current test Context. The protected method
-selenium_find can also be used to locate elements using standard Selenium
-selectors.</p>
+attribute to refer to the current test Context. The protected method <a
+href="SelectorModule.html#method-i-selenium_find">selenium_find</a> can
+also be used to locate elements using standard Selenium selectors.</p>
 
 <p><a href="Selector.html">Selector</a> methods should always take a block and
-forward that block to a call to either find or selenium_find.</p>
+forward that block to a call to either <a
+href="SelectorModule.html#method-i-find">find</a> or <a
+href="SelectorModule.html#method-i-selenium_find">selenium_find</a>.</p>
 
 <p>For example (new selector template):</p>
 

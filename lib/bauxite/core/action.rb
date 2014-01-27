@@ -200,6 +200,6 @@ module Bauxite
 	#                                   [ OK  ]
 	#
 	class Action
-		include ActionModule
+		include Bauxite::ActionModule
 	end
 end

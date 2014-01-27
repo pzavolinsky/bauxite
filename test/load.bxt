@@ -15,3 +15,5 @@ assertv "^this shouldn't change$" "${other}"
 assertv "^in main!$" "${var}"
 assertv "^\$\{child_only\}$" "${child_only}"
 assertv "^child$" "${retval}"
+
+tryload "this_one_is_invalid.bin"

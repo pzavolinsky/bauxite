@@ -55,7 +55,15 @@ module Bauxite
 	# Parser methods can use the +ctx+ attribute to refer to the current test
 	# Context.
 	# Parser methods receive a single action hash argument including <tt>:file</tt>
-	# and return an array of hashes or nil if the parser can't handle the file.
+	# and return an array of arrays or nil if the parser can't handle the file.
+	#
+	# Each element in the output array must contain the following fields:
+	#     [
+	#         action, # action name
+	#         args,   # args array
+	#         text,   # raw action text (before parsing), or nil
+	#         line    # line in the file that defined the action
+	#     ]
 	#
 	# For example:
 	#     # === parsers/my_parser.rb ======= #
@@ -64,15 +72,15 @@ module Bauxite
 	#         def my_parser(action)
 	#             # open and read file
 	#             [
-	#                 { :cmd => 'echo', :args => [ 'hello world'                 ] },
-	#                 { :cmd => 'write',:args => [ 'id=username', 'jdoe'         ] },
-	#                 { :cmd => 'write',:args => [ 'id=password', 'hello world!' ] }
+	#                 [ 'echo', [ 'hello world'                 ], 'echo "hello world"', 0 ],
+	#                 [ 'write',[ 'id=username', 'jdoe'         ], nil                 , 1 ],
+	#                 [ 'write',[ 'id=password', 'hello world!' ], nil                 , 2 ]
 	#             ]
 	#         end
 	#     end
 	#     # === end parsers/my_parser.rb === #
 	#
 	class Parser
-		include ParserModule
+		include Bauxite::ParserModule
 	end
 end

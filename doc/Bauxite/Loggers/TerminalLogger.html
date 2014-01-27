@@ -204,7 +204,7 @@
 
           
           <div class="method-source-code" id="debug_prompt-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 65</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 69</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug_prompt</span>
         <span class="ruby-identifier">_fmt</span>(<span class="ruby-value">:white</span>, <span class="ruby-keyword">super</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -244,7 +244,7 @@
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 80</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 85</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
         <span class="ruby-identifier">color</span> = <span class="ruby-value">:gray</span>
         <span class="ruby-keyword">case</span> <span class="ruby-identifier">type</span>
@@ -298,6 +298,8 @@
         <span class="ruby-identifier">s</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">args</span>(<span class="ruby-keyword">true</span>).<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)
         <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">max_args_size</span><span class="ruby-operator">-</span><span class="ruby-value">3</span>]<span class="ruby-operator">+</span><span class="ruby-string">&#39;...&#39;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max_args_size</span>
         <span class="ruby-identifier">print</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-identifier">max_args_size</span>)
+        <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">flush</span>
+
         <span class="ruby-identifier">_save_cursor</span>
         <span class="ruby-identifier">color</span> = <span class="ruby-value">:green</span>
         <span class="ruby-identifier">text</span>  = <span class="ruby-string">&#39;OK&#39;</span>
@@ -308,10 +310,12 @@
         <span class="ruby-keyword">end</span>
         <span class="ruby-identifier">_restore_cursor</span>
         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot; #{_block(color, text, 5)}&quot;</span>
+        <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">flush</span>
         <span class="ruby-identifier">ret</span>
 <span class="ruby-keyword">rescue</span>
         <span class="ruby-identifier">_restore_cursor</span>
         <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot; #{_block(:red, &#39;ERROR&#39;, 5)}&quot;</span>
+        <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">flush</span>
         <span class="ruby-identifier">raise</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -343,10 +347,11 @@
 
           
           <div class="method-source-code" id="progress-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 70</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 74</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>)
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">_restore_cursor</span>
                 <span class="ruby-identifier">print</span> <span class="ruby-node">&quot; #{_block(:gray, value.to_s, 5)}&quot;</span>
+                <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">flush</span>
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -386,7 +391,7 @@
 
           
           <div class="method-source-code" id="_block-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 110</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 115</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_block</span>(<span class="ruby-identifier">color</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">size</span>)
         <span class="ruby-node">&quot;#{_fmt(:white, &#39;[&#39;)}#{_fmt(color, text, size)}#{_fmt(:white, &#39;]&#39;)}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -419,7 +424,7 @@
 
           
           <div class="method-source-code" id="_cmd_color-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 115</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_cmd_color</span>(<span class="ruby-identifier">cmd</span>)
         <span class="ruby-keyword">case</span> <span class="ruby-identifier">cmd</span>
         <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;load&#39;</span>
@@ -459,7 +464,7 @@
 
           
           <div class="method-source-code" id="_fmt-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 95</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 100</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_fmt</span>(<span class="ruby-identifier">color</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">size</span> = <span class="ruby-value">0</span>)
         <span class="ruby-identifier">text</span>.<span class="ruby-identifier">center</span>(<span class="ruby-identifier">size</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -492,7 +497,7 @@
 
           
           <div class="method-source-code" id="_restore_cursor-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 105</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_restore_cursor</span>
         <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -525,7 +530,7 @@
 
           
           <div class="method-source-code" id="_save_cursor-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 100</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 105</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_save_cursor</span>
         <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -558,7 +563,7 @@
 
           
           <div class="method-source-code" id="_screen_width-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 127</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/terminal.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">_screen_width</span>
         <span class="ruby-value">80</span>
 <span class="ruby-keyword">end</span></pre>

@@ -34,6 +34,7 @@ lambda do
 	Dir[File.join(dir, '..', 'parsers'  , '*.rb')].each { |file| require file }
 end.call
 
+# Bauxite Namespace
 module Bauxite
 	# The Main test context. This class includes state and helper functions
 	# used by clients execute tests and by actions and selectors to interact
