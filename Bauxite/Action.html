@@ -348,7 +348,7 @@ not alias_action.</p>
           <div class="method-source-code" id="alias_action-source">
             <pre><span class="ruby-comment"># File lib/bauxite/actions/alias.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">alias_action</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">aliases</span>[<span class="ruby-identifier">name</span>] = ([<span class="ruby-identifier">action</span>] <span class="ruby-operator">+</span> (<span class="ruby-identifier">args</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-string">&#39;&quot;&#39;</span><span class="ruby-operator">+</span><span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&#39;&quot;&quot;&#39;</span>, <span class="ruby-string">&#39;&#39;</span>)<span class="ruby-operator">+</span><span class="ruby-string">&#39;&quot;&#39;</span> })).<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">add_alias</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -1351,7 +1351,7 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
             <pre><span class="ruby-comment"># File lib/bauxite/actions/tryload.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tryload</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">_load_file_action</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
-                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">parse_file</span>(<span class="ruby-identifier">f</span>)
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_file</span>(<span class="ruby-identifier">f</span>)
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>

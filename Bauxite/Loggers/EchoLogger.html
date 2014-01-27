@@ -138,6 +138,7 @@ action succeeded, failed or was skipped).</p>
             <pre><span class="ruby-comment"># File lib/bauxite/loggers/echo.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-identifier">puts</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">text</span>
+        <span class="ruby-identifier">$stdout</span>.<span class="ruby-identifier">flush</span>
         <span class="ruby-keyword">yield</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
