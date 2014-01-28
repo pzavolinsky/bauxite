@@ -20,10 +20,18 @@
 # SOFTWARE.
 #++
 
-#--
-module Bauxite
-	VERSION = "0.4.2"
+class Bauxite::Action
+	# Submits the form that contains the selected element.
+	#
+	# For example:
+	#     # assuming <form><input id="i"/></form>
+	#     submit i
+	#     # => this would submit the form
+	#
+	# :category: Action Methods
+	def submit(selector)
+		@ctx.find(selector) do |e|
+			e.submit
+		end
+	end
 end
-#++
-
-require_relative 'bauxite/application'

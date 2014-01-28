@@ -1,0 +1,9 @@
+open "file://${__DIR__}/select/page.html"
+
+assert type def
+
+select type Auto
+assert type car
+
+select type Bicycle
+assert type bike

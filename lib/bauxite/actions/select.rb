@@ -20,10 +20,29 @@
 # SOFTWARE.
 #++
 
-#--
-module Bauxite
-	VERSION = "0.4.2"
+class Bauxite::Action
+	# Sets the value of the selected +HTMLSelect+ to +text+.
+	#
+	# +text+ can be the +value+ or the +text+ of the target +HTMLOption+.
+	#
+	# For example:
+	#     # assuming <select id="s">
+	#     #            <option value="one">First</option>
+	#     #            <option value="two">Second</option>
+	#     #          </select>
+	#     select s Second
+	#     select s two
+	#     # => both actions select the second option.
+	#
+	# :category: Action Methods
+	def select(selector, text)
+		@ctx.find(selector) do |e|
+			e = Selenium::WebDriver::Support::Select.new(e)
+			begin
+				e.select_by(:value, text)
+			rescue Selenium::WebDriver::Error::NoSuchElementError
+				e.select_by(:text, text)
+			end
+		end
+	end
 end
-#++
-
-require_relative 'bauxite/application'

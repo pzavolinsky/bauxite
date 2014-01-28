@@ -127,11 +127,15 @@
     
     <li ><a href="#method-i-ruby">#ruby</a>
     
+    <li ><a href="#method-i-select">#select</a>
+    
     <li ><a href="#method-i-set">#set</a>
     
     <li ><a href="#method-i-source">#source</a>
     
     <li ><a href="#method-i-store">#store</a>
+    
+    <li ><a href="#method-i-submit">#submit</a>
     
     <li ><a href="#method-i-test">#test</a>
     
@@ -1099,6 +1103,61 @@ href="Context.html">Context</a> instance as its only argument.</p>
       </div>
 
     
+      <div id="method-i-select" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">select</span><span
+            class="method-args">(selector, text)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets the value of the selected <code>HTMLSelect</code> to
+<code>text</code>.</p>
+
+<p><code>text</code> can be the <code>value</code> or the <code>text</code> of
+the target <code>HTMLOption</code>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;select id=&quot;s&quot;&gt;</span>
+<span class="ruby-comment">#            &lt;option value=&quot;one&quot;&gt;First&lt;/option&gt;</span>
+<span class="ruby-comment">#            &lt;option value=&quot;two&quot;&gt;Second&lt;/option&gt;</span>
+<span class="ruby-comment">#          &lt;/select&gt;</span>
+<span class="ruby-identifier">select</span> <span class="ruby-identifier">s</span> <span class="ruby-constant">Second</span>
+<span class="ruby-identifier">select</span> <span class="ruby-identifier">s</span> <span class="ruby-identifier">two</span>
+<span class="ruby-comment"># =&gt; both actions select the second option.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="select-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/select.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">select</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-identifier">text</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">e</span> = <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Support</span><span class="ruby-operator">::</span><span class="ruby-constant">Select</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">e</span>)
+                <span class="ruby-keyword">begin</span>
+                        <span class="ruby-identifier">e</span>.<span class="ruby-identifier">select_by</span>(<span class="ruby-value">:value</span>, <span class="ruby-identifier">text</span>)
+                <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">NoSuchElementError</span>
+                        <span class="ruby-identifier">e</span>.<span class="ruby-identifier">select_by</span>(<span class="ruby-value">:text</span>, <span class="ruby-identifier">text</span>)
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-set" class="method-detail ">
         
         <div class="method-heading">
@@ -1229,6 +1288,48 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
             <pre><span class="ruby-comment"># File lib/bauxite/actions/store.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">store</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-identifier">name</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">e</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-submit" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">submit</span><span
+            class="method-args">(selector)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Submits the form that contains the selected element.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;form&gt;&lt;input id=&quot;i&quot;/&gt;&lt;/form&gt;</span>
+<span class="ruby-identifier">submit</span> <span class="ruby-identifier">i</span>
+<span class="ruby-comment"># =&gt; this would submit the form</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="submit-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/submit.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">submit</span>(<span class="ruby-identifier">selector</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">e</span>.<span class="ruby-identifier">submit</span>
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -1461,7 +1562,7 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.0.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 

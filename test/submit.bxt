@@ -1,0 +1,4 @@
+open "file://${__DIR__}/submit/page.html"
+write name=q "Hello World"
+submit name=q
+assert h "\?q=Hello\+World$"

@@ -30,9 +30,10 @@ class Bauxite::Selector
 	# 4. by +id+ fragment (the +id+ contains the text specified)
 	# 5. by +placeholder+ attribute
 	# 6. by text content (unless the element is a label)
-	# 7. by referenced element (find a label by its text, then find the element
+	# 7. by radio/checkbox button value
+	# 8. by referenced element (find a label by its text, then find the element
 	#    pointed by the label's +for+ attribute)
-	# 8  by child element (find a label by its text, then find the first
+	# 9. by child element (find a label by its text, then find the first
 	#    element child control element, including input, select, textarea and
 	#    button).
 	#
@@ -49,6 +50,8 @@ class Bauxite::Selector
 		target ||= _smart_try_find { selenium_find(:class_name, arg) }
 		target ||= _smart_try_find { attr("id*:"+arg, &b)            }
 		target ||= _smart_try_find { attr("placeholder:"+arg, &b)    }
+		quoted_arg = "'"+arg.gsub("'", "\\'")+"'"
+		target ||= _smart_try_find { selenium_find(:css, "input[type='checkbox'][value=#{quoted_arg}],input[type='radio'][value=#{quoted_arg}]") }
 		return yield target if target
 		
 		target = selenium_find(:xpath, "//*[contains(text(), '#{arg.gsub("'", "\\'")}')]")
