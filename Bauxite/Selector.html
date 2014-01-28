@@ -101,6 +101,8 @@
     
     <li ><a href="#method-i-frame">#frame</a>
     
+    <li ><a href="#method-i-smart">#smart</a>
+    
   </ul>
 </div>
 
@@ -410,6 +412,88 @@ selector.</p>
       </div>
 
     
+      <div id="method-i-smart" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">smart</span><span
+            class="method-args">(arg) { |target| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Select an element by applying different <a
+href="Selector.html">Selector</a> strategies.</p>
+
+<p>This selector tries to find elements by using the following strategies:</p>
+<ol><li>
+<p>default (id suffix)</p>
+</li><li>
+<p>by <code>name</code></p>
+</li><li>
+<p>by <code>class_name</code></p>
+</li><li>
+<p>by <code>id</code> fragment (the <code>id</code> contains the text
+specified)</p>
+</li><li>
+<p>by <code>placeholder</code> attribute</p>
+</li><li>
+<p>by text content (unless the element is a label)</p>
+</li><li>
+<p>by radio/checkbox button value</p>
+</li><li>
+<p>by referenced element (find a label by its text, then find the element
+pointed by the label&#39;s <code>for</code> attribute)</p>
+</li><li>
+<p>by child element (find a label by its text, then find the first element
+child control element, including input, select, textarea and button).</p>
+</li></ol>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;label&gt;By label parent&lt;input type=&quot;text&quot; value=&quot;By label parent&quot;/&gt;&lt;/label&gt;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-string">&quot;smart=By label parent&quot;</span> <span class="ruby-string">&quot;By label parent&quot;</span>
+<span class="ruby-comment"># =&gt; the assertion succeeds.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="smart-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/smart.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">smart</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">b</span> = <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span> }
+        <span class="ruby-identifier">target</span>   = <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">default</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)                }
+        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:name</span>, <span class="ruby-identifier">arg</span>)       }
+        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:class_name</span>, <span class="ruby-identifier">arg</span>) }
+        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">attr</span>(<span class="ruby-string">&quot;id*:&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)            }
+        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">attr</span>(<span class="ruby-string">&quot;placeholder:&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)    }
+        <span class="ruby-identifier">quoted_arg</span> = <span class="ruby-string">&quot;&#39;&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&#39;&quot;</span>, <span class="ruby-string">&quot;\\&#39;&quot;</span>)<span class="ruby-operator">+</span><span class="ruby-string">&quot;&#39;&quot;</span>
+        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;input[type=&#39;checkbox&#39;][value=#{quoted_arg}],input[type=&#39;radio&#39;][value=#{quoted_arg}]&quot;</span>) }
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">target</span>
+        
+        <span class="ruby-identifier">target</span> = <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:xpath</span>, <span class="ruby-node">&quot;//*[contains(text(), &#39;#{arg.gsub(&quot;&#39;&quot;, &quot;\\&#39;&quot;)}&#39;)]&quot;</span>)
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">target</span>.<span class="ruby-identifier">tag_name</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;label&#39;</span>
+        <span class="ruby-identifier">label</span> = <span class="ruby-identifier">target</span>
+        <span class="ruby-identifier">id</span> = <span class="ruby-identifier">label</span>[<span class="ruby-string">&#39;for&#39;</span>]
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:id</span>, <span class="ruby-identifier">id</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span>
+        
+        <span class="ruby-identifier">target</span> = <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">label</span>.<span class="ruby-identifier">find_element</span>(<span class="ruby-value">:css</span>, <span class="ruby-string">&quot;input, select, textarea, button&quot;</span>) }
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">target</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
     </section>
   
   </section>
@@ -418,7 +502,7 @@ selector.</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.0.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
