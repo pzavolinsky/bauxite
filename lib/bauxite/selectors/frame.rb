@@ -48,13 +48,13 @@ class Bauxite::Selector
 	def frame(arg, &block)
 		delimiter = arg[0]
 		items = arg[1..-1].split(delimiter, 2)
-		frame = find(items[0])
-		
-		begin
-			@ctx.driver.switch_to.frame frame
-			find(items[1], &block)
-		ensure
-			@ctx.driver.switch_to.default_content
+		find(items[0]) do |f|
+			begin
+				@ctx.driver.switch_to.frame f
+				find(items[1], &block)
+			ensure
+				@ctx.driver.switch_to.default_content
+			end
 		end
 	end
 end

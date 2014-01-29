@@ -25,8 +25,9 @@ module Bauxite
 	module SelectorModule
 		
 		# Constructs a new test selector instance.
-		def initialize(ctx)
+		def initialize(ctx, default_selector)
 			@ctx = ctx
+			@default = default_selector
 		end
 		
 		# Searches for elements using the specified selector string.
@@ -47,10 +48,14 @@ module Bauxite
 		#
 		def find(selector, &block)
 			data = selector.split('=', 2)
-			type = data.length == 2 ? data[0] : "default"
+			type = data[0]
+			arg  = data[-1]
+			unless data.length == 2 and type =~ /^[a-z_]+$/i
+				type = @default
+				arg  = selector
+			end
 			raise ArgumentError, "Invalid selector type '#{type}'" unless Context::selectors.include? type
 			
-			arg  = data[-1]
 			custom_selectors = Context::selectors(false)
 			return send(type            , arg, &block) if custom_selectors.include? type
 			return send(type+'_selector', arg, &block) if custom_selectors.include? type+'_selector'

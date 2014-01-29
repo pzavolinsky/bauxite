@@ -1,0 +1,7 @@
+open "file://${__DIR__}/default_selector/page.html"
+
+assert "#username" "jdoe"
+assert ".password" "hello world!"
+assert "[data=pet]" "velociraptor"
+assert ".form textarea" "Hi! I'm John"
+assert "textarea" "Notes go here."

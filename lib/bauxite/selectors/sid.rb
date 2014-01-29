@@ -28,11 +28,11 @@ class Bauxite::Selector
 	#
 	# For example:
 	#     # assuming <div id="strange_uuid_like_stuff_myDiv">foo</div>
-	#     assert myDiv "foo"
+	#     assert sid=myDiv "foo"
 	#     # => matches the element above.
 	#
 	# :category: Selector Methods
-	def default(arg, &block)
+	def sid(arg, &block)
 		selenium_find(:css, "[id$='#{arg.gsub("'", "\\'")}']", &block)
 	end
 end

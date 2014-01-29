@@ -97,9 +97,9 @@
     
     <li ><a href="#method-i-attr">#attr</a>
     
-    <li ><a href="#method-i-default">#default</a>
-    
     <li ><a href="#method-i-frame">#frame</a>
+    
+    <li ><a href="#method-i-sid">#sid</a>
     
     <li ><a href="#method-i-smart">#smart</a>
     
@@ -302,49 +302,6 @@ elements using XPATH expressions.</a></p>
       </div>
 
     
-      <div id="method-i-default" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">default</span><span
-            class="method-args">(arg, &block)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Select an element by id suffix.</p>
-
-<p>This is the default selector. Any selector strings that do not contain an
-equal sign (i.e. &#39;=&#39;) will use this selector.</p>
-
-<p>For example:</p>
-
-<pre class="ruby"><span class="ruby-comment"># assuming &lt;div id=&quot;strange_uuid_like_stuff_myDiv&quot;&gt;foo&lt;/div&gt;</span>
-<span class="ruby-identifier">assert</span> <span class="ruby-identifier">myDiv</span> <span class="ruby-string">&quot;foo&quot;</span>
-<span class="ruby-comment"># =&gt; matches the element above.</span>
-</pre>
-          
-          
-
-          
-          <div class="method-source-code" id="default-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/selectors/default.rb, line 35</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">default</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;[id$=&#39;#{arg.gsub(&quot;&#39;&quot;, &quot;\\&#39;&quot;)}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
       <div id="method-i-frame" class="method-detail ">
         
         <div class="method-heading">
@@ -393,14 +350,57 @@ selector.</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">frame</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">delimiter</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">0</span>]
         <span class="ruby-identifier">items</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-identifier">delimiter</span>, <span class="ruby-value">2</span>)
-        <span class="ruby-identifier">frame</span> = <span class="ruby-identifier">find</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>])
-        
-        <span class="ruby-keyword">begin</span>
-                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">frame</span> <span class="ruby-identifier">frame</span>
-                <span class="ruby-identifier">find</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">1</span>], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-keyword">ensure</span>
-                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">default_content</span>
+        <span class="ruby-identifier">find</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">0</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+                <span class="ruby-keyword">begin</span>
+                        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">frame</span> <span class="ruby-identifier">f</span>
+                        <span class="ruby-identifier">find</span>(<span class="ruby-identifier">items</span>[<span class="ruby-value">1</span>], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+                <span class="ruby-keyword">ensure</span>
+                        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">default_content</span>
+                <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-sid" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sid</span><span
+            class="method-args">(arg, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Select an element by id suffix.</p>
+
+<p>This is the default selector. Any selector strings that do not contain an
+equal sign (i.e. &#39;=&#39;) will use this selector.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;div id=&quot;strange_uuid_like_stuff_myDiv&quot;&gt;foo&lt;/div&gt;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">sid</span>=<span class="ruby-identifier">myDiv</span> <span class="ruby-string">&quot;foo&quot;</span>
+<span class="ruby-comment"># =&gt; matches the element above.</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="sid-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/sid.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sid</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;[id$=&#39;#{arg.gsub(&quot;&#39;&quot;, &quot;\\&#39;&quot;)}&#39;]&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -466,7 +466,7 @@ child control element, including input, select, textarea and button).</p>
             <pre><span class="ruby-comment"># File lib/bauxite/selectors/smart.rb, line 46</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">smart</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">b</span> = <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span> }
-        <span class="ruby-identifier">target</span>   = <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">default</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)                }
+        <span class="ruby-identifier">target</span>   = <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">sid</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)                    }
         <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:name</span>, <span class="ruby-identifier">arg</span>)       }
         <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:class_name</span>, <span class="ruby-identifier">arg</span>) }
         <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">attr</span>(<span class="ruby-string">&quot;id*:&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)            }
@@ -502,7 +502,7 @@ child control element, including input, select, textarea and button).</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.0.
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 

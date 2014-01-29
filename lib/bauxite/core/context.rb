@@ -39,6 +39,50 @@ module Bauxite
 	# The Main test context. This class includes state and helper functions
 	# used by clients execute tests and by actions and selectors to interact
 	# with the test engine (i.e. Selenium WebDriver).
+	#
+	# === Context variables
+	# Context variables are a key/value pairs scoped to the a test context.
+	#
+	# Variables can be set using different actions. For example:
+	# - Action#set sets a variable to a literal string.
+	# - Action#store sets a variable to the value of an element in the page.
+	# - Action#exec sets a variable to the output of an external command
+	#   (i.e. stdout).
+	# - Action#js sets a variable to the result of Javascript command.
+	# - Action#replace sets a variable to the result of doing a 
+	#   find-and-replace operation on a literal.
+	#
+	# Variables can be expanded in every Action argument (e.g. selectors,
+	# texts, expressions, etc.). To obtain the value of a variable through
+	# variable expansion the following syntax must be used:
+	#     ${var_name}
+	#
+	# For example:
+	#     set field "greeting"
+	#     set name "John"
+	#     write "${field}_textbox" "Hi, my name is ${name}!"
+	#     click "${field}_button"
+	#
+	# === Variable scope
+	# When the main test starts (via the #start method), the test is bound
+	# to the global scope. The variables defined in the global scope are
+	# available to every test Action.
+	#
+	# The global scope can have nested variable scopes created by special
+	# actions. The variables defined in a scope +A+ are only available to that
+	# scope and scopes nested within +A+.
+	#
+	# Every time an Action loads a file, a new nested scope is created.
+	# File-loading actions include:
+	# - Action#load
+	# - Action#tryload
+	# - Action#ruby
+	# - Action#test
+	#
+	# A nested scope can bubble variables to its parent scope with the special
+	# action:
+	# - Action#return_action
+	#
 	class Context
 		# Test engine driver instance (Selenium WebDriver).
 		attr_reader :driver
@@ -70,8 +114,9 @@ module Bauxite
 			@options = options
 			@driver_name = (options[:driver] || :firefox).to_sym
 			@variables = {
-				'__TIMEOUT__' => (options[:timeout] || 10).to_i,
-				'__DEBUG__'   => false
+				'__TIMEOUT__'  => (options[:timeout] || 10).to_i,
+				'__DEBUG__'    => false,
+				'__SELECTOR__' => options[:selector] || 'sid'
 			}
 			@aliases = {}
 			@tests = []
@@ -164,7 +209,7 @@ module Bauxite
 		#
 		def find(selector, &block) # yields: element
 			with_timeout Selenium::WebDriver::Error::NoSuchElementError do
-				Selector.new(self).find(selector, &block)
+				Selector.new(self, @variables['__SELECTOR__']).find(selector, &block)
 			end
 		end
 		
@@ -298,6 +343,28 @@ module Bauxite
 
 			sleep(1.0/10.0) if (t - stime).to_i < 1
 			retry
+		end
+		
+		# Executes the given block using the specified driver +timeout+.
+		#
+		# Note that the driver +timeout+ is the time (in seconds) Selenium
+		# will wait for a specific element to appear in the page (using any
+		# of the available Selector strategies).
+		#
+		# For example
+		#     ctx.with_driver_timeout 0.5 do
+		#         ctx.find ('find_me_quickly') do |e|
+		#             # do something with e
+		#         end
+		#     end
+		#
+		def with_driver_timeout(timeout)
+			current = @driver_timeout
+			@driver.manage.timeouts.implicit_wait = timeout
+			yield
+		ensure
+			@driver_timeout = current
+			@driver.manage.timeouts.implicit_wait = current
 		end
 
 		# Prompts the user to press ENTER before resuming execution.
@@ -503,6 +570,7 @@ module Bauxite
 		def _load_driver
 			@driver = Selenium::WebDriver.for(@driver_name, @options[:driver_opt])
 			@driver.manage.timeouts.implicit_wait = 1
+			@driver_timeout = 1
 		end
 		
 		def _load_extensions(dirs)

@@ -99,6 +99,13 @@ module Bauxite
 	#    Wait for user input when the test completes instead of closing the
 	#    browser window.
 	#
+	# [-s, \--selector SELECTOR]
+	#    Default selector strategy. This strategy is applied if the selector
+	#    text does not contain an <tt>=</tt> sign.
+	#
+	#    To see a complete list of the available selectors execute:
+	#        bauxite -h
+	#
 	# [-u, \--url URL]
 	#    This option is an alias of:
 	#        -p remote -P url=URL
@@ -147,6 +154,7 @@ module Bauxite
 				:debug      => false,
 				:timeout    => 10,
 				:reset      => false,
+				:selector   => 'sid',
 				:driver_opt => {},
 				:logger_opt => {},
 				:extensions => []
@@ -186,6 +194,7 @@ module Bauxite
 				.multi( :logger_opt, "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
 				.single(:reset     , "-r",  "--reset"                 , "Reset driver between tests")
 				.single(:wait      , "-w",  "--wait"                  , "Wait for ENTER before exiting")
+				.single(:selector  , "-s",  "--selector SELECTOR"     , "Default selector ('#{options[:selector]}')")
 				opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url.") do |v|
 					v = 'localhost:4444' unless v
 					v = 'http://'+v unless v.match /^https?:\/\//

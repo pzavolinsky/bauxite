@@ -30,5 +30,6 @@ class Bauxite::Action
 	# :category: Action Methods
 	def open(url)
 		@ctx.driver.navigate.to url
+		true
 	end
 end

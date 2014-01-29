@@ -45,7 +45,7 @@ class Bauxite::Selector
 	# :category: Selector Methods
 	def smart(arg, &block)
 		b = lambda { |e| e }
-		target   = _smart_try_find { default(arg, &b)                }
+		target   = _smart_try_find { sid(arg, &b)                    }
 		target ||= _smart_try_find { selenium_find(:name, arg)       }
 		target ||= _smart_try_find { selenium_find(:class_name, arg) }
 		target ||= _smart_try_find { attr("id*:"+arg, &b)            }
@@ -66,8 +66,7 @@ class Bauxite::Selector
 	
 private
 	def _smart_try_find()
-		wait = Selenium::WebDriver::Wait.new(:timeout => 0.01)
-		wait.until { yield }
+		@ctx.with_driver_timeout(0) { yield }
 	rescue StandardError => e
 		nil
 	end

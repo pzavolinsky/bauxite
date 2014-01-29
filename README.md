@@ -105,6 +105,7 @@ This section presented a  brief introduction into the basic Bauxite concepts. Fo
  - [Available Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html#Action+Methods)
  - [Available Bauxite Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html#Selector+Methods)
  - [Selenium Standard Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html#class-Bauxite::Selector-label-Standard+Selenium+Selectors)
+ - [Bauxite Variables](http://pzavolinsky.github.io/bauxite/Bauxite/Context.html#class-Bauxite::Context-label-Context+variables)
  - [Creating new Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html)
  - [Creating new Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html)
 

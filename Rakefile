@@ -9,6 +9,7 @@ require 'rubygems/package_task'
 spec = Gem::Specification.new do |s|
 	s.name        = 'bauxite'
 	s.summary     = 'Bauxite is a façade over Selenium intended for non-developers'
+	s.description = 'The idea behind this project was to create a tool that allows non-developers to write web tests in a human-readable language. Another major requirement is to be able to easily extend the test language to create functional abstractions over technical details.'
 	s.author      = 'Patricio Zavolinsky'
 	s.email       = 'pzavolinsky at yahoo dot com dot ar'
 	s.homepage    = 'https://github.com/pzavolinsky/bauxite'
@@ -43,6 +44,8 @@ task :test do
 	ruby "-Ilib bin/bauxite -v #{test_files}"
 	
 	ruby "-Ilib bin/bauxite -v -e #{File.join('test', 'extension')} #{File.join('test', 'extension.bxt.manual')}"
+	
+	ruby "-Ilib bin/bauxite -v -s css #{File.join('test', 'default_selector.bxt.manual')}"
 	
 	system("ruby -Ilib bin/bauxite #{File.join('test', 'test.bxt.manual')}")
 	fail "The 'test' action test failed to return the expected exit status: the exit status was #{$?.exitstatus}" unless $?.exitstatus == 2
