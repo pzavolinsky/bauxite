@@ -121,6 +121,11 @@ module Bauxite
 			@aliases = {}
 			@tests = []
 			
+			client = Selenium::WebDriver::Remote::Http::Default.new
+			client.timeout = (@options[:open_timeout] || 60).to_i
+			@options[:driver_opt] = {} unless @options[:driver_opt]
+			@options[:driver_opt][:http_client] = client
+
 			_load_extensions(options[:extensions] || [])
 			
 			handle_errors do

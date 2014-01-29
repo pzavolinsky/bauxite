@@ -147,17 +147,18 @@ module Bauxite
 	class Application
 		def self.start #:nodoc:
 			options = {
-				:logger     => (ENV['TERM'] == 'xterm') ?  'xterm' : 'terminal',
-				:verbose    => false,
-				:break      => false,
-				:driver     => 'firefox',
-				:debug      => false,
-				:timeout    => 10,
-				:reset      => false,
-				:selector   => 'sid',
-				:driver_opt => {},
-				:logger_opt => {},
-				:extensions => []
+				:logger       => (ENV['TERM'] == 'xterm') ?  'xterm' : 'terminal',
+				:verbose      => false,
+				:break        => false,
+				:driver       => 'firefox',
+				:debug        => false,
+				:timeout      => 10,
+				:open_timeout => 60,
+				:reset        => false,
+				:selector     => 'sid',
+				:driver_opt   => {},
+				:logger_opt   => {},
+				:extensions   => []
 			}
 
 			OptionParser.new do |opts|
@@ -184,17 +185,19 @@ module Bauxite
 				opts.separator ""
 				opts.separator "Options: "
 				opts
-				.single(:verbose   , "-v",  "--verbose", "Show verbose errors")
-				.single(:timeout   , "-t",  "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)")
-				.single(:debug     , "-d",  "--debug", "Break to debug on error. "+
+				.single(:verbose     , "-v",  "--verbose", "Show verbose errors")
+				.single(:timeout     , "-t",  "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)")
+				.single(:open_timeout, "-o",  "--open-timeout SECONDS", "Open timeout (#{options[:open_timeout]}s)")
+				.single(:debug       , "-d",  "--debug", "Break to debug on error. "+
 													"Start the debug console if no input files given.")
-				.single(:driver    , "-p",  "--provider PROVIDER"     , "Driver provider")
-				.multi( :driver_opt, "-P",  "--provider-option OPTION", "Provider options (name=value)")
-				.single(:logger    , "-l",  "--logger LOGGER"         , "Logger type ('#{options[:logger]}')")
-				.multi( :logger_opt, "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
-				.single(:reset     , "-r",  "--reset"                 , "Reset driver between tests")
-				.single(:wait      , "-w",  "--wait"                  , "Wait for ENTER before exiting")
-				.single(:selector  , "-s",  "--selector SELECTOR"     , "Default selector ('#{options[:selector]}')")
+				.single(:driver      , "-p",  "--provider PROVIDER"     , "Driver provider")
+				.multi( :driver_opt  , "-P",  "--provider-option OPTION", "Provider options (name=value)")
+				.single(:logger      , "-l",  "--logger LOGGER"         , "Logger type ('#{options[:logger]}')")
+				.multi( :logger_opt  , "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
+				.single(:reset       , "-r",  "--reset"                 , "Reset driver between tests")
+				.single(:wait        , "-w",  "--wait"                  , "Wait for ENTER before exiting")
+				.single(:selector    , "-s",  "--selector SELECTOR"     , "Default selector ('#{options[:selector]}')")
+				.single(:csv         , "--csv-summary FILE"             , "Output a single-line CSV summary")
 				opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url.") do |v|
 					v = 'localhost:4444' unless v
 					v = 'http://'+v unless v.match /^https?:\/\//
@@ -250,6 +253,16 @@ module Bauxite
 				ctx.start(actions)
 			ensure
 				if ctx.tests.any?
+
+					if (csv_file = options[:csv])
+						total  = ctx.tests.size
+						ok     = ctx.tests.inject(0) { |s,t| s + (t[:status] == 'OK' ? 1 : 0) }
+						failed = total - ok
+						time   = ctx.tests.inject(0) { |s,t| s + t[:time] }
+						File.open(csv_file, 'w') do |f|
+							f.write "Total,OK,Failed,Time\n#{total},#{ok},#{failed},#{time}\n"
+						end
+					end
 					
 					failed = 0
 					
