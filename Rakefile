@@ -9,7 +9,7 @@ require 'rubygems/package_task'
 spec = Gem::Specification.new do |s|
 	s.name        = 'bauxite'
 	s.summary     = 'Bauxite is a façade over Selenium intended for non-developers'
-	s.description = 'The idea behind this project was to create a tool that allows non-developers to write web tests in a human-readable language. Another major requirement is to be able to easily extend the test language to create functional abstractions over technical details.'
+	s.description = 'Bauxite is a façade over Selenium intended for non-developers. The idea behind this project was to create a tool that allows non-developers to write web tests in a human-readable language. Another major requirement is to be able to easily extend the test language to create functional abstractions over technical details.'
 	s.author      = 'Patricio Zavolinsky'
 	s.email       = 'pzavolinsky at yahoo dot com dot ar'
 	s.homepage    = 'https://github.com/pzavolinsky/bauxite'
