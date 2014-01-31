@@ -83,6 +83,28 @@ module Bauxite
 	# action:
 	# - Action#return_action
 	#
+	# === Built-in variable
+	# Bauxite has a series of built-in variables that provide information of
+	# the current test context and allow dynamic constomizations of the test
+	# behavior.
+	#
+	# The built-in variables are:
+	# [<tt>__FILE__</tt>] The file where the current action is defined.
+	# [<tt>__DIR__</tt>] The directory where <tt>__FILE__</tt> is.
+	# [<tt>__SELECTOR__</tt>] The default selector used when the selector
+	#                         specified does not contain an <tt>=</tt>
+	#                         character.
+	# [<tt>__DEBUG__</tt>] Set to true if the current action is being executed
+	#                      by the debug console.
+	# [<tt>__RETURN__</tt>] Used internally by Action#return_action to indicate
+	#                       which variables should be returned to the parent
+	#                       scope.
+	#
+	# In general, variables surrounded by double underscores and variables
+	# whose names are only numbers are reserved for Bauxite and should not be
+	# used as part of a functional test. The obvious exception is when trying
+	# to change the test behavior by changing the built-in variables.
+	#
 	class Context
 		# Test engine driver instance (Selenium WebDriver).
 		attr_reader :driver
@@ -104,11 +126,16 @@ module Bauxite
 		# +options+ is a hash with the following values:
 		# [:driver] selenium driver symbol (defaults to +:firefox+)
 		# [:timeout] selector timeout in seconds (defaults to +10s+)
-		# [:logger] logger implementation name without the 'Logger' suffix (defaults to 'null' for Loggers::NullLogger).
-		# [:verbose] if +true+, show verbose error information (e.g. backtraces) if an error occurs (defaults to +false+)
-		# [:debug] if +true+, break into the #debug console if an error occurs (defaults to +false+)
-		# [:wait] if +true+, call ::wait before stopping the test engine with #stop (defaults to +false+)
-		# [:extensions] an array of directories that contain extensions to be loaded
+		# [:logger] logger implementation name without the 'Logger' suffix
+		#           (defaults to 'null' for Loggers::NullLogger).
+		# [:verbose] if +true+, show verbose error information (e.g.
+		#            backtraces) if an error occurs (defaults to +false+)
+		# [:debug] if +true+, break into the #debug console if an error occurs
+		#          (defaults to +false+)
+		# [:wait] if +true+, call ::wait before stopping the test engine with
+		#         #stop (defaults to +false+)
+		# [:extensions] an array of directories that contain extensions to be
+		#               loaded
 		#
 		def initialize(options)
 			@options = options

@@ -9,5 +9,10 @@
 		<div><label for="my_input">By label sibling</label><input id="my_input" type="text" value="By label sibling"/></div>
 		<input type="radio" name="radio" value="By radio value"/>
 		<input type="checkbox" name="checkbox" value="By checkbox value"/>
+		<input type="submit" value="By submit text"  onclick="document.getElementById('btn_text').setAttribute('value', this.getAttribute('value'));"/>
+		<input type="button" value="By input button text" onclick="document.getElementById('btn_text').setAttribute('value', this.getAttribute('value'));"/>
+		<button onclick="document.getElementById('btn_text').setAttribute('value', this.innerHTML);">By button text</button>
+		
+		<input type="text" id="btn_text"/>
 	</body>
 </html>

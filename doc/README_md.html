@@ -213,7 +213,7 @@ the <code>=</code> sign.</p>
 
 <pre>&lt;input type=&quot;text&quot; name=&quot;q&quot; /&gt;</pre>
 
-<p>If we want to type the text “Hello WebDriver!” in textbox we can do the
+<p>If we want to type the text “Hello WebDriver!” in the textbox we can do the
 following:</p>
 
 <pre>write &quot;name=q&quot; &quot;Hello WebDriver!&quot;</pre>
@@ -457,15 +457,16 @@ bauxite -l echo -u http://localhost:4444/wd/hub          \
 <pre># === suite.bxt === #
 test login.bxt
 test register.bxt
-test browse_arround.bxt
+test browse_around.bxt
 test purchase_something.bxt
 # more tests here...</pre>
 
 <p>Note the <code>--csv-summary</code> option in the configuration above. That
-option generates a single-ling CSV file ideal to feed the <code>Plot</code>
-Jenkins plugin. I won&#39;t go into the details of configuring the Plot
-plugin, but instead here is a fragment of a possible Jenkins config.xml
-plotting the <a href="Bauxite.html">Bauxite</a> test results:</p>
+option generates a single-line CSV file ideal to feed into the
+<code>Plot</code> Jenkins plugin. I won&#39;t go into the details of
+configuring the Plot plugin, but instead here is a fragment of a possible
+Jenkins <code>config.xml</code> plotting the <a
+href="Bauxite.html">Bauxite</a> test results:</p>
 
 <pre>&lt;publishers&gt;
   ...
