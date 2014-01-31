@@ -96,7 +96,7 @@ For example, in this HTML fragment:
 
     <input type="text" name="q" />
 
-If we want to type the text "Hello WebDriver!" in textbox we can do the following:
+If we want to type the text "Hello WebDriver!" in the textbox we can do the following:
 
     write "name=q" "Hello WebDriver!"
 
@@ -273,11 +273,11 @@ Assuming you have Selenium Server running on localhost and your workspace (e.g. 
     # === suite.bxt === #
     test login.bxt
     test register.bxt
-    test browse_arround.bxt
+    test browse_around.bxt
     test purchase_something.bxt
     # more tests here...
 
-Note the `--csv-summary` option in the configuration above. That option generates a single-ling CSV file ideal to feed the `Plot` Jenkins plugin. I won't go into the details of configuring the Plot plugin, but instead here is a fragment of a possible Jenkins config.xml plotting the Bauxite test results:
+Note the `--csv-summary` option in the configuration above. That option generates a single-line CSV file ideal to feed into the `Plot` Jenkins plugin. I won't go into the details of configuring the Plot plugin, but instead here is a fragment of a possible Jenkins `config.xml` plotting the Bauxite test results:
 
     <publishers>
       ...
