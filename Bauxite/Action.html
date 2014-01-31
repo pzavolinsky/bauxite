@@ -111,6 +111,8 @@
     
     <li ><a href="#method-i-exec">#exec</a>
     
+    <li ><a href="#method-i-failif">#failif</a>
+    
     <li ><a href="#method-i-js">#js</a>
     
     <li ><a href="#method-i-load">#load</a>
@@ -682,6 +684,74 @@ results of the execution will be assigned to the variable named
 
         <span class="ruby-identifier">ret</span> = <span class="ruby-node">%x#{command.join(&#39; &#39;)}`</span>
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">strip</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-failif" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">failif</span><span
+            class="method-args">(action, *args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes the specified <code>action</code> expected to fail. If
+<code>action</code> succeeds the <a
+href="Action.html#method-i-failif">failif</a> action fails. If
+<code>action</code> fails, <a href="Action.html#method-i-failif">failif</a>
+succeeds.</p>
+
+<p><a href="Action.html#method-i-failif">failif</a> effectively negates the
+value of <code>action</code>. Note that this method is intended to negate
+assertions (e.g. <a href="Action.html#method-i-assert">assert</a>, <a
+href="Action.html#method-i-assertv">assertv</a>, <a
+href="Action.html#method-i-source">source</a>, etc.). The behavior when
+applied to other actions (e.g. <a
+href="Action.html#method-i-load">load</a>, <a
+href="Action.html#method-i-ruby">ruby</a>, <a
+href="Action.html#method-i-test">test</a>, etc.) is undefined.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&quot;text&quot; id=&quot;hello&quot; value=&quot;world&quot; /&gt;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">world</span>
+<span class="ruby-identifier">failif</span> <span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">universe</span>
+<span class="ruby-identifier">failif</span> <span class="ruby-identifier">assertv</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">false</span>
+<span class="ruby-comment"># =&gt; these assertions would pass</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="failif-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/failif.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">failif</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-identifier">action</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__FILE__&#39;</span>], <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__LINE__&#39;</span>])
+        
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_vars</span>({ <span class="ruby-string">&#39;__TIMEOUT__&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}) <span class="ruby-keyword">do</span>
+                        <span class="ruby-keyword">begin</span>
+                                <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
+                                <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span>
+                        <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>
+                                <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
+                        <span class="ruby-keyword">end</span>
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion did not failed as expected:#{action.text}&quot;</span>
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
