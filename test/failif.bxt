@@ -1,0 +1,6 @@
+open "file://${__DIR__}/failif/page.html"
+failif assertv true false
+assert hello world
+failif assert hello universe
+failif source "not in the source code"
+failif failif assertv true true

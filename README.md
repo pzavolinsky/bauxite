@@ -254,3 +254,87 @@ Now we can change our test to look like this:
 Finally, to execute Bauxite loading our plugin we can type:
 
     bauxite -e plugins my_test.bxt
+
+Jenkins Integration
+-------------------
+
+If you want to run Bauxite tests in your [Jenkins CI](http://jenkins-ci.org/) server you must install `xvfb` and `selenium-server-standalone`. Googling for `selenium headless jenkins <your distro>` is a great start. Assuming you installed Ruby and Bauxite for the `jenkins` user (see the instructions above), you can create an execute shell build task with the following text:
+
+    #!/bin/bash
+    source ~/.rvm/scripts/rvm
+    bauxite -l echo -u http://localhost:4444/wd/hub          \
+            -t 60 -o 240 --csv-summary "$WORKSPACE/test.csv" \
+            "$WORKSPACE/test/suite.bxt"
+
+Assuming you have Selenium Server running on localhost and your workspace (e.g. GIT repo) contains a folder named `test` with a file named `suite.bxt` the configuration above should work like a charm.
+
+`suite.bxt` could be something like:
+
+    # === suite.bxt === #
+    test login.bxt
+    test register.bxt
+    test browse_arround.bxt
+    test purchase_something.bxt
+    # more tests here...
+
+Note the `--csv-summary` option in the configuration above. That option generates a single-ling CSV file ideal to feed the `Plot` Jenkins plugin. I won't go into the details of configuring the Plot plugin, but instead here is a fragment of a possible Jenkins config.xml plotting the Bauxite test results:
+
+    <publishers>
+      ...
+      <hudson.plugins.plot.PlotPublisher plugin="plot@1.5">
+        <plots>
+          <hudson.plugins.plot.Plot>
+            <title>Number of tests</title>
+            <yaxis>Number of tests</yaxis>
+            <series>
+              <hudson.plugins.plot.CSVSeries>
+                <file>test.csv</file>
+                <label></label>
+                <fileType>csv</fileType>
+                <strExclusionSet>
+                  <string>OK</string>
+                  <string>Failed</string>
+                  <string>Total</string>
+                </strExclusionSet>
+                <inclusionFlag>INCLUDE_BY_STRING</inclusionFlag>
+                <exclusionValues>Total,OK,Failed</exclusionValues>
+                <url></url>
+                <displayTableFlag>false</displayTableFlag>
+              </hudson.plugins.plot.CSVSeries>
+            </series>
+            <group>Test</group>
+            <numBuilds>100</numBuilds>
+            <csvFileName>1620406039.csv</csvFileName>
+            <csvLastModification>0</csvLastModification>
+            <style>line</style>
+            <useDescr>false</useDescr>
+          </hudson.plugins.plot.Plot>
+          <hudson.plugins.plot.Plot>
+            <title>Test Execution Time</title>
+            <yaxis>Test time (s)</yaxis>
+            <series>
+              <hudson.plugins.plot.CSVSeries>
+                <file>test.csv</file>
+                <label></label>
+                <fileType>csv</fileType>
+                <strExclusionSet>
+                  <string>Time</string>
+                </strExclusionSet>
+                <inclusionFlag>INCLUDE_BY_STRING</inclusionFlag>
+                <exclusionValues>Time</exclusionValues>
+                <url></url>
+                <displayTableFlag>false</displayTableFlag>
+              </hudson.plugins.plot.CSVSeries>
+            </series>
+            <group>Test</group>
+            <numBuilds>100</numBuilds>
+            <csvFileName>336296054.csv</csvFileName>
+            <csvLastModification>0</csvLastModification>
+            <style>line</style>
+            <useDescr>false</useDescr>
+          </hudson.plugins.plot.Plot>
+        </plots>
+      </hudson.plugins.plot.PlotPublisher>
+      ...
+    </publishers>
+

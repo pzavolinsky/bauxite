@@ -145,7 +145,7 @@ module Bauxite
 		#         'click "name=sa"',
 		#         'break'
 		#     ]
-		#     ctx.start(lines.map { |l| ctx.parse_action(l) })
+		#     ctx.start(lines)
 		#     # => navigates to www.ruby-lang.org, types ljust in the search box
 		#     #    and clicks the "Search" button.
 		#
@@ -440,6 +440,61 @@ module Bauxite
 			end
 		end
 		
+		# Returns an executable Action object constructed from the specified
+		# arguments resolving action aliases.
+		#
+		# This method if part of the action execution chain and is intended
+		# for advanced use (e.g. in complex actions). To execute an Action
+		# directly, the #exec_action method is preferred.
+		#
+		def get_action(action, args, text, file, line)
+			while (alias_action = @aliases[action])
+				action = alias_action[:action]
+				args   = alias_action[:args].map do |a|
+					a.gsub(/\$\{(\d+)(\*q?)?\}/) do |match|
+						# expand ${1} to args[0], ${2} to args[1], etc.
+						# expand ${4*} to "#{args[4]} #{args[5]} ..."
+						# expand ${4*q} to "\"#{args[4]}\" \"#{args[5]}\" ..."
+						idx = $1.to_i-1
+						if $2 == nil
+							args[idx] || ''
+						else
+							range = args[idx..-1]
+							range = range.map { |arg| '"'+arg.gsub('"', '""')+'"' } if $2 == '*q'
+							range.join(' ')
+						end
+					end
+				end
+			end
+			
+			text = ([action] + args.map { |a| '"'+a.gsub('"', '""')+'"' }).join(' ') unless text
+			
+			Action.new(self, action, args, text, file, line)
+		end
+		
+		# Executes the specified action object injecting built-in variables.
+		# Note that the result returned by this method might be a lambda.
+		# If this is the case, a further +call+ method must be issued.
+		#
+		# This method if part of the action execution chain and is intended
+		# for advanced use (e.g. in complex actions). To execute an Action
+		# directly, the #exec_action method is preferred.
+		#
+		# For example:
+		#     action = ctx.get_action("echo", ['Hi!'], 'echo "Hi!"')
+		#     ret = ctx.exec_action_object(action)
+		#     ret.call if ret.respond_to? :call
+		#
+		def exec_action_object(action)
+			# Inject built-in variables
+			file = action.file
+			dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
+			@variables['__FILE__'] = file
+			@variables['__DIR__'] = File.absolute_path(dir)
+			action.execute
+		end
+
+		
 		# ======================================================================= #
 		# :section: Metadata
 		# ======================================================================= #
@@ -589,42 +644,15 @@ module Bauxite
 		def _exec_parsed_action(action, args, text, log, file, line)
 			ret = handle_errors(true) do
 				
-				while (alias_action = @aliases[action])
-					action = alias_action[:action]
-					args   = alias_action[:args].map do |a|
-						a.gsub(/\$\{(\d+)(\*q?)?\}/) do |match|
-							# expand ${1} to args[0], ${2} to args[1], etc.
-							# expand ${4*} to "#{args[4]} #{args[5]} ..."
-							# expand ${4*q} to "\"#{args[4]}\" \"#{args[5]}\" ..."
-							idx = $1.to_i-1
-							if $2 == nil
-								args[idx] || ''
-							else
-								range = args[idx..-1]
-								range = range.map { |arg| '"'+arg.gsub('"', '""')+'"' } if $2 == '*q'
-								range.join(' ')
-							end
-						end
-					end
-				end
-				
-				text = ([action] + args.map { |a| '"'+a.gsub('"', '""')+'"' }).join(' ') unless text
-				
-				action =  Action.new(self, action, args, text, file, line)
-				
-				# Inject built-in variables
-				file = action.file
-				dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
-				@variables['__FILE__'] = file
-				@variables['__DIR__'] = File.absolute_path(dir)
+				action =  get_action(action, args, text, file, line)
 				
 				if log
 					@logger.log_cmd(action) do
 			    		Readline::HISTORY << action.text
-						action.execute
+						exec_action_object(action)
 					end
 				else
-					action.execute
+					exec_action_object(action)
 				end
 			end
 			handle_errors(true) do
