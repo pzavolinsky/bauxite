@@ -443,7 +443,7 @@ specified)</p>
 </li><li>
 <p>by text content (unless the element is a label)</p>
 </li><li>
-<p>by radio/checkbox button value</p>
+<p>by radio/checkbox/button/submit value</p>
 </li><li>
 <p>by referenced element (find a label by its text, then find the element
 pointed by the label&#39;s <code>for</code> attribute)</p>
@@ -472,7 +472,14 @@ child control element, including input, select, textarea and button).</p>
         <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">attr</span>(<span class="ruby-string">&quot;id*:&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)            }
         <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">attr</span>(<span class="ruby-string">&quot;placeholder:&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)    }
         <span class="ruby-identifier">quoted_arg</span> = <span class="ruby-string">&quot;&#39;&quot;</span><span class="ruby-operator">+</span><span class="ruby-identifier">arg</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;&#39;&quot;</span>, <span class="ruby-string">&quot;\\&#39;&quot;</span>)<span class="ruby-operator">+</span><span class="ruby-string">&quot;&#39;&quot;</span>
-        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, <span class="ruby-node">&quot;input[type=&#39;checkbox&#39;][value=#{quoted_arg}],input[type=&#39;radio&#39;][value=#{quoted_arg}]&quot;</span>) }
+        <span class="ruby-identifier">target</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_smart_try_find</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:css</span>, [<span class="ruby-node">&quot;input[type=&#39;checkbox&#39;][value=#{quoted_arg}]&quot;</span>,
+                        <span class="ruby-node">&quot;input[type=&#39;radio&#39;][value=#{quoted_arg}]&quot;</span>,
+                        <span class="ruby-node">&quot;input[type=&#39;button&#39;][value=#{quoted_arg}]&quot;</span>,
+                        <span class="ruby-node">&quot;input[type=&#39;submit&#39;][value=#{quoted_arg}]&quot;</span>
+                        ].<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;,&#39;</span>)
+                )
+        <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">return</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">target</span>
         
         <span class="ruby-identifier">target</span> = <span class="ruby-identifier">selenium_find</span>(<span class="ruby-value">:xpath</span>, <span class="ruby-node">&quot;//*[contains(text(), &#39;#{arg.gsub(&quot;&#39;&quot;, &quot;\\&#39;&quot;)}&#39;)]&quot;</span>)

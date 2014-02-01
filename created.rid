@@ -1,5 +1,5 @@
-Thu, 30 Jan 2014 21:31:14 -0300
-README.md	Thu, 30 Jan 2014 21:30:21 -0300
+Fri, 31 Jan 2014 20:58:25 -0300
+README.md	Fri, 31 Jan 2014 08:21:19 -0300
 lib/bauxite/actions/break.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/assert.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/wait.rb	Mon, 27 Jan 2014 20:58:50 -0300
@@ -32,13 +32,13 @@ lib/bauxite/parsers/default.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/application.rb	Thu, 30 Jan 2014 20:35:05 -0300
 lib/bauxite/core/errors.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/core/selector.rb	Tue, 28 Jan 2014 21:05:35 -0300
-lib/bauxite/core/context.rb	Thu, 30 Jan 2014 20:50:42 -0300
+lib/bauxite/core/context.rb	Fri, 31 Jan 2014 20:56:57 -0300
 lib/bauxite/core/logger.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/core/action.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/core/parser.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/selectors/sid.rb	Tue, 28 Jan 2014 19:32:32 -0300
 lib/bauxite/selectors/attr.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/selectors/smart.rb	Tue, 28 Jan 2014 21:11:30 -0300
+lib/bauxite/selectors/smart.rb	Fri, 31 Jan 2014 20:43:53 -0300
 lib/bauxite/selectors/frame.rb	Tue, 28 Jan 2014 19:38:40 -0300
 lib/bauxite/loggers/terminal.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/loggers/file.rb	Mon, 27 Jan 2014 20:58:50 -0300
