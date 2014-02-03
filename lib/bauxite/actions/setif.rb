@@ -28,7 +28,7 @@ class Bauxite::Action
 	# For example:
 	#     set name john
 	#     setif is_john true assertv "/John/i" "${name}"
-	#     assertv true ${is_john]}
+	#     assertv true ${is_john}
 	#     # => the assertion would pass
 	#
 	# :category: Action Methods

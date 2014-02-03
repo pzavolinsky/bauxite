@@ -1,4 +1,4 @@
-Mon, 03 Feb 2014 11:53:03 -0300
+Mon, 03 Feb 2014 12:14:36 -0300
 README.md	Fri, 31 Jan 2014 09:09:21 -0300
 lib/bauxite/actions/js.rb	Mon, 27 Jan 2014 11:02:44 -0300
 lib/bauxite/actions/exec.rb	Mon, 27 Jan 2014 11:02:44 -0300
@@ -16,7 +16,7 @@ lib/bauxite/actions/open.rb	Wed, 29 Jan 2014 09:10:40 -0300
 lib/bauxite/actions/reset.rb	Mon, 27 Jan 2014 11:02:44 -0300
 lib/bauxite/actions/write.rb	Mon, 27 Jan 2014 11:02:44 -0300
 lib/bauxite/actions/failif.rb	Mon, 03 Feb 2014 11:32:29 -0300
-lib/bauxite/actions/setif.rb	Mon, 03 Feb 2014 11:25:29 -0300
+lib/bauxite/actions/setif.rb	Mon, 03 Feb 2014 12:14:26 -0300
 lib/bauxite/actions/replace.rb	Mon, 27 Jan 2014 11:02:44 -0300
 lib/bauxite/actions/select.rb	Tue, 28 Jan 2014 16:04:12 -0300
 lib/bauxite/actions/echo.rb	Mon, 27 Jan 2014 11:02:44 -0300
