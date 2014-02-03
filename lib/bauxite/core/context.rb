@@ -292,7 +292,7 @@ module Bauxite
 		#
 		def exec_action(text, log = true, file = '<unknown>', line = 0)
 			data = Context::parse_action_default(text, file, line)
-			_exec_parsed_action(data[:action], data[:args], text, log, file, line)
+			exec_parsed_action(data[:action], data[:args], log, text, file, line)
 		end
 		
 		# Executes the specified +file+.
@@ -303,9 +303,42 @@ module Bauxite
 		#
 		def exec_file(file)
 			@parser.parse(file) do |action, args, text, file, line|
-				_exec_parsed_action(action, args, text, true, file, line)
+				exec_parsed_action(action, args, true, text, file, line)
 			end
 		end
+
+		# Executes the specified action handling errors, logging and debug
+		# history.
+		#
+		# This method if part of the action execution chain and is intended
+		# for advanced use (e.g. in complex actions). To execute an Action
+		# directly, the #exec_action method is preferred.
+		#
+		# If +log+ is +true+, log the action execution (default behavior).
+		#
+		# For example:
+		#     ctx.exec_action 'open "http://www.ruby-lang.org"'
+		#     # => navigates to www.ruby-lang.org
+		#
+		def exec_parsed_action(action, args, log = true, text = nil, file = nil, line = nil)
+			ret = handle_errors(true) do
+				
+				action =  get_action(action, args, text, file, line)
+				
+				if log
+					@logger.log_cmd(action) do
+						Readline::HISTORY << action.text
+						exec_action_object(action)
+					end
+				else
+					exec_action_object(action)
+				end
+			end
+			handle_errors(true) do
+				ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
+			end
+		end
+
 		
 		# Executes the +block+ inside a rescue block applying standard criteria of
 		# error handling.
@@ -474,7 +507,7 @@ module Bauxite
 		# for advanced use (e.g. in complex actions). To execute an Action
 		# directly, the #exec_action method is preferred.
 		#
-		def get_action(action, args, text, file, line)
+		def get_action(action, args, text = nil, file = nil, line = nil)
 			while (alias_action = @aliases[action])
 				action = alias_action[:action]
 				args   = alias_action[:args].map do |a|
@@ -495,6 +528,8 @@ module Bauxite
 			end
 			
 			text = ([action] + args.map { |a| '"'+a.gsub('"', '""')+'"' }).join(' ') unless text
+			file = @variables['__FILE__'] unless file
+			line = @variables['__LINE__'] unless line
 			
 			Action.new(self, action, args, text, file, line)
 		end
@@ -519,6 +554,35 @@ module Bauxite
 			@variables['__FILE__'] = file
 			@variables['__DIR__'] = File.absolute_path(dir)
 			action.execute
+		end
+
+		# Executes the specified +action+ and returns +true+ if the action
+		# succeeds and +false+ otherwise.
+		# 
+		# This method is intended to simplify conditional actions that execute
+		# different code depending on the outcome of an action execution.
+		#
+		# For example:
+		#     if ctx.try_exec_action(action, args)
+		#         # => when action succeeds...
+		#     else
+		#         # => when action fails...
+		#     end
+		#
+		def try_exec_action(action, args)
+			action = get_action(action, args)
+			
+			with_timeout Bauxite::Errors::AssertionError do
+				with_vars({ '__TIMEOUT__' => 0}) do
+					begin
+						ret = exec_action_object(action)
+						ret.call if ret.respond_to? :call
+						true
+					rescue Bauxite::Errors::AssertionError
+						false
+					end
+				end
+			end
 		end
 
 		
@@ -665,25 +729,6 @@ module Bauxite
 				d = File.join(Dir.pwd, d) unless Dir.exists? d
 				d = File.absolute_path(d)
 				Dir[File.join(d, '**', '*.rb')].each { |file| require file }
-			end
-		end
-		
-		def _exec_parsed_action(action, args, text, log, file, line)
-			ret = handle_errors(true) do
-				
-				action =  get_action(action, args, text, file, line)
-				
-				if log
-					@logger.log_cmd(action) do
-			    		Readline::HISTORY << action.text
-						exec_action_object(action)
-					end
-				else
-					exec_action_object(action)
-				end
-			end
-			handle_errors(true) do
-				ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
 			end
 		end
 		

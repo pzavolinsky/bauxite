@@ -1,0 +1,3 @@
+set name john
+setif is_john true assertv "/John/i" "${name}"
+assertv true ${is_john}

@@ -107,6 +107,8 @@
     
     <li ><a href="#method-i-debug">#debug</a>
     
+    <li ><a href="#method-i-doif">#doif</a>
+    
     <li ><a href="#method-i-echo">#echo</a>
     
     <li ><a href="#method-i-exec">#exec</a>
@@ -132,6 +134,8 @@
     <li ><a href="#method-i-select">#select</a>
     
     <li ><a href="#method-i-set">#set</a>
+    
+    <li ><a href="#method-i-setif">#setif</a>
     
     <li ><a href="#method-i-source">#source</a>
     
@@ -600,6 +604,56 @@ autocomplete (pressing the <code>TAB</code> key).</p>
       </div>
 
     
+      <div id="method-i-doif" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">doif</span><span
+            class="method-args">(expected, actual, action, *args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes <code>action</code> only if <code>expected</code> matches
+<code>actual</code>.</p>
+
+<p>The conditional check in this action is similar to <a
+href="Action.html#method-i-assertv">assertv</a>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">first</span> <span class="ruby-identifier">john</span>
+<span class="ruby-identifier">set</span> <span class="ruby-identifier">last</span> <span class="ruby-identifier">doe</span>
+<span class="ruby-identifier">doif</span> <span class="ruby-identifier">john</span> ${<span class="ruby-identifier">first</span>} <span class="ruby-identifier">assertv</span> <span class="ruby-identifier">doe</span> ${<span class="ruby-identifier">last</span>}
+<span class="ruby-comment"># =&gt; this assertion would pass.</span>
+
+<span class="ruby-identifier">doif</span> <span class="ruby-identifier">smith</span> ${<span class="ruby-identifier">last</span>} <span class="ruby-identifier">load</span> <span class="ruby-identifier">smith_specific_text</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-comment"># =&gt; this would only load smith_specific_text.bxt if the last</span>
+<span class="ruby-comment">#    variable matches &#39;smith&#39;</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="doif-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/doif.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">doif</span>(<span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">expected</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_action_object</span>(<span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-echo" class="method-detail ">
         
         <div class="method-heading">
@@ -739,19 +793,10 @@ href="Action.html#method-i-test">test</a>, etc.) is undefined.</p>
           <div class="method-source-code" id="failif-source">
             <pre><span class="ruby-comment"># File lib/bauxite/actions/failif.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">failif</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
-        <span class="ruby-identifier">action</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__FILE__&#39;</span>], <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__LINE__&#39;</span>])
-        
-        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
-                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_vars</span>({ <span class="ruby-string">&#39;__TIMEOUT__&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}) <span class="ruby-keyword">do</span>
-                        <span class="ruby-keyword">begin</span>
-                                <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
-                                <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span>
-                        <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>
-                                <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
-                        <span class="ruby-keyword">end</span>
-                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion did not failed as expected:#{action.text}&quot;</span>
-                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">try_exec_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
+                <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion did not failed as expected:#{action} #{args.join(&#39; &#39;)}&quot;</span>
         <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -1275,6 +1320,51 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
       </div>
 
     
+      <div id="method-i-setif" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">setif</span><span
+            class="method-args">(name, value, action, *args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Sets the variable named <code>name</code> to the <code>value</code>
+specified only if the. <code>action</code> execution succeeds. If the
+execution fails, the value of <code>name</code> is left unchanged.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">name</span> <span class="ruby-identifier">john</span>
+<span class="ruby-identifier">setif</span> <span class="ruby-identifier">is_john</span> <span class="ruby-keyword">true</span> <span class="ruby-identifier">assertv</span> <span class="ruby-string">&quot;/John/i&quot;</span> <span class="ruby-string">&quot;${name}&quot;</span>
+<span class="ruby-identifier">assertv</span> <span class="ruby-keyword">true</span> ${<span class="ruby-identifier">is_john</span>]}
+<span class="ruby-comment"># =&gt; the assertion would pass</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="setif-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/setif.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">setif</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">value</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">try_exec_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">value</span>
+        <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-source" class="method-detail ">
         
         <div class="method-heading">
@@ -1633,7 +1723,7 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.0.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 

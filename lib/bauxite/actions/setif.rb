@@ -21,26 +21,20 @@
 #++
 
 class Bauxite::Action
-	# Executes the specified +action+ expected to fail. If +action+ succeeds
-	# the #failif action fails. If +action+ fails, #failif succeeds.
-	#
-	# #failif effectively negates the value of +action+. Note that this method
-	# is intended to negate assertions (e.g. #assert, #assertv, #source, etc.).
-	# The behavior when applied to other actions (e.g. #load, #ruby, #test,
-	# etc.) is undefined.
+	# Sets the variable named +name+ to the +value+ specified only if the.
+	# +action+ execution succeeds. If the execution fails, the value of +name+
+	# is left unchanged.
 	#
 	# For example:
-	#     # assuming <input type="text" id="hello" value="world" />
-	#     assert hello world
-	#     failif assert hello universe
-	#     failif assertv true false
-	#     # => these assertions would pass
+	#     set name john
+	#     setif is_john true assertv "/John/i" "${name}"
+	#     assertv true ${is_john]}
+	#     # => the assertion would pass
 	#
 	# :category: Action Methods
-	def failif(action, *args)
-		if @ctx.try_exec_action(action, args)
-			raise Bauxite::Errors::AssertionError, "Assertion did not failed as expected:#{action} #{args.join(' ')}"
-		end
+	def setif(name, value, action, *args)
+		return false unless @ctx.try_exec_action(action, args)
+		@ctx.variables[name] = value
 		true
 	end
 end

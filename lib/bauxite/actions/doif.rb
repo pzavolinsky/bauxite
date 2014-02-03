@@ -21,26 +21,23 @@
 #++
 
 class Bauxite::Action
-	# Executes the specified +action+ expected to fail. If +action+ succeeds
-	# the #failif action fails. If +action+ fails, #failif succeeds.
+	# Executes +action+ only if +expected+ matches +actual+.
 	#
-	# #failif effectively negates the value of +action+. Note that this method
-	# is intended to negate assertions (e.g. #assert, #assertv, #source, etc.).
-	# The behavior when applied to other actions (e.g. #load, #ruby, #test,
-	# etc.) is undefined.
+	# The conditional check in this action is similar to #assertv.
 	#
 	# For example:
-	#     # assuming <input type="text" id="hello" value="world" />
-	#     assert hello world
-	#     failif assert hello universe
-	#     failif assertv true false
-	#     # => these assertions would pass
+	#     set first john
+	#     set last doe
+	#     doif john ${first} assertv doe ${last}
+	#     # => this assertion would pass.
+	#     
+	#     doif smith ${last} load smith_specific_text.bxt
+	#     # => this would only load smith_specific_text.bxt if the last
+	#     #    variable matches 'smith'
 	#
 	# :category: Action Methods
-	def failif(action, *args)
-		if @ctx.try_exec_action(action, args)
-			raise Bauxite::Errors::AssertionError, "Assertion did not failed as expected:#{action} #{args.join(' ')}"
-		end
-		true
+	def doif(expected, actual, action, *args)
+		return false unless actual =~ _pattern(expected)
+		@ctx.exec_action_object(@ctx.get_action(action, args))
 	end
 end

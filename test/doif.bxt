@@ -1,0 +1,6 @@
+set first john
+set last doe
+doif john ${first} assertv doe ${last}
+doif john ${first} set is_john true
+assertv true ${is_john}
+doif smith ${last} load smith_specific_text.bxt
