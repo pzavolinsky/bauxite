@@ -138,15 +138,13 @@
     
     <li ><a href="#method-i-get_value">#get_value</a>
     
-    <li ><a href="#method-i-handle_errors">#handle_errors</a>
+    <li ><a href="#method-i-print_error">#print_error</a>
     
     <li ><a href="#method-i-reset_driver">#reset_driver</a>
     
     <li ><a href="#method-i-start">#start</a>
     
     <li ><a href="#method-i-stop">#stop</a>
-    
-    <li ><a href="#method-i-try_exec_action">#try_exec_action</a>
     
     <li ><a href="#method-i-with_driver_timeout">#with_driver_timeout</a>
     
@@ -421,7 +419,8 @@ href="Context.html#method-i-stop">stop</a> (defaults to <code>false</code>)</p>
         <span class="ruby-ivar">@variables</span> = {
                 <span class="ruby-string">&#39;__TIMEOUT__&#39;</span>  =<span class="ruby-operator">&gt;</span> (<span class="ruby-identifier">options</span>[<span class="ruby-value">:timeout</span>] <span class="ruby-operator">||</span> <span class="ruby-value">10</span>).<span class="ruby-identifier">to_i</span>,
                 <span class="ruby-string">&#39;__DEBUG__&#39;</span>    =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>,
-                <span class="ruby-string">&#39;__SELECTOR__&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:selector</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;sid&#39;</span>
+                <span class="ruby-string">&#39;__SELECTOR__&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:selector</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;sid&#39;</span>,
+                <span class="ruby-string">&#39;__OUTPUT__&#39;</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:output</span>]
         }
         <span class="ruby-ivar">@aliases</span> = {}
         <span class="ruby-ivar">@tests</span> = []
@@ -433,9 +432,7 @@ href="Context.html#method-i-stop">stop</a> (defaults to <code>false</code>)</p>
 
         <span class="ruby-identifier">_load_extensions</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:extensions</span>] <span class="ruby-operator">||</span> [])
         
-        <span class="ruby-identifier">handle_errors</span> <span class="ruby-keyword">do</span>
-                <span class="ruby-ivar">@logger</span> = <span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:logger</span>], <span class="ruby-identifier">options</span>[<span class="ruby-value">:logger_opt</span>])
-        <span class="ruby-keyword">end</span>
+        <span class="ruby-ivar">@logger</span> = <span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:logger</span>], <span class="ruby-identifier">options</span>[<span class="ruby-value">:logger_opt</span>])
         
         <span class="ruby-ivar">@parser</span> = <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -482,7 +479,7 @@ href="Context.html#method-i-stop">stop</a> (defaults to <code>false</code>)</p>
 
           
           <div class="method-source-code" id="debug-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 253</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 258</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug</span>
         <span class="ruby-identifier">exec_action</span>(<span class="ruby-string">&#39;debug&#39;</span>, <span class="ruby-keyword">false</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -539,7 +536,7 @@ applies if no <code>block</code> was given).</p>
 
           
           <div class="method-source-code" id="find-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 242</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 247</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment"># yields: element</span>
         <span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">NoSuchElementError</span> <span class="ruby-keyword">do</span>
                 <span class="ruby-constant">Selector</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__SELECTOR__&#39;</span>]).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -589,7 +586,7 @@ the inner text or the value of the <code>value</code> attribute.</p>
 
           
           <div class="method-source-code" id="get_value-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 272</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 277</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">element</span>)
         <span class="ruby-keyword">if</span> [<span class="ruby-string">&#39;input&#39;</span>,<span class="ruby-string">&#39;select&#39;</span>,<span class="ruby-string">&#39;textarea&#39;</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">tag_name</span>.<span class="ruby-identifier">downcase</span>
                 <span class="ruby-identifier">element</span>.<span class="ruby-identifier">attribute</span>(<span class="ruby-string">&#39;value&#39;</span>) 
@@ -632,7 +629,7 @@ the inner text or the value of the <code>value</code> attribute.</p>
 
           
           <div class="method-source-code" id="reset_driver-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 197</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 202</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">reset_driver</span>
         <span class="ruby-ivar">@driver</span>.<span class="ruby-identifier">quit</span>
         <span class="ruby-identifier">_load_driver</span>
@@ -681,13 +678,19 @@ href="Context.html#method-i-stop">stop</a>).</p>
 
           
           <div class="method-source-code" id="start-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 179</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 178</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">start</span>(<span class="ruby-identifier">actions</span> = [])
         <span class="ruby-identifier">_load_driver</span>
         <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actions</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
         <span class="ruby-keyword">begin</span>
                 <span class="ruby-identifier">actions</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span><span class="ruby-operator">|</span>
-                        <span class="ruby-identifier">exec_action</span>(<span class="ruby-identifier">action</span>)
+                        <span class="ruby-keyword">begin</span>
+                                <span class="ruby-identifier">exec_action</span>(<span class="ruby-identifier">action</span>)
+                        <span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+                                <span class="ruby-identifier">print_error</span>(<span class="ruby-identifier">e</span>)
+                                <span class="ruby-identifier">raise</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:debug</span>]
+                                <span class="ruby-identifier">debug</span>
+                        <span class="ruby-keyword">end</span>
                 <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">ensure</span>
                 <span class="ruby-identifier">stop</span>
@@ -740,7 +743,7 @@ href="Context.html#method-i-stop">stop</a> pattern.</p>
 
           
           <div class="method-source-code" id="stop-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 217</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 222</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">stop</span>
         <span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">wait</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:wait</span>]
         <span class="ruby-ivar">@driver</span>.<span class="ruby-identifier">quit</span>
@@ -806,7 +809,7 @@ logger type.</p>
 
           
           <div class="method-source-code" id="load_logger-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 448</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 404</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)
         <span class="ruby-identifier">log_name</span> = (<span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;null&#39;</span>).<span class="ruby-identifier">downcase</span>
         
@@ -848,7 +851,7 @@ logger type.</p>
 
           
           <div class="method-source-code" id="parse_action_default-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 470</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 426</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parse_action_default</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span> = <span class="ruby-string">&#39;&lt;unknown&gt;&#39;</span>, <span class="ruby-identifier">line</span> = <span class="ruby-value">0</span>)
         <span class="ruby-identifier">data</span> = <span class="ruby-identifier">text</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39; &#39;</span>, <span class="ruby-value">2</span>)
         <span class="ruby-keyword">begin</span>
@@ -916,7 +919,7 @@ logger type.</p>
 
           
           <div class="method-source-code" id="wait-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 441</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 397</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">wait</span>
         <span class="ruby-constant">Readline</span>.<span class="ruby-identifier">readline</span>(<span class="ruby-string">&quot;Press ENTER to continue\n&quot;</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -958,7 +961,7 @@ with the arguments specified in <code>args</code>.</p>
 
           
           <div class="method-source-code" id="add_alias-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 464</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 420</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add_alias</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
         <span class="ruby-ivar">@aliases</span>[<span class="ruby-identifier">name</span>] = { <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">action</span>, <span class="ruby-value">:args</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">args</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -1001,7 +1004,7 @@ behavior).</p>
 
           
           <div class="method-source-code" id="exec_action-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 293</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 298</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">exec_action</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">log</span> = <span class="ruby-keyword">true</span>, <span class="ruby-identifier">file</span> = <span class="ruby-string">&#39;&lt;unknown&gt;&#39;</span>, <span class="ruby-identifier">line</span> = <span class="ruby-value">0</span>)
         <span class="ruby-identifier">data</span> = <span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">parse_action_default</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
         <span class="ruby-identifier">exec_parsed_action</span>(<span class="ruby-identifier">data</span>[<span class="ruby-value">:action</span>], <span class="ruby-identifier">data</span>[<span class="ruby-value">:args</span>], <span class="ruby-identifier">log</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
@@ -1049,7 +1052,7 @@ ret.call if ret.respond_to? :call</pre>
 
           
           <div class="method-source-code" id="exec_action_object-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 550</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 506</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-comment"># Inject built-in variables</span>
         <span class="ruby-identifier">file</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">file</span>
@@ -1093,7 +1096,7 @@ ret.call if ret.respond_to? :call</pre>
 
           
           <div class="method-source-code" id="exec_file-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 304</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 309</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">exec_file</span>(<span class="ruby-identifier">file</span>)
         <span class="ruby-ivar">@parser</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">file</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
                 <span class="ruby-identifier">exec_parsed_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-keyword">true</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
@@ -1124,14 +1127,14 @@ ret.call if ret.respond_to? :call</pre>
           
           <p>Executes the specified action handling errors, logging and debug history.</p>
 
+<p>If <code>log</code> is <code>true</code>, log the action execution (default
+behavior).</p>
+
 <p>This method if part of the action execution chain and is intended for
 advanced use (e.g. in complex actions). To execute an <a
 href="Action.html">Action</a> directly, the <a
 href="Context.html#method-i-exec_action">exec_action</a> method is
 preferred.</p>
-
-<p>If <code>log</code> is <code>true</code>, log the action execution (default
-behavior).</p>
 
 <p>For example:</p>
 
@@ -1143,24 +1146,20 @@ behavior).</p>
 
           
           <div class="method-source-code" id="exec_parsed_action-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 323</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 328</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">exec_parsed_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">log</span> = <span class="ruby-keyword">true</span>, <span class="ruby-identifier">text</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">file</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">line</span> = <span class="ruby-keyword">nil</span>)
-        <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">handle_errors</span>(<span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span>
-                
-                <span class="ruby-identifier">action</span> =  <span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
-                
-                <span class="ruby-keyword">if</span> <span class="ruby-identifier">log</span>
-                        <span class="ruby-ivar">@logger</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>) <span class="ruby-keyword">do</span>
-                                <span class="ruby-constant">Readline</span><span class="ruby-operator">::</span><span class="ruby-constant">HISTORY</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">text</span>
-                                <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
-                        <span class="ruby-keyword">end</span>
-                <span class="ruby-keyword">else</span>
-                        <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
+        <span class="ruby-identifier">action</span> =  <span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
+        <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">nil</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">log</span>
+                <span class="ruby-ivar">@logger</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>) <span class="ruby-keyword">do</span>
+                        <span class="ruby-constant">Readline</span><span class="ruby-operator">::</span><span class="ruby-constant">HISTORY</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">text</span>
+                        <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
                 <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">else</span>
+                <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-keyword">end</span>
-        <span class="ruby-identifier">handle_errors</span>(<span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span>
-                <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span> <span class="ruby-comment"># delayed actions (after log_cmd)</span>
-        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span> <span class="ruby-comment"># delayed actions (after log_cmd)</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -1198,7 +1197,7 @@ preferred.</p>
 
           
           <div class="method-source-code" id="get_action-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 510</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 466</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">text</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">file</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">line</span> = <span class="ruby-keyword">nil</span>)
         <span class="ruby-keyword">while</span> (<span class="ruby-identifier">alias_action</span> = <span class="ruby-ivar">@aliases</span>[<span class="ruby-identifier">action</span>])
                 <span class="ruby-identifier">action</span> = <span class="ruby-identifier">alias_action</span>[<span class="ruby-value">:action</span>]
@@ -1235,11 +1234,11 @@ preferred.</p>
       </div>
 
     
-      <div id="method-i-handle_errors" class="method-detail ">
+      <div id="method-i-print_error" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">handle_errors</span><span
-            class="method-args">(break_into_debug = false, exit_on_error = true) { || ... }</span>
+          <span class="method-name">print_error</span><span
+            class="method-args">(e)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -1248,36 +1247,25 @@ preferred.</p>
 
         <div class="method-description">
           
-          <p>Executes the <code>block</code> inside a rescue block applying standard
-criteria of error handling.</p>
-
-<p>The default behavior is to print the exception message and exit.</p>
-
-<p>If the <code>:verbose</code> option is set, the exception backtrace will
-also be printed.</p>
-
-<p>If the <code>break_into_debug</code> argument is <code>true</code> and the
-<code>:debug</code> option is set, the handler will break into the debug
-console instead of exiting.</p>
-
-<p>If the <code>exit_on_error</code> argument is <code>false</code> the
-handler will not exit after printing the error message.</p>
+          <p>Prints the specified <code>error</code> using the Logger configured and 
+handling the verbose option.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">ctx</span> = <span class="ruby-constant">Context</span>.<span class="ruby-identifier">new</span>({ :<span class="ruby-identifier">debug</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> })
-<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">handle_errors</span>(<span class="ruby-keyword">true</span>) { <span class="ruby-identifier">raise</span> <span class="ruby-string">&#39;break into debug now!&#39;</span> }
-<span class="ruby-comment"># =&gt; this breaks into the debug console</span>
+<pre class="ruby"><span class="ruby-keyword">begin</span>
+    <span class="ruby-comment"># =&gt; some code here</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">print_error</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-comment"># =&gt; additional error handling code here</span>
+<span class="ruby-keyword">end</span>
 </pre>
           
           
 
           
-          <div class="method-source-code" id="handle_errors-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 362</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">handle_errors</span>(<span class="ruby-identifier">break_into_debug</span> = <span class="ruby-keyword">false</span>, <span class="ruby-identifier">exit_on_error</span> = <span class="ruby-keyword">true</span>)
-        <span class="ruby-keyword">yield</span>
-<span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+          <div class="method-source-code" id="print_error-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 526</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">print_error</span>(<span class="ruby-identifier">e</span>)
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@logger</span>
                 <span class="ruby-ivar">@logger</span>.<span class="ruby-identifier">log</span> <span class="ruby-node">&quot;#{e.message}\n&quot;</span>, <span class="ruby-value">:error</span>
         <span class="ruby-keyword">else</span>
@@ -1286,75 +1274,6 @@ handler will not exit after printing the error message.</p>
         <span class="ruby-keyword">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:verbose</span>]
                 <span class="ruby-identifier">p</span> <span class="ruby-identifier">e</span>
                 <span class="ruby-identifier">puts</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span>
-        <span class="ruby-keyword">end</span>
-        <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__DEBUG__&#39;</span>]
-                <span class="ruby-keyword">if</span> <span class="ruby-identifier">break_into_debug</span> <span class="ruby-keyword">and</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:debug</span>]
-                        <span class="ruby-identifier">debug</span>
-                <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">exit_on_error</span>
-                        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__RAISE_ERROR__&#39;</span>]
-                                <span class="ruby-identifier">raise</span>
-                        <span class="ruby-keyword">else</span>
-                                <span class="ruby-identifier">exit</span> <span class="ruby-keyword">false</span>
-                        <span class="ruby-keyword">end</span>
-                <span class="ruby-keyword">end</span>
-        <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-try_exec_action" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">try_exec_action</span><span
-            class="method-args">(action, args)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Executes the specified <code>action</code> and returns <code>true</code> if
-the action succeeds and <code>false</code> otherwise.</p>
-
-<p>This method is intended to simplify conditional actions that execute
-different code depending on the outcome of an action execution.</p>
-
-<p>For example:</p>
-
-<pre class="ruby"><span class="ruby-keyword">if</span> <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">try_exec_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
-    <span class="ruby-comment"># =&gt; when action succeeds...</span>
-<span class="ruby-keyword">else</span>
-    <span class="ruby-comment"># =&gt; when action fails...</span>
-<span class="ruby-keyword">end</span>
-</pre>
-          
-          
-
-          
-          <div class="method-source-code" id="try_exec_action-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 572</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">try_exec_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
-        <span class="ruby-identifier">action</span> = <span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>)
-        
-        <span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
-                <span class="ruby-identifier">with_vars</span>({ <span class="ruby-string">&#39;__TIMEOUT__&#39;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}) <span class="ruby-keyword">do</span>
-                        <span class="ruby-keyword">begin</span>
-                                <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
-                                <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span>
-                                <span class="ruby-keyword">true</span>
-                        <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>
-                                <span class="ruby-keyword">false</span>
-                        <span class="ruby-keyword">end</span>
-                <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -1399,7 +1318,7 @@ available <a href="Selector.html">Selector</a> strategies).</p>
 
           
           <div class="method-source-code" id="with_driver_timeout-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 426</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 382</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">with_driver_timeout</span>(<span class="ruby-identifier">timeout</span>)
         <span class="ruby-identifier">current</span> = <span class="ruby-ivar">@driver_timeout</span>
         <span class="ruby-ivar">@driver</span>.<span class="ruby-identifier">manage</span>.<span class="ruby-identifier">timeouts</span>.<span class="ruby-identifier">implicit_wait</span> = <span class="ruby-identifier">timeout</span>
@@ -1448,7 +1367,7 @@ to execute the block itself.</p>
 
           
           <div class="method-source-code" id="with_timeout-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 398</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 354</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">with_timeout</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">error_types</span>)
         <span class="ruby-identifier">stime</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">new</span>
         <span class="ruby-identifier">timeout</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">stime</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__TIMEOUT__&#39;</span>]
@@ -1529,7 +1448,7 @@ to execute the block itself.</p>
 
           
           <div class="method-source-code" id="action_args-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 609</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 558</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">action_args</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-identifier">action</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;_action&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">_action_methods</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">action</span>
         <span class="ruby-constant">Action</span>.<span class="ruby-identifier">public_instance_method</span>(<span class="ruby-identifier">action</span>).<span class="ruby-identifier">parameters</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">att</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">|</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span> }
@@ -1569,7 +1488,7 @@ to execute the block itself.</p>
 
           
           <div class="method-source-code" id="actions-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 599</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 548</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">actions</span>
         <span class="ruby-identifier">_action_methods</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/_action$/</span>, <span class="ruby-string">&#39;&#39;</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -1608,7 +1527,7 @@ to execute the block itself.</p>
 
           
           <div class="method-source-code" id="loggers-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 638</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 587</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">loggers</span>
         <span class="ruby-constant">Loggers</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/logger$/</span>, <span class="ruby-string">&#39;&#39;</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -1650,7 +1569,7 @@ to execute the block itself.</p>
 
           
           <div class="method-source-code" id="max_action_name_size-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 662</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 611</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">max_action_name_size</span>
         <span class="ruby-identifier">actions</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">s</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -1689,7 +1608,7 @@ to execute the block itself.</p>
 
           
           <div class="method-source-code" id="parsers-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 648</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 597</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parsers</span>
         (<span class="ruby-constant">Parser</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>)                           <span class="ruby-operator">-</span> <span class="ruby-constant">ParserModule</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>))
         .<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">to_s</span> }
@@ -1733,7 +1652,7 @@ custom  selectors are returned.</p>
 
           
           <div class="method-source-code" id="selectors-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 624</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 573</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">selectors</span>(<span class="ruby-identifier">include_standard_selectors</span> = <span class="ruby-keyword">true</span>)
         <span class="ruby-identifier">ret</span> = <span class="ruby-constant">Selector</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/_selector$/</span>, <span class="ruby-string">&#39;&#39;</span>) }
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">include_standard_selectors</span>
@@ -1815,7 +1734,7 @@ with the corresponding variable value.</p>
 
           
           <div class="method-source-code" id="expand-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 683</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 632</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">expand</span>(<span class="ruby-identifier">s</span>)
         <span class="ruby-identifier">result</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">s</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span>,<span class="ruby-identifier">kv</span><span class="ruby-operator">|</span>
                 <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/\$\{#{kv[0]}\}/</span>, <span class="ruby-identifier">kv</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_s</span>)
@@ -1868,7 +1787,7 @@ variables is restored.</p>
 
           
           <div class="method-source-code" id="with_vars-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 706</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 655</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">with_vars</span>(<span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">current</span> = <span class="ruby-ivar">@variables</span>
         <span class="ruby-ivar">@variables</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">vars</span>)
