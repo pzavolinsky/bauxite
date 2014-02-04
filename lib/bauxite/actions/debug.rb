@@ -41,7 +41,6 @@ class Bauxite::Action
 	end
 	
 private
-	@@debug_line = 0
 	def _debug_process
 		Readline.completion_append_character = " "
 		Readline.completer_word_break_characters = ""
@@ -51,11 +50,10 @@ private
 			next if not line or line == ''
 			break if line == 'exit'
 			begin
-				@ctx.exec_action(line, true, '<debug>', @@debug_line)
+				@ctx.exec_action(line)
 			rescue StandardError => e
-				@ctx.print_error(e)
+				@ctx.print_error(e, false)
 			end
-			@@debug_line += 1
 		end
 	end
 

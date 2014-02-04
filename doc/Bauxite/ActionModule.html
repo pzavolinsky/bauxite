@@ -119,33 +119,6 @@
         </div>
       </div>
       
-      <div id="attribute-i-file" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">file</span><span
-            class="attribute-access-type">[R]</span>
-        </div>
-
-        <div class="method-description">
-        
-        <p>File where the action was defined.</p>
-        
-        </div>
-      </div>
-      
-      <div id="attribute-i-line" class="method-detail">
-        <div class="method-heading attribute-method-heading">
-          <span class="method-name">line</span><span
-            class="attribute-access-type">[R]</span>
-        </div>
-
-        <div class="method-description">
-        
-        <p>Line in the <a href="ActionModule.html#attribute-i-file">file</a> where the
-action was defined.</p>
-        
-        </div>
-      </div>
-      
       <div id="attribute-i-text" class="method-detail">
         <div class="method-heading attribute-method-heading">
           <span class="method-name">text</span><span
@@ -188,14 +161,12 @@ action was defined.</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/action.rb, line 39</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/action.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">ctx</span>, <span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
         <span class="ruby-ivar">@ctx</span>  = <span class="ruby-identifier">ctx</span>
         <span class="ruby-ivar">@cmd</span>  = <span class="ruby-identifier">cmd</span>
         <span class="ruby-ivar">@args</span> = <span class="ruby-identifier">args</span>
         <span class="ruby-ivar">@text</span> = <span class="ruby-identifier">text</span>
-        <span class="ruby-ivar">@file</span> = <span class="ruby-identifier">file</span>
-        <span class="ruby-ivar">@line</span> = <span class="ruby-identifier">line</span>
         
         <span class="ruby-ivar">@cmd_real</span> = (<span class="ruby-identifier">respond_to?</span> <span class="ruby-identifier">cmd</span><span class="ruby-operator">+</span><span class="ruby-string">&#39;_action&#39;</span>) <span class="ruby-operator">?</span> (<span class="ruby-identifier">cmd</span><span class="ruby-operator">+</span><span class="ruby-string">&#39;_action&#39;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">cmd</span>
         
@@ -260,7 +231,7 @@ quote characters (“) and every quote inside an argument is doubled.</p>
 
           
           <div class="method-source-code" id="args-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/action.rb, line 74</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/action.rb, line 66</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">args</span>(<span class="ruby-identifier">quote</span> = <span class="ruby-keyword">false</span>)
         <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@args</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">expand</span>(<span class="ruby-identifier">a</span>) }
         <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-string">&#39;&quot;&#39;</span><span class="ruby-operator">+</span><span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&#39;&quot;&#39;</span>, <span class="ruby-string">&#39;&quot;&quot;&#39;</span>)<span class="ruby-operator">+</span><span class="ruby-string">&#39;&quot;&#39;</span> } <span class="ruby-keyword">if</span> <span class="ruby-identifier">quote</span>
@@ -314,7 +285,7 @@ might yield different results.</p>
 
           
           <div class="method-source-code" id="execute-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/core/action.rb, line 96</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/core/action.rb, line 88</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">execute</span>()
         <span class="ruby-identifier">send</span>(<span class="ruby-ivar">@cmd_real</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
 <span class="ruby-keyword">end</span></pre>

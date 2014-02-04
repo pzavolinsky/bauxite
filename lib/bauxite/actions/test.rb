@@ -42,7 +42,7 @@ class Bauxite::Action
 				t = Time.new
 				status = 'ERROR'
 				error = nil
-				@ctx.with_vars({ '__RAISE_ERROR__' => true, '__TEST__' => name }) do
+				@ctx.with_vars({ '__TEST__' => name }) do
 					delayed.call
 					status = 'OK'
 				end

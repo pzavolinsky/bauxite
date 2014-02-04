@@ -1,0 +1,4 @@
+open "file://${__DIR__}/capture_on_error/page.html"
+test capture_on_error/my_test.bxt
+write label main
+assertv true false

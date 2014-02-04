@@ -144,7 +144,8 @@ module Bauxite
 				'__TIMEOUT__'  => (options[:timeout] || 10).to_i,
 				'__DEBUG__'    => false,
 				'__SELECTOR__' => options[:selector] || 'sid',
-				'__OUTPUT__'   => options[:output]
+				'__OUTPUT__'   => options[:output],
+				'__DIR__'      => File.absolute_path(Dir.pwd)
 			}
 			@aliases = {}
 			@tests = []
@@ -256,7 +257,7 @@ module Bauxite
 		#     ctx.debug
 		#     # => this breaks into the debug console
 		def debug
-			exec_action('debug', false)
+			exec_parsed_action('debug', [], false)
 		end
 		
 		# Returns the value of the specified +element+.
@@ -295,9 +296,9 @@ module Bauxite
 		#     ctx.exec_action 'open "http://www.ruby-lang.org"'
 		#     # => navigates to www.ruby-lang.org
 		#
-		def exec_action(text, log = true, file = '<unknown>', line = 0)
-			data = Context::parse_action_default(text, file, line)
-			exec_parsed_action(data[:action], data[:args], log, text, file, line)
+		def exec_action(text)
+			data = Context::parse_action_default(text, '<unknown>', 0)
+			exec_parsed_action(data[:action], data[:args], true, text)
 		end
 		
 		# Executes the specified +file+.
@@ -307,9 +308,20 @@ module Bauxite
 		#     # => executes every action defined in 'file'
 		#
 		def exec_file(file)
+			current_dir  = @variables['__DIR__' ]
+			current_file = @variables['__FILE__']
+			current_line = @variables['__LINE__']
+
 			@parser.parse(file) do |action, args, text, file, line|
-				exec_parsed_action(action, args, true, text, file, line)
+				@variables['__DIR__'] = File.absolute_path(File.dirname(file))
+				@variables['__FILE__'] = file
+				@variables['__LINE__'] = line
+				exec_parsed_action(action, args, true, text)
 			end
+
+			@variables['__DIR__' ] = current_dir
+			@variables['__FILE__'] = current_file
+			@variables['__LINE__'] = current_line
 		end
 
 		# Executes the specified action handling errors, logging and debug
@@ -325,8 +337,8 @@ module Bauxite
 		#     ctx.exec_action 'open "http://www.ruby-lang.org"'
 		#     # => navigates to www.ruby-lang.org
 		#
-		def exec_parsed_action(action, args, log = true, text = nil, file = nil, line = nil)
-			action =  get_action(action, args, text, file, line)
+		def exec_parsed_action(action, args, log = true, text = nil)
+			action = get_action(action, args, text)
 			ret = nil
 			if log
 				@logger.log_cmd(action) do
@@ -463,7 +475,7 @@ module Bauxite
 		# for advanced use (e.g. in complex actions). To execute an Action
 		# directly, the #exec_action method is preferred.
 		#
-		def get_action(action, args, text = nil, file = nil, line = nil)
+		def get_action(action, args, text = nil)
 			while (alias_action = @aliases[action])
 				action = alias_action[:action]
 				args   = alias_action[:args].map do |a|
@@ -484,8 +496,8 @@ module Bauxite
 			end
 			
 			text = ([action] + args.map { |a| '"'+a.gsub('"', '""')+'"' }).join(' ') unless text
-			file = @variables['__FILE__'] unless file
-			line = @variables['__LINE__'] unless line
+			file = @variables['__FILE__']
+			line = @variables['__LINE__']
 			
 			Action.new(self, action, args, text, file, line)
 		end
@@ -504,11 +516,6 @@ module Bauxite
 		#     ret.call if ret.respond_to? :call
 		#
 		def exec_action_object(action)
-			# Inject built-in variables
-			file = action.file
-			dir  = (File.exists? file) ? File.dirname(file) : Dir.pwd
-			@variables['__FILE__'] = file
-			@variables['__DIR__'] = File.absolute_path(dir)
 			action.execute
 		end
 
@@ -523,7 +530,7 @@ module Bauxite
 		#         # => additional error handling code here
 		#     end
 		#
-		def print_error(e)
+		def print_error(e, capture = true)
 			if @logger
 				@logger.log "#{e.message}\n", :error
 			else
@@ -532,6 +539,11 @@ module Bauxite
 			if @options[:verbose]
 				p e
 				puts e.backtrace
+			end
+			if capture and @options[:capture]
+				with_vars(e.variables) do
+					exec_parsed_action('capture', [] , false) 
+				end
 			end
 		end
 		
@@ -656,6 +668,12 @@ module Bauxite
 			current = @variables
 			@variables = @variables.merge(vars)
 			yield
+		rescue StandardError => e
+			e.instance_variable_set "@variables", @variables
+			def e.variables
+				@variables
+			end
+			raise
 		ensure
 			@variables = current
 		end

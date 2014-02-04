@@ -56,9 +56,10 @@ task :test do
 		fail "The -d argument failed to open the debug console"
 	end
 
-	system('rm -rf /tmp/bauxite-test')
-	ruby "-Ilib bin/bauxite test/capture.bxt.manual --output /tmp/bauxite-test"
 	check = lambda { |f| fail "Captured file not found #{f}" unless File.exists? f }
+
+	system('rm -rf /tmp/bauxite-test')
+	ruby "-Ilib bin/bauxite --output /tmp/bauxite-test test/capture.bxt.manual"
 	check.call '/tmp/bauxite-test/test_capture_bxt_manual_0.png'
 	check.call '/tmp/bauxite-test/test_capture_bxt_manual_1.png'
 	check.call '/tmp/bauxite-test/test_capture_bxt_manual_2.png'
@@ -66,6 +67,11 @@ task :test do
 	check.call '/tmp/bauxite-test/capture_my_test_bxt_test_capture_my_test_bxt_3.png'
 	check.call '/tmp/bauxite-test/named_test_test_capture_my_test_bxt_3.png'
 
+	system('rm -rf /tmp/bauxite-test')
+	system("ruby -Ilib bin/bauxite --output /tmp/bauxite-test -c test/capture_on_error.bxt.manual")
+	fail "The 'capture_on_error' test failed to return the expected exit status: the exit status was #{$?.exitstatus}" unless $?.exitstatus == 1
+	check.call '/tmp/bauxite-test/capture_on_error_my_test_bxt_test_capture_on_error_bxt_manual_0.png'
+	check.call '/tmp/bauxite-test/test_capture_on_error_bxt_manual_0.png'
 end
 
 # === Documentation ========================================================= #

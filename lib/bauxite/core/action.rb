@@ -29,20 +29,12 @@ module Bauxite
 		# Raw action text.
 		attr_reader :text
 		
-		# File where the action was defined.
-		attr_reader :file
-		
-		# Line in the #file where the action was defined.
-		attr_reader :line
-		
 		# Constructs a new test action instance.
 		def initialize(ctx, cmd, args, text, file, line)
 			@ctx  = ctx
 			@cmd  = cmd
 			@args = args
 			@text = text
-			@file = file
-			@line = line
 			
 			@cmd_real = (respond_to? cmd+'_action') ? (cmd+'_action') : cmd
 			
