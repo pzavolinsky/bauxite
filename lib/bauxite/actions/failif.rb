@@ -38,9 +38,15 @@ class Bauxite::Action
 	#
 	# :category: Action Methods
 	def failif(action, *args)
-		if @ctx.try_exec_action(action, args)
+		@ctx.with_timeout Bauxite::Errors::AssertionError do
+			begin
+				@ctx.with_vars({ '__TIMEOUT__' => 0}) do
+					@ctx.exec_parsed_action(action, args, false)
+				end
+			rescue Bauxite::Errors::AssertionError
+				return true
+			end
 			raise Bauxite::Errors::AssertionError, "Assertion did not failed as expected:#{action} #{args.join(' ')}"
 		end
-		true
 	end
 end

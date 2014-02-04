@@ -33,8 +33,12 @@ class Bauxite::Action
 	#
 	# :category: Action Methods
 	def setif(name, value, action, *args)
-		return false unless @ctx.try_exec_action(action, args)
-		@ctx.variables[name] = value
-		true
+		begin
+			@ctx.exec_parsed_action(action, args, false)
+			@ctx.variables[name] = value
+			true
+		rescue Bauxite::Errors::AssertionError
+			return false
+		end
 	end
 end

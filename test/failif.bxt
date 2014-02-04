@@ -1,4 +1,5 @@
 open "file://${__DIR__}/failif/page.html"
+failif assert label "not yet!"
 failif assertv true false
 assert hello world
 failif assert hello universe

@@ -43,12 +43,29 @@ task :test do
 	test_files = Dir[File.join('test', '*.bxt')].select { |f| not File.directory? f }.join(' ')
 	ruby "-Ilib bin/bauxite -v #{test_files}"
 	
-	ruby "-Ilib bin/bauxite -v -e #{File.join('test', 'extension')} #{File.join('test', 'extension.bxt.manual')}"
+	ruby "-Ilib bin/bauxite -v -e test/extension #{File.join('test', 'extension.bxt.manual')}"
 	
-	ruby "-Ilib bin/bauxite -v -s css #{File.join('test', 'default_selector.bxt.manual')}"
+	ruby "-Ilib bin/bauxite -v -s css test/default_selector.bxt.manual"
 	
-	system("ruby -Ilib bin/bauxite #{File.join('test', 'test.bxt.manual')}")
+	system("ruby -Ilib bin/bauxite test/test.bxt.manual")
 	fail "The 'test' action test failed to return the expected exit status: the exit status was #{$?.exitstatus}" unless $?.exitstatus == 2
+
+	debug = `echo exit | ruby -Ilib bin/bauxite -l echo test/debug.bxt.manual -d`
+	puts debug
+	unless debug.include? 'debug> exit'
+		fail "The -d argument failed to open the debug console"
+	end
+
+	system('rm -rf /tmp/bauxite-test')
+	ruby "-Ilib bin/bauxite test/capture.bxt.manual --output /tmp/bauxite-test"
+	check = lambda { |f| fail "Captured file not found #{f}" unless File.exists? f }
+	check.call '/tmp/bauxite-test/test_capture_bxt_manual_0.png'
+	check.call '/tmp/bauxite-test/test_capture_bxt_manual_1.png'
+	check.call '/tmp/bauxite-test/test_capture_bxt_manual_2.png'
+	check.call '/tmp/bauxite-test/with_name.png'
+	check.call '/tmp/bauxite-test/capture_my_test_bxt_test_capture_my_test_bxt_3.png'
+	check.call '/tmp/bauxite-test/named_test_test_capture_my_test_bxt_3.png'
+
 end
 
 # === Documentation ========================================================= #

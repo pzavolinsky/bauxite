@@ -50,8 +50,10 @@ private
 		while line = _debug_get_line
 			next if not line or line == ''
 			break if line == 'exit'
-			@ctx.handle_errors(false, false) do
+			begin
 				@ctx.exec_action(line, true, '<debug>', @@debug_line)
+			rescue StandardError => e
+				@ctx.print_error(e)
 			end
 			@@debug_line += 1
 		end

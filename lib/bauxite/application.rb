@@ -189,7 +189,7 @@ module Bauxite
 				.single(:timeout     , "-t",  "--timeout SECONDS", "Selector timeout (#{options[:timeout]}s)")
 				.single(:open_timeout, "-o",  "--open-timeout SECONDS", "Open timeout (#{options[:open_timeout]}s)")
 				.single(:debug       , "-d",  "--debug", "Break to debug on error. "+
-													"Start the debug console if no input files given.")
+												"Start the debug console if no input files given.")
 				.single(:driver      , "-p",  "--provider PROVIDER"     , "Driver provider")
 				.multi( :driver_opt  , "-P",  "--provider-option OPTION", "Provider options (name=value)")
 				.single(:logger      , "-l",  "--logger LOGGER"         , "Logger type ('#{options[:logger]}')")
@@ -197,7 +197,9 @@ module Bauxite
 				.single(:reset       , "-r",  "--reset"                 , "Reset driver between tests")
 				.single(:wait        , "-w",  "--wait"                  , "Wait for ENTER before exiting")
 				.single(:selector    , "-s",  "--selector SELECTOR"     , "Default selector ('#{options[:selector]}')")
+				.single(:capture     , "-c",  "--capture"               , "If the test fails, capture a screenshot")
 				.single(:csv         , "--csv-summary FILE"             , "Output a single-line CSV summary")
+				.single(:output      , "--output DIR"                   , "Output directory for generated artifacts")
 				opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url.") do |v|
 					v = 'localhost:4444' unless v
 					v = 'http://'+v unless v.match /^https?:\/\//
@@ -231,7 +233,17 @@ module Bauxite
 				opts.separator ""
 			end.parse!
 
-			ctx = Context.new(options)
+			ctx = nil
+			begin
+				ctx = Context.new(options)
+			rescue StandardError => e
+				puts e.message
+				if options[:verbose]
+					p e
+					puts e.backtrace
+				end
+				exit false
+			end
 
 			files = ARGV
 			files = ['stdin'] if files.size == 0 and not options[:debug]
@@ -251,6 +263,8 @@ module Bauxite
 
 			begin
 				ctx.start(actions)
+			rescue StandardError => e
+				exit false
 			ensure
 				if ctx.tests.any?
 

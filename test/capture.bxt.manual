@@ -1,0 +1,20 @@
+open "file://${__DIR__}/capture/page.html"
+write by_id hello
+
+# Seq 0
+capture
+
+# Seq 1
+capture
+
+# Seq 2
+capture
+
+# With name
+capture with_name.png
+
+# With test name
+test "capture/my_test.bxt"
+
+# With named test name
+test "capture/my_test.bxt" named_test

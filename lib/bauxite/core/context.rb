@@ -143,7 +143,8 @@ module Bauxite
 			@variables = {
 				'__TIMEOUT__'  => (options[:timeout] || 10).to_i,
 				'__DEBUG__'    => false,
-				'__SELECTOR__' => options[:selector] || 'sid'
+				'__SELECTOR__' => options[:selector] || 'sid',
+				'__OUTPUT__'   => options[:output]
 			}
 			@aliases = {}
 			@tests = []
@@ -155,9 +156,7 @@ module Bauxite
 
 			_load_extensions(options[:extensions] || [])
 			
-			handle_errors do
-				@logger = Context::load_logger(options[:logger], options[:logger_opt])
-			end
+			@logger = Context::load_logger(options[:logger], options[:logger_opt])
 			
 			@parser = Parser.new(self)
 		end
@@ -181,7 +180,13 @@ module Bauxite
 			return unless actions.size > 0
 			begin
 				actions.each do |action|
-					exec_action(action)
+					begin
+						exec_action(action)
+					rescue StandardError => e
+						print_error(e)
+						raise unless @options[:debug]
+						debug
+					end
 				end
 			ensure
 				stop
@@ -310,78 +315,29 @@ module Bauxite
 		# Executes the specified action handling errors, logging and debug
 		# history.
 		#
+		# If +log+ is +true+, log the action execution (default behavior).
+		#
 		# This method if part of the action execution chain and is intended
 		# for advanced use (e.g. in complex actions). To execute an Action
 		# directly, the #exec_action method is preferred.
-		#
-		# If +log+ is +true+, log the action execution (default behavior).
 		#
 		# For example:
 		#     ctx.exec_action 'open "http://www.ruby-lang.org"'
 		#     # => navigates to www.ruby-lang.org
 		#
 		def exec_parsed_action(action, args, log = true, text = nil, file = nil, line = nil)
-			ret = handle_errors(true) do
-				
-				action =  get_action(action, args, text, file, line)
-				
-				if log
-					@logger.log_cmd(action) do
-						Readline::HISTORY << action.text
-						exec_action_object(action)
-					end
-				else
-					exec_action_object(action)
+			action =  get_action(action, args, text, file, line)
+			ret = nil
+			if log
+				@logger.log_cmd(action) do
+					Readline::HISTORY << action.text
+					ret = exec_action_object(action)
 				end
-			end
-			handle_errors(true) do
-				ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
-			end
-		end
-
-		
-		# Executes the +block+ inside a rescue block applying standard criteria of
-		# error handling.
-		#
-		# The default behavior is to print the exception message and exit.
-		#
-		# If the +:verbose+ option is set, the exception backtrace will also be
-		# printed.
-		#
-		# If the +break_into_debug+ argument is +true+ and the +:debug+ option is
-		# set, the handler will break into the debug console instead of exiting.
-		#
-		# If the +exit_on_error+ argument is +false+ the handler will not exit
-		# after printing the error message.
-		#
-		# For example:
-		#     ctx = Context.new({ :debug => true })
-		#     ctx.handle_errors(true) { raise 'break into debug now!' }
-		#     # => this breaks into the debug console
-		#
-		def handle_errors(break_into_debug = false, exit_on_error = true)
-			yield
-		rescue StandardError => e
-			if @logger
-				@logger.log "#{e.message}\n", :error
 			else
-				puts e.message
+				ret = exec_action_object(action)
 			end
-			if @options[:verbose]
-				p e
-				puts e.backtrace
-			end
-			unless @variables['__DEBUG__']
-				if break_into_debug and @options[:debug]
-					debug
-				elsif exit_on_error
-					if @variables['__RAISE_ERROR__']
-						raise
-					else
-						exit false
-					end
-				end
-			end
+
+			ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
 		end
 
 		# Executes the given block retrying for at most <tt>${__TIMEOUT__}</tt>
@@ -556,35 +512,28 @@ module Bauxite
 			action.execute
 		end
 
-		# Executes the specified +action+ and returns +true+ if the action
-		# succeeds and +false+ otherwise.
+		# Prints the specified +error+ using the Logger configured and 
+		# handling the verbose option.
 		# 
-		# This method is intended to simplify conditional actions that execute
-		# different code depending on the outcome of an action execution.
-		#
 		# For example:
-		#     if ctx.try_exec_action(action, args)
-		#         # => when action succeeds...
-		#     else
-		#         # => when action fails...
+		#     begin
+		#         # => some code here
+		#     rescue StandardError => e
+		#         @ctx.print_error e
+		#         # => additional error handling code here
 		#     end
 		#
-		def try_exec_action(action, args)
-			action = get_action(action, args)
-			
-			with_timeout Bauxite::Errors::AssertionError do
-				with_vars({ '__TIMEOUT__' => 0}) do
-					begin
-						ret = exec_action_object(action)
-						ret.call if ret.respond_to? :call
-						true
-					rescue Bauxite::Errors::AssertionError
-						false
-					end
-				end
+		def print_error(e)
+			if @logger
+				@logger.log "#{e.message}\n", :error
+			else
+				puts e.message
+			end
+			if @options[:verbose]
+				p e
+				puts e.backtrace
 			end
 		end
-
 		
 		# ======================================================================= #
 		# :section: Metadata

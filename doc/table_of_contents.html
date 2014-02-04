@@ -169,9 +169,14 @@
     <span class="container">Bauxite::Context</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/TerminalLogger.html#method-c-new">::new</a>
+    <a href="Bauxite/SelectorModule.html#method-c-new">::new</a>
     &mdash;
-    <span class="container">Bauxite::Loggers::TerminalLogger</span>
+    <span class="container">Bauxite::SelectorModule</span>
+
+  <li class="method">
+    <a href="Bauxite/ParserModule.html#method-c-new">::new</a>
+    &mdash;
+    <span class="container">Bauxite::ParserModule</span>
 
   <li class="method">
     <a href="Bauxite/ActionModule.html#method-c-new">::new</a>
@@ -184,14 +189,14 @@
     <span class="container">Bauxite::Context</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/CompositeLogger.html#method-c-new">::new</a>
-    &mdash;
-    <span class="container">Bauxite::Loggers::CompositeLogger</span>
-
-  <li class="method">
     <a href="Bauxite/Loggers/FileLogger.html#method-c-new">::new</a>
     &mdash;
     <span class="container">Bauxite::Loggers::FileLogger</span>
+
+  <li class="method">
+    <a href="Bauxite/Loggers/CompositeLogger.html#method-c-new">::new</a>
+    &mdash;
+    <span class="container">Bauxite::Loggers::CompositeLogger</span>
 
   <li class="method">
     <a href="Bauxite/Loggers/NullLogger.html#method-c-new">::new</a>
@@ -199,14 +204,9 @@
     <span class="container">Bauxite::Loggers::NullLogger</span>
 
   <li class="method">
-    <a href="Bauxite/SelectorModule.html#method-c-new">::new</a>
+    <a href="Bauxite/Loggers/TerminalLogger.html#method-c-new">::new</a>
     &mdash;
-    <span class="container">Bauxite::SelectorModule</span>
-
-  <li class="method">
-    <a href="Bauxite/ParserModule.html#method-c-new">::new</a>
-    &mdash;
-    <span class="container">Bauxite::ParserModule</span>
+    <span class="container">Bauxite::Loggers::TerminalLogger</span>
 
   <li class="method">
     <a href="Bauxite/Context.html#method-c-parse_action_default">::parse_action_default</a>
@@ -249,14 +249,14 @@
     <span class="container">Bauxite::Loggers::XtermLogger</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/XtermLogger.html#method-i-_restore_cursor">#_restore_cursor</a>
-    &mdash;
-    <span class="container">Bauxite::Loggers::XtermLogger</span>
-
-  <li class="method">
     <a href="Bauxite/Loggers/TerminalLogger.html#method-i-_restore_cursor">#_restore_cursor</a>
     &mdash;
     <span class="container">Bauxite::Loggers::TerminalLogger</span>
+
+  <li class="method">
+    <a href="Bauxite/Loggers/XtermLogger.html#method-i-_restore_cursor">#_restore_cursor</a>
+    &mdash;
+    <span class="container">Bauxite::Loggers::XtermLogger</span>
 
   <li class="method">
     <a href="Bauxite/Loggers/XtermLogger.html#method-i-_save_cursor">#_save_cursor</a>
@@ -314,6 +314,11 @@
     <span class="container">Bauxite::Action</span>
 
   <li class="method">
+    <a href="Bauxite/Action.html#method-i-capture">#capture</a>
+    &mdash;
+    <span class="container">Bauxite::Action</span>
+
+  <li class="method">
     <a href="Bauxite/Action.html#method-i-click">#click</a>
     &mdash;
     <span class="container">Bauxite::Action</span>
@@ -339,14 +344,14 @@
     <span class="container">Bauxite::Loggers::TerminalLogger</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/NullLogger.html#method-i-debug_prompt">#debug_prompt</a>
-    &mdash;
-    <span class="container">Bauxite::Loggers::NullLogger</span>
-
-  <li class="method">
     <a href="Bauxite/Loggers/CompositeLogger.html#method-i-debug_prompt">#debug_prompt</a>
     &mdash;
     <span class="container">Bauxite::Loggers::CompositeLogger</span>
+
+  <li class="method">
+    <a href="Bauxite/Loggers/NullLogger.html#method-i-debug_prompt">#debug_prompt</a>
+    &mdash;
+    <span class="container">Bauxite::Loggers::NullLogger</span>
 
   <li class="method">
     <a href="Bauxite/Parser.html#method-i-default">#default</a>
@@ -429,11 +434,6 @@
     <span class="container">Bauxite::Context</span>
 
   <li class="method">
-    <a href="Bauxite/Context.html#method-i-handle_errors">#handle_errors</a>
-    &mdash;
-    <span class="container">Bauxite::Context</span>
-
-  <li class="method">
     <a href="Bauxite/Action.html#method-i-js">#js</a>
     &mdash;
     <span class="container">Bauxite::Action</span>
@@ -459,9 +459,9 @@
     <span class="container">Bauxite::Loggers::CompositeLogger</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/FileLogger.html#method-i-log_cmd">#log_cmd</a>
+    <a href="Bauxite/Loggers/NullLogger.html#method-i-log_cmd">#log_cmd</a>
     &mdash;
-    <span class="container">Bauxite::Loggers::FileLogger</span>
+    <span class="container">Bauxite::Loggers::NullLogger</span>
 
   <li class="method">
     <a href="Bauxite/Loggers/TerminalLogger.html#method-i-log_cmd">#log_cmd</a>
@@ -469,9 +469,9 @@
     <span class="container">Bauxite::Loggers::TerminalLogger</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/NullLogger.html#method-i-log_cmd">#log_cmd</a>
+    <a href="Bauxite/Loggers/FileLogger.html#method-i-log_cmd">#log_cmd</a>
     &mdash;
-    <span class="container">Bauxite::Loggers::NullLogger</span>
+    <span class="container">Bauxite::Loggers::FileLogger</span>
 
   <li class="method">
     <a href="Bauxite/Loggers/CompositeLogger.html#method-i-log_cmd">#log_cmd</a>
@@ -499,9 +499,9 @@
     <span class="container">Bauxite::ParserModule</span>
 
   <li class="method">
-    <a href="Bauxite/Loggers/CompositeLogger.html#method-i-progress">#progress</a>
+    <a href="Bauxite/Context.html#method-i-print_error">#print_error</a>
     &mdash;
-    <span class="container">Bauxite::Loggers::CompositeLogger</span>
+    <span class="container">Bauxite::Context</span>
 
   <li class="method">
     <a href="Bauxite/Loggers/NullLogger.html#method-i-progress">#progress</a>
@@ -512,6 +512,11 @@
     <a href="Bauxite/Loggers/TerminalLogger.html#method-i-progress">#progress</a>
     &mdash;
     <span class="container">Bauxite::Loggers::TerminalLogger</span>
+
+  <li class="method">
+    <a href="Bauxite/Loggers/CompositeLogger.html#method-i-progress">#progress</a>
+    &mdash;
+    <span class="container">Bauxite::Loggers::CompositeLogger</span>
 
   <li class="method">
     <a href="Bauxite/Action.html#method-i-replace">#replace</a>
@@ -602,11 +607,6 @@
     <a href="Bauxite/Action.html#method-i-test">#test</a>
     &mdash;
     <span class="container">Bauxite::Action</span>
-
-  <li class="method">
-    <a href="Bauxite/Context.html#method-i-try_exec_action">#try_exec_action</a>
-    &mdash;
-    <span class="container">Bauxite::Context</span>
 
   <li class="method">
     <a href="Bauxite/Action.html#method-i-tryload">#tryload</a>

@@ -36,21 +36,22 @@ class Bauxite::Action
 	# :category: Action Methods
 	def test(file, name = nil)
 		delayed = load(file)
-
+		name = name || file
 		lambda do
 			begin
 				t = Time.new
 				status = 'ERROR'
 				error = nil
-				@ctx.with_vars({ '__RAISE_ERROR__' => true }) do
+				@ctx.with_vars({ '__RAISE_ERROR__' => true, '__TEST__' => name }) do
 					delayed.call
 					status = 'OK'
 				end
 			rescue StandardError => e
+				@ctx.print_error(e)
 				error = e
 			ensure
 				@ctx.tests << {
-					:name => name || file,
+					:name => name,
 					:status => status,
 					:time => Time.new - t,
 					:error => error
