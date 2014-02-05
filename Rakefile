@@ -52,7 +52,7 @@ task :test do
 
 	debug = `echo exit | ruby -Ilib bin/bauxite -l echo test/debug.bxt.manual -d`
 	puts debug
-	unless debug.include? 'debug> exit'
+	unless debug.include? 'debug> '
 		fail "The -d argument failed to open the debug console"
 	end
 

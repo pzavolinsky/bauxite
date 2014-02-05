@@ -72,7 +72,7 @@ class Bauxite::Loggers::CompositeLogger
 		@loggers.each { |l| l.finalize(ctx) }
 	end
 	
-protected
+private
 	def _log_cmd_block(loggers, action, &block)
 		return yield if loggers.size == 0
 		return loggers[0].log_cmd(action, &block) if loggers.size == 1

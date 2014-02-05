@@ -163,7 +163,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 		File.open(file, 'w') { |f| f.write html }
 	end
 	
-protected
+private
 	def _d(depth, s)
 		"\n"+depth.times.inject('') { |s,i| s + "\t" } + s
 	end
