@@ -159,7 +159,10 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 	</body>
 </html>"
 		file = @file
-		file = File.join(output, file) if output != ''
+		if output != ''
+			file = File.join(output, file)
+			Dir.mkdir output unless Dir.exists? output
+		end
 		File.open(file, 'w') { |f| f.write html }
 	end
 	
