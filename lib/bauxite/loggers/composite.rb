@@ -42,9 +42,7 @@ class Bauxite::Loggers::CompositeLogger
 	# Additional loggers are called after the block completed.
 	#
 	def log_cmd(action, &block)
-		ret = @loggers[0].log_cmd(action, &block)
-		@loggers[1..-1].each { |l| l.log_cmd(action) { ret } }
-		ret
+		_log_cmd_block(@loggers, action, &block)
 	end
 
 	# Returns a colorized debug prompt.
@@ -67,4 +65,18 @@ class Bauxite::Loggers::CompositeLogger
 	def log(s, type = :info)
 		@loggers.each { |l| l.log(s, type) }
 	end
+	
+	# Completes the log execution.
+	#
+	def finalize(ctx)
+		@loggers.each { |l| l.finalize(ctx) }
+	end
+	
+protected
+	def _log_cmd_block(loggers, action, &block)
+		return yield if loggers.size == 0
+		return loggers[0].log_cmd(action, &block) if loggers.size == 1
+		loggers[0].log_cmd(action) { _log_cmd_block(loggers[1..-1], action, &block) }
+	end
+
 end

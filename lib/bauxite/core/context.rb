@@ -222,7 +222,14 @@ module Bauxite
 		#
 		def stop
 			Context::wait if @options[:wait]
-			@driver.quit
+			begin
+				@logger.finalize(self)
+			rescue StandardError => e
+				print_error(e)
+				raise
+			ensure
+				@driver.quit
+			end
 		end
 		
 		# Finds an element by +selector+.
@@ -542,7 +549,8 @@ module Bauxite
 			end
 			if capture and @options[:capture]
 				with_vars(e.variables) do
-					exec_parsed_action('capture', [] , false) 
+					exec_parsed_action('capture', [] , false)
+					e.variables['__CAPTURE__'] = @variables['__CAPTURE__']
 				end
 			end
 		end

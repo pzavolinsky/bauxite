@@ -81,6 +81,11 @@ module Bauxite
 			def log(s, type = :info)
 				print s
 			end
+			
+			# Completes the log execution.
+			#
+			def finalize(ctx)
+			end
 		end
 	end
 end

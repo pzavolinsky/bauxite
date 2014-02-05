@@ -23,6 +23,9 @@
 module Bauxite
 	# Action common state and behavior.
 	module ActionModule
+		# Test context
+		attr_reader :ctx
+		
 		# Parsed action command (i.e. action name)
 		attr_reader :cmd
 		
