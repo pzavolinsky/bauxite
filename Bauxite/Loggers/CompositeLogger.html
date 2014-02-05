@@ -77,6 +77,8 @@
     
     <li ><a href="#method-i-debug_prompt">#debug_prompt</a>
     
+    <li ><a href="#method-i-finalize">#finalize</a>
+    
     <li ><a href="#method-i-log">#log</a>
     
     <li ><a href="#method-i-log_cmd">#log_cmd</a>
@@ -190,9 +192,42 @@ first logger.</p>
 
           
           <div class="method-source-code" id="debug_prompt-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 54</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 52</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug_prompt</span>
         <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">debug_prompt</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-finalize" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">finalize</span><span
+            class="method-args">(ctx)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Completes the log execution.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="finalize-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>)
+        <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>) }
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -225,7 +260,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 67</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 65</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -264,9 +299,7 @@ first logger.</p>
           <div class="method-source-code" id="log_cmd-source">
             <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 44</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-identifier">ret</span> = <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>) { <span class="ruby-identifier">ret</span> } }
-        <span class="ruby-identifier">ret</span>
+        <span class="ruby-identifier">_log_cmd_block</span>(<span class="ruby-ivar">@loggers</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -297,7 +330,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="progress-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 59</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -319,7 +352,7 @@ first logger.</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.0.
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
