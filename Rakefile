@@ -72,12 +72,19 @@ task :test do
 	fail "The 'capture_on_error' test failed to return the expected exit status: the exit status was #{$?.exitstatus}" unless $?.exitstatus == 1
 	check.call '/tmp/bauxite-test/capture_on_error_my_test_bxt_test_capture_on_error_bxt_manual_0.png'
 	check.call '/tmp/bauxite-test/test_capture_on_error_bxt_manual_0.png'
+	
+	system("( cd test; ruby -I../lib ../bin/bauxite bug_load_path.bxt.manual -v; )")
+	fail "The regression test for 'bug_load_path' failed" unless $?.exitstatus == 0
+	
 end
 
 # === Documentation ========================================================= #
 desc "Generate Bauxite documentation"
 task :doc do
-	system("rdoc -O -U -V --main README.md README.md  #{File.join('lib', 'bauxite')}")
+	doc = `rdoc -O -U -V --main README.md README.md  #{File.join('lib', 'bauxite')}`
+	puts doc
+	fail "Documentation failed" unless $?.exitstatus == 0
+	fail "Undocumented artifacts found" unless doc.include? '100.00% documented'
 end
 
 desc "Open documentation in a browser"

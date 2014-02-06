@@ -683,7 +683,10 @@ will be stored in <code>__CAPTURE__</code>.</p>
                 <span class="ruby-identifier">test</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__TEST__&#39;</span>]
                 <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__CAPTURE_SEQ__&#39;</span>] = <span class="ruby-identifier">seq</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
 
-                <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{@ctx.variables[&#39;__FILE__&#39;]}_#{seq}&quot;</span>
+                <span class="ruby-identifier">file</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__FILE__&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
+                <span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span>[<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">+</span><span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">start_with?</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>
+                
+                <span class="ruby-identifier">file</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;_#{seq}&quot;</span>
                 <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{test}_#{file}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">test</span>
                 <span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^A-Z0-9_-]/i</span>, <span class="ruby-string">&#39;_&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39;.png&#39;</span>
         <span class="ruby-keyword">end</span>
@@ -1816,7 +1819,7 @@ href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
 
           
           <div class="method-source-code" id="tryload-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/actions/tryload.rb, line 44</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/tryload.rb, line 46</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">tryload</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">_load_file_action</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
                 <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_file</span>(<span class="ruby-identifier">f</span>)

@@ -20,6 +20,8 @@
 # SOFTWARE.
 #++
 
+require 'pathname'
+
 class Bauxite::Action
 	# Load the specified file into an isolated variable context and execute
 	# the actions specified. If the file does not exist, this action skips.
@@ -49,9 +51,9 @@ class Bauxite::Action
 	
 private
 	def _load_file_action(file, *vars)
-		unless file == 'stdin' or  File.exists? file
+		unless file == 'stdin' or  (File.exists? file and Pathname.new(file).absolute?)
 			current = @ctx.variables['__FILE__']
-			current = (File.exists? current) ? File.dirname(current) : Dir.pwd
+			current = (current and File.exists? current) ? File.dirname(current) : Dir.pwd
 			file = File.join(current, file)
 			return nil unless File.exists? file
 		end

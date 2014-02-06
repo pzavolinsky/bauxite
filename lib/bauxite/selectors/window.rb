@@ -39,32 +39,36 @@ class Bauxite::Selector
 	#     js "window.w = window.open('popup.html', 'mypopup')"
 	#     assert "window=|mypopup|label" "hello!"
 	#     # => this assertion would pass
+	#     
+	#     assert "window=|popup.html|label" "hello!"
+	#     # => this assertion would pass
 	#
 	# :category: Selector Methods
 	def window(arg, &block)
+		current = @ctx.driver.window_handle
+		
 		delimiter = arg[0]
 		name,child = arg[1..-1].split(delimiter, 2)
-		current = @ctx.driver.window_handle
+		
+		pattern = /#{name}/
+		if name =~ /^\/.*\/[imxo]*$/
+			pattern = eval(name)
+		end
+
+		match = @ctx.driver.window_handles.find do |h|
+			@ctx.driver.switch_to.window h
+			@ctx.driver.current_url =~ pattern
+		end
+		
+		name = match if match
 		begin
-			window_name = name
-			unless @ctx.driver.window_handles.include? name
-				if name =~ /^\/.*\/[imxo]*$/
-					name = eval(name)
-				else
-					name = /#{name}/
-				end
-
-				name = @ctx.driver.window_handles.find do |h|
-					@ctx.driver.switch_to.window h
-					@ctx.driver.current_url =~ name
-				end
-			end
-
-			unless name
-				raise Bauxite::Errors::AssertionError, "Cannot find a window matching '#{window_name}' (either by name exact match or by url regex)." 
-			end
-
 			@ctx.driver.switch_to.window name
+		rescue StandardError => e
+			@ctx.driver.switch_to.window current
+			raise Bauxite::Errors::AssertionError, "Cannot find a window matching '#{name}' (either by name exact match or by url regex)." + e.message 
+		end
+		
+		begin
 			find(child, &block)
 		ensure
 			@ctx.driver.switch_to.window current

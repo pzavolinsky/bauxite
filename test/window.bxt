@@ -1,0 +1,14 @@
+open "file://${__DIR__}/window/page.html"
+
+write message "waiting"
+click open
+click "window=|popup_name|close"
+assertw 1
+assert message "hello from popup"
+
+write message "still waiting"
+click open
+click "window=|popup.html|close"
+assertw 1
+assert message "hello from popup"
+

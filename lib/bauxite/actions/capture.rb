@@ -45,7 +45,10 @@ class Bauxite::Action
 			test = @ctx.variables['__TEST__']
 			@ctx.variables['__CAPTURE_SEQ__'] = seq + 1
 
-			file = "#{@ctx.variables['__FILE__']}_#{seq}"
+			file = @ctx.variables['__FILE__'] || ''
+			file = file[Dir.pwd.size+1..-1] if file.start_with? Dir.pwd
+			
+			file += "_#{seq}"
 			file = "#{test}_#{file}" if test
 			file = file.gsub(/[^A-Z0-9_-]/i, '_') + '.png'
 		end
