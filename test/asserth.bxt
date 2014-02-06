@@ -1,0 +1,2 @@
+open "https://www.ruby-lang.org"
+asserth "content-type=html" "content-length=^\d+$"

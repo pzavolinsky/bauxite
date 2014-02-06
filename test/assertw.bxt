@@ -1,0 +1,7 @@
+assertw
+
+js "window.w = window.open()"
+assertw 2
+
+js "setTimeout(function() { window.w.close(); }, 3000);"
+assertw 1

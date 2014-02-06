@@ -20,10 +20,28 @@
 # SOFTWARE.
 #++
 
-#--
-module Bauxite
-	VERSION = "0.6.4"
+class Bauxite::Action
+	# Asserts that the number of currently open windows equals +count+.
+	#
+	# For example:
+	#     assertw
+	#     # => this assertion would pass (only the main window is open)
+	#     
+	#     js "window.w = window.open()"
+	#     assertw 2
+	#     # => this assertion would pass (main window and popup)
+	#
+	#     js "setTimeout(function() { window.w.close(); }, 3000);"
+	#     assertw 1
+	#     # => this assertion would pass (popup was closed)
+	#
+	# :category: Action Methods
+	def assertw(count = 1)
+		@ctx.with_timeout Bauxite::Errors::AssertionError do
+			unless @ctx.driver.window_handles.size == count.to_i
+				raise Bauxite::Errors::AssertionError, "Assertion failed: all popups must be closed." 
+			end
+			true
+		end
+	end
 end
-#++
-
-require_relative 'bauxite/application'

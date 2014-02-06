@@ -30,6 +30,12 @@ class Bauxite::Loggers::CompositeLogger
 	
 	# Constructs a new composite logger instance.
 	def initialize(options)
+		unless options[:loggers]
+			raise ArgumentError, "Missing required logger option 'loggers'. "+
+				"The value of this option is a comma-separated list of valid loggers. "+
+				"For example loggers=xterm,file."
+		end
+
 		@loggers = options[:loggers].split(',').map do |l|
 			Bauxite::Context::load_logger(l, options)
 		end

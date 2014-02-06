@@ -103,6 +103,8 @@
     
     <li ><a href="#method-i-smart">#smart</a>
     
+    <li ><a href="#method-i-window">#window</a>
+    
   </ul>
 </div>
 
@@ -490,6 +492,85 @@ child control element, including input, select, textarea and button).</p>
         
         <span class="ruby-identifier">target</span> = <span class="ruby-identifier">_smart_try_find</span> { <span class="ruby-identifier">label</span>.<span class="ruby-identifier">find_element</span>(<span class="ruby-value">:css</span>, <span class="ruby-string">&quot;input, select, textarea, button&quot;</span>) }
         <span class="ruby-keyword">return</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">target</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-window" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">window</span><span
+            class="method-args">(arg, &block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Change the selector scope to the given window and finds an element in that
+window.</p>
+
+<p>This is a composite selector. The window selector syntax is:</p>
+
+<pre>window=|window_name|child_selector</pre>
+
+<p>Where <code>window_name</code> is the name or url pattern of the target
+window,  <code>child_selector</code> is any selector available that matches
+the target element inside the target window.</p>
+
+<p>Note that the &#39;|&#39; character can be replaced with any
+single-character delimiter.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming &lt;div id=&#39;label&#39;&gt;hello!&lt;/div&gt; in popup.html</span>
+<span class="ruby-identifier">js</span> <span class="ruby-string">&quot;window.w = window.open(&#39;popup.html&#39;, &#39;mypopup&#39;)&quot;</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-string">&quot;window=|mypopup|label&quot;</span> <span class="ruby-string">&quot;hello!&quot;</span>
+<span class="ruby-comment"># =&gt; this assertion would pass</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="window-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/window.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">window</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">delimiter</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">0</span>]
+        <span class="ruby-identifier">name</span>,<span class="ruby-identifier">child</span> = <span class="ruby-identifier">arg</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-identifier">delimiter</span>, <span class="ruby-value">2</span>)
+        <span class="ruby-identifier">current</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">window_handle</span>
+        <span class="ruby-keyword">begin</span>
+                <span class="ruby-identifier">window_name</span> = <span class="ruby-identifier">name</span>
+                <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">window_handles</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">name</span>
+                        <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/^\/.*\/[imxo]*$/</span>
+                                <span class="ruby-identifier">name</span> = <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">name</span>)
+                        <span class="ruby-keyword">else</span>
+                                <span class="ruby-identifier">name</span> = <span class="ruby-node">/#{name}/</span>
+                        <span class="ruby-keyword">end</span>
+
+                        <span class="ruby-identifier">name</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">window_handles</span>.<span class="ruby-identifier">find</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span>
+                                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">window</span> <span class="ruby-identifier">h</span>
+                                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">current_url</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">name</span>
+                        <span class="ruby-keyword">end</span>
+                <span class="ruby-keyword">end</span>
+
+                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">name</span>
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Cannot find a window matching &#39;#{window_name}&#39; (either by name exact match or by url regex).&quot;</span> 
+                <span class="ruby-keyword">end</span>
+
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">window</span> <span class="ruby-identifier">name</span>
+                <span class="ruby-identifier">find</span>(<span class="ruby-identifier">child</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-keyword">ensure</span>
+                <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">window</span> <span class="ruby-identifier">current</span>
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

@@ -42,7 +42,7 @@ class Bauxite::Parser
 			.select { |match| match }
 			.map { |match| match.captures }
 			.map do |action|
-				case action[0]
+				case action[0].downcase
 				when 'open'
 					url = action[1]
 					url = url[1..-1] if url[0] == '/' and base_ends_in_slash # remove leading '/'
@@ -50,21 +50,24 @@ class Bauxite::Parser
 				when 'type'
 					action[0] = 'write'
 					action[1] = _selenium_ide_html_parse_selector(action[1])
-				when 'verifyTextPresent'
+				when 'verifytextpresent'
 					action[0] = 'source'
-				when 'clickAndWait', 'click'
+				when 'clickandwait', 'click'
 					action[0] = 'click'
 					action[1] = _selenium_ide_html_parse_selector(action[1])
-				when 'waitForPageToLoad'
+				when 'waitforpagetoload'
 					action[0] = 'wait'
 					action[1] = (action[1].to_i / 1000).to_s
-				when 'assertValue'
+				when 'assertvalue'
 					action[0] = 'assert'
 					action[1] = _selenium_ide_html_parse_selector(action[1])
+				when 'waitforpopup'
+					action = [] # remove
 				end
 				action = action.select { |a| a != '' }
 				[ action[0], action[1..-1], nil, 0 ]
 			end
+			.select { |a| a[0] }
 		end
 	end
 

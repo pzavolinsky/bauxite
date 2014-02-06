@@ -328,7 +328,7 @@ parser can&#39;t handle the file.</p>
                 .<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-identifier">match</span> }
                 .<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">captures</span> }
                 .<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span><span class="ruby-operator">|</span>
-                        <span class="ruby-keyword">case</span> <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>]
+                        <span class="ruby-keyword">case</span> <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">downcase</span>
                         <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;open&#39;</span>
                                 <span class="ruby-identifier">url</span> = <span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>]
                                 <span class="ruby-identifier">url</span> = <span class="ruby-identifier">url</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">url</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;/&#39;</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">base_ends_in_slash</span> <span class="ruby-comment"># remove leading &#39;/&#39;</span>
@@ -336,21 +336,24 @@ parser can&#39;t handle the file.</p>
                         <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;type&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>] = <span class="ruby-string">&#39;write&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>] = <span class="ruby-identifier">_selenium_ide_html_parse_selector</span>(<span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>])
-                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;verifyTextPresent&#39;</span>
+                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;verifytextpresent&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>] = <span class="ruby-string">&#39;source&#39;</span>
-                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;clickAndWait&#39;</span>, <span class="ruby-string">&#39;click&#39;</span>
+                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;clickandwait&#39;</span>, <span class="ruby-string">&#39;click&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>] = <span class="ruby-string">&#39;click&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>] = <span class="ruby-identifier">_selenium_ide_html_parse_selector</span>(<span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>])
-                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;waitForPageToLoad&#39;</span>
+                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;waitforpagetoload&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>] = <span class="ruby-string">&#39;wait&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>] = (<span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">/</span> <span class="ruby-value">1000</span>).<span class="ruby-identifier">to_s</span>
-                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;assertValue&#39;</span>
+                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;assertvalue&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>] = <span class="ruby-string">&#39;assert&#39;</span>
                                 <span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>] = <span class="ruby-identifier">_selenium_ide_html_parse_selector</span>(<span class="ruby-identifier">action</span>[<span class="ruby-value">1</span>])
+                        <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;waitforpopup&#39;</span>
+                                <span class="ruby-identifier">action</span> = [] <span class="ruby-comment"># remove</span>
                         <span class="ruby-keyword">end</span>
                         <span class="ruby-identifier">action</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&#39;&#39;</span> }
                         [ <span class="ruby-identifier">action</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">action</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>], <span class="ruby-keyword">nil</span>, <span class="ruby-value">0</span> ]
                 <span class="ruby-keyword">end</span>
+                .<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>] }
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
