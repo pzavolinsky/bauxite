@@ -99,7 +99,11 @@
     
     <li ><a href="#method-i-assert">#assert</a>
     
+    <li ><a href="#method-i-asserth">#asserth</a>
+    
     <li ><a href="#method-i-assertv">#assertv</a>
+    
+    <li ><a href="#method-i-assertw">#assertw</a>
     
     <li ><a href="#method-i-break_action">#break_action</a>
     
@@ -427,6 +431,72 @@ flags.</p>
       </div>
 
     
+      <div id="method-i-asserth" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">asserth</span><span
+            class="method-args">(*args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Replays the current GET request and asserts that the HTTP headers returned
+by that request match each of the <code>args</code> specified.</p>
+
+<p>Note that this action results in an additional HTTP GET request to the
+current browser url.</p>
+
+<p>The syntax of <code>args</code> is:</p>
+
+<pre>&quot;header_name1=expression1&quot; &quot;header_name2=expression2&quot; ...</pre>
+
+<p>Where <code>expression</code> is a regular expression. Note that multiple
+headers can be asserted in a single <a
+href="Action.html#method-i-asserth">asserth</a> call. Also note that if the
+same header is specified more than once, the value of the header must match
+every expression specified.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming response headers { &#39;Content-Type&#39; =&gt; &#39;text/plain&#39; }</span>
+<span class="ruby-identifier">asserth</span> <span class="ruby-string">&quot;content-type=plain&quot;</span>
+<span class="ruby-identifier">asserth</span> <span class="ruby-string">&quot;content-type=^text&quot;</span> <span class="ruby-string">&quot;content-type=/plain$&quot;</span>
+<span class="ruby-comment"># =&gt; these assertions would pass</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="asserth-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/asserth.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">asserth</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>(<span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">current_url</span>)
+        <span class="ruby-identifier">res</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get_response</span>(<span class="ruby-identifier">uri</span>)
+        <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">name</span>,<span class="ruby-identifier">value</span> = <span class="ruby-identifier">a</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;=&#39;</span>, <span class="ruby-value">2</span>);
+                <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">downcase</span>
+                <span class="ruby-identifier">value</span> = <span class="ruby-identifier">value</span>.<span class="ruby-identifier">strip</span>
+
+                <span class="ruby-identifier">actual</span> = <span class="ruby-identifier">res</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
+                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">value</span>)
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed for HTTP Header &#39;#{name}&#39;: expected &#39;#{value}&#39;, got &#39;#{actual}&#39;&quot;</span>
+                <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-assertv" class="method-detail ">
         
         <div class="method-heading">
@@ -463,6 +533,59 @@ href="Action.html#method-i-assert">assert</a> for more details.</p>
                 <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: &#39;#{actual}&#39; does not match &#39;#{expected}&#39;&quot;</span> 
         <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-assertw" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">assertw</span><span
+            class="method-args">(count = 1)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Asserts that the number of currently open windows equals
+<code>count</code>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">assertw</span>
+<span class="ruby-comment"># =&gt; this assertion would pass (only the main window is open)</span>
+
+<span class="ruby-identifier">js</span> <span class="ruby-string">&quot;window.w = window.open()&quot;</span>
+<span class="ruby-identifier">assertw</span> <span class="ruby-value">2</span>
+<span class="ruby-comment"># =&gt; this assertion would pass (main window and popup)</span>
+
+<span class="ruby-identifier">js</span> <span class="ruby-string">&quot;setTimeout(function() { window.w.close(); }, 3000);&quot;</span>
+<span class="ruby-identifier">assertw</span> <span class="ruby-value">1</span>
+<span class="ruby-comment"># =&gt; this assertion would pass (popup was closed)</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="assertw-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/assertw.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">assertw</span>(<span class="ruby-identifier">count</span> = <span class="ruby-value">1</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">window_handles</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">count</span>.<span class="ruby-identifier">to_i</span>
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-string">&quot;Assertion failed: all popups must be closed.&quot;</span> 
+                <span class="ruby-keyword">end</span>
+                <span class="ruby-keyword">true</span>
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
