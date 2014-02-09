@@ -1,7 +1,7 @@
-Thu, 06 Feb 2014 20:30:38 -0300
+Sun, 09 Feb 2014 18:48:09 -0300
 README.md	Fri, 31 Jan 2014 08:21:19 -0300
 lib/bauxite/actions/break.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/actions/asserth.rb	Thu, 06 Feb 2014 19:25:05 -0300
+lib/bauxite/actions/asserth.rb	Sun, 09 Feb 2014 18:41:12 -0300
 lib/bauxite/actions/assert.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/wait.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/assertv.rb	Mon, 27 Jan 2014 20:58:50 -0300
@@ -49,6 +49,6 @@ lib/bauxite/selectors/frame.rb	Tue, 28 Jan 2014 19:38:40 -0300
 lib/bauxite/loggers/terminal.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/loggers/file.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/loggers/composite.rb	Thu, 06 Feb 2014 19:25:05 -0300
-lib/bauxite/loggers/html.rb	Thu, 06 Feb 2014 19:25:05 -0300
+lib/bauxite/loggers/html.rb	Sun, 09 Feb 2014 18:48:01 -0300
 lib/bauxite/loggers/echo.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/loggers/xterm.rb	Mon, 27 Jan 2014 20:58:50 -0300

@@ -20,12 +20,20 @@
 # SOFTWARE.
 #++
 
-# Echo logger.
+require 'base64'
+
+# Html logger.
 #
-# This logger outputs the raw action text for every action executed.
+# This logger creates an HTML report of the test execution, linking to the
+# captures taken, if any.
 #
-# Note that this logger does not include execution status information
-# (i.e. action succeeded, failed or was skipped).
+# Html logger options include:
+# [<tt>html</tt>] Name of the outpus HTML report file. If not present, defaults 
+#                 to "test.html".
+# [<tt>html_package</tt>] If set, embed captures into the HTML report file
+#                         using the data URI scheme (base64 encoded). The
+#                         captures embedded into the report are deleted from
+#                         the filesystem.
 #
 class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 	
@@ -35,6 +43,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 		super(options)
 		@data = []
 		@file = options[:html] || 'test.html'
+		@imgs = []
 	end
 	
 	# Logs the specified string.
@@ -164,6 +173,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 			Dir.mkdir output unless Dir.exists? output
 		end
 		File.open(file, 'w') { |f| f.write html }
+		File.delete(*@imgs) if @imgs.size > 0
 	end
 	
 private
@@ -171,7 +181,13 @@ private
 		"\n"+depth.times.inject('') { |s,i| s + "\t" } + s
 	end
 	def _img(output, path)
-		path = path[output.size+1..-1] unless output == ''
-		"<img src='#{path}'/>"
+		if @options[:html_package]
+			content = Base64.encode64(File.open(path, 'r') { |f| f.read })
+			@imgs << path unless @imgs.include? path
+			"<img src='data:image/png;base64,#{content}'/>"
+		else
+			path = path[output.size+1..-1] unless output == ''
+			"<img src='#{path}'/>"
+		end
 	end
 end
