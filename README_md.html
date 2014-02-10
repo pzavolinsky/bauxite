@@ -444,8 +444,7 @@ create an execute shell build task with the following text:</p>
 
 <pre>#!/bin/bash
 source ~/.rvm/scripts/rvm
-bauxite -l echo -u http://localhost:4444/wd/hub          \
-        -t 60 -o 240 --csv-summary &quot;$WORKSPACE/test.csv&quot; \
+bauxite -t 60 -o 240 --jenkins &quot;$WORKSPACE/test-results&quot; \
         &quot;$WORKSPACE/test/suite.bxt&quot;</pre>
 
 <p>Assuming you have Selenium Server running on localhost and your workspace
@@ -461,12 +460,16 @@ test browse_around.bxt
 test purchase_something.bxt
 # more tests here...</pre>
 
-<p>Note the <code>--csv-summary</code> option in the configuration above. That
-option generates a single-line CSV file ideal to feed into the
-<code>Plot</code> Jenkins plugin. I won&#39;t go into the details of
-configuring the Plot plugin, but instead here is a fragment of a possible
-Jenkins <code>config.xml</code> plotting the <a
-href="Bauxite.html">Bauxite</a> test results:</p>
+<p>Note the <code>--jenkins</code> option in the configuration above. That
+option sets the default configuration arguments for Jenkins integration.
+For more details on the <code>bauxite</code> command-line arguments refer
+to the <a
+href="http://pzavolinsky.github.io/bauxite/Bauxite/Application.html">RDoc
+documentation</a>.</p>
+
+<p>I won&#39;t go into the details of configuring the Jenkins publishing
+plugins to print <a href="Bauxite.html">Bauxite</a> test results, but
+instead here is a fragment of a possible Jenkins <code>config.xml</code>:</p>
 
 <pre>&lt;publishers&gt;
   ...
@@ -477,7 +480,7 @@ href="Bauxite.html">Bauxite</a> test results:</p>
         &lt;yaxis&gt;Number of tests&lt;/yaxis&gt;
         &lt;series&gt;
           &lt;hudson.plugins.plot.CSVSeries&gt;
-            &lt;file&gt;test.csv&lt;/file&gt;
+            &lt;file&gt;test-results/summary.csv&lt;/file&gt;
             &lt;label&gt;&lt;/label&gt;
             &lt;fileType&gt;csv&lt;/fileType&gt;
             &lt;strExclusionSet&gt;
@@ -503,7 +506,7 @@ href="Bauxite.html">Bauxite</a> test results:</p>
         &lt;yaxis&gt;Test time (s)&lt;/yaxis&gt;
         &lt;series&gt;
           &lt;hudson.plugins.plot.CSVSeries&gt;
-            &lt;file&gt;test.csv&lt;/file&gt;
+            &lt;file&gt;test-results/summary.csv&lt;/file&gt;
             &lt;label&gt;&lt;/label&gt;
             &lt;fileType&gt;csv&lt;/fileType&gt;
             &lt;strExclusionSet&gt;

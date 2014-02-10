@@ -94,12 +94,22 @@
 
   <section class="description">
     
-<p>Echo logger.</p>
+<p>Html logger.</p>
 
-<p>This logger outputs the raw action text for every action executed.</p>
+<p>This logger creates an HTML report of the test execution, linking to the
+captures taken, if any.</p>
 
-<p>Note that this logger does not include execution status information (i.e.
-action succeeded, failed or was skipped).</p>
+<p>Html logger options include:</p>
+<dl class="rdoc-list label-list"><dt><code>html</code>
+<dd>
+<p>Name of the outpus HTML report file. If not present, defaults  to
+“test.html”.</p>
+</dd><dt><code>html_package</code>
+<dd>
+<p>If set, embed captures into the HTML report file using the data URI scheme
+(base64 encoded). The captures embedded into the report are deleted from
+the filesystem.</p>
+</dd></dl>
 
   </section>
 
@@ -146,11 +156,12 @@ action succeeded, failed or was skipped).</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 34</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-keyword">super</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-ivar">@data</span> = []
         <span class="ruby-ivar">@file</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:html</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;test.html&#39;</span>
+        <span class="ruby-ivar">@imgs</span> = []
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -189,7 +200,7 @@ action succeeded, failed or was skipped).</p>
 
           
           <div class="method-source-code" id="finalize-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 81</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 90</span>
         <span class="ruby-keyword">def</span> <span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>)
                 <span class="ruby-identifier">output</span> = <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__OUTPUT__&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
                 
@@ -270,12 +281,9 @@ action succeeded, failed or was skipped).</p>
                 <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;
         &lt;/body&gt;
 &lt;/html&gt;&quot;</span>
-                <span class="ruby-identifier">file</span> = <span class="ruby-ivar">@file</span>
-                <span class="ruby-keyword">if</span> <span class="ruby-identifier">output</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&#39;&#39;</span>
-                        <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">output</span>, <span class="ruby-identifier">file</span>)
-                        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span> <span class="ruby-identifier">output</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">output</span>
-                <span class="ruby-keyword">end</span>
+                <span class="ruby-identifier">file</span> = <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">output_path</span>(<span class="ruby-ivar">@file</span>)
                 <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>, <span class="ruby-string">&#39;w&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">html</span> }
+                <span class="ruby-constant">File</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-operator">*</span><span class="ruby-ivar">@imgs</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@imgs</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
         <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -309,7 +317,7 @@ action succeeded, failed or was skipped).</p>
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 45</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -341,7 +349,7 @@ action succeeded, failed or was skipped).</p>
 
           
           <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 49</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 58</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span>
 <span class="ruby-keyword">ensure</span>
