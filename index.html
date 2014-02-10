@@ -501,66 +501,22 @@ documentation</a>.</p>
 
 <p>I won&#39;t go into the details of configuring the Jenkins publishing
 plugins to print <a href="Bauxite.html">Bauxite</a> test results, but
-instead here is a fragment of a possible Jenkins <code>config.xml</code>:</p>
-
-<pre>&lt;publishers&gt;
-  ...
-  &lt;hudson.plugins.plot.PlotPublisher plugin=&quot;plot@1.5&quot;&gt;
-    &lt;plots&gt;
-      &lt;hudson.plugins.plot.Plot&gt;
-        &lt;title&gt;Number of tests&lt;/title&gt;
-        &lt;yaxis&gt;Number of tests&lt;/yaxis&gt;
-        &lt;series&gt;
-          &lt;hudson.plugins.plot.CSVSeries&gt;
-            &lt;file&gt;test-results/summary.csv&lt;/file&gt;
-            &lt;label&gt;&lt;/label&gt;
-            &lt;fileType&gt;csv&lt;/fileType&gt;
-            &lt;strExclusionSet&gt;
-              &lt;string&gt;OK&lt;/string&gt;
-              &lt;string&gt;Failed&lt;/string&gt;
-              &lt;string&gt;Total&lt;/string&gt;
-            &lt;/strExclusionSet&gt;
-            &lt;inclusionFlag&gt;INCLUDE_BY_STRING&lt;/inclusionFlag&gt;
-            &lt;exclusionValues&gt;Total,OK,Failed&lt;/exclusionValues&gt;
-            &lt;url&gt;&lt;/url&gt;
-            &lt;displayTableFlag&gt;false&lt;/displayTableFlag&gt;
-          &lt;/hudson.plugins.plot.CSVSeries&gt;
-        &lt;/series&gt;
-        &lt;group&gt;Test&lt;/group&gt;
-        &lt;numBuilds&gt;100&lt;/numBuilds&gt;
-        &lt;csvFileName&gt;1620406039.csv&lt;/csvFileName&gt;
-        &lt;csvLastModification&gt;0&lt;/csvLastModification&gt;
-        &lt;style&gt;line&lt;/style&gt;
-        &lt;useDescr&gt;false&lt;/useDescr&gt;
-      &lt;/hudson.plugins.plot.Plot&gt;
-      &lt;hudson.plugins.plot.Plot&gt;
-        &lt;title&gt;Test Execution Time&lt;/title&gt;
-        &lt;yaxis&gt;Test time (s)&lt;/yaxis&gt;
-        &lt;series&gt;
-          &lt;hudson.plugins.plot.CSVSeries&gt;
-            &lt;file&gt;test-results/summary.csv&lt;/file&gt;
-            &lt;label&gt;&lt;/label&gt;
-            &lt;fileType&gt;csv&lt;/fileType&gt;
-            &lt;strExclusionSet&gt;
-              &lt;string&gt;Time&lt;/string&gt;
-            &lt;/strExclusionSet&gt;
-            &lt;inclusionFlag&gt;INCLUDE_BY_STRING&lt;/inclusionFlag&gt;
-            &lt;exclusionValues&gt;Time&lt;/exclusionValues&gt;
-            &lt;url&gt;&lt;/url&gt;
-            &lt;displayTableFlag&gt;false&lt;/displayTableFlag&gt;
-          &lt;/hudson.plugins.plot.CSVSeries&gt;
-        &lt;/series&gt;
-        &lt;group&gt;Test&lt;/group&gt;
-        &lt;numBuilds&gt;100&lt;/numBuilds&gt;
-        &lt;csvFileName&gt;336296054.csv&lt;/csvFileName&gt;
-        &lt;csvLastModification&gt;0&lt;/csvLastModification&gt;
-        &lt;style&gt;line&lt;/style&gt;
-        &lt;useDescr&gt;false&lt;/useDescr&gt;
-      &lt;/hudson.plugins.plot.Plot&gt;
-    &lt;/plots&gt;
-  &lt;/hudson.plugins.plot.PlotPublisher&gt;
-  ...
-&lt;/publishers&gt;</pre>
+instead take a look at this <a
+href="https://raw.github.com/pzavolinsky/bauxite/master/jenkins/config.xml">preconfigured
+Jenkins config.xml</a>. This Jenkins configuration requires the following
+plugins:</p>
+<ul><li>
+<p><a href="https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin">Git</a>
+(required by the template, optional if you are not using Git)</p>
+</li><li>
+<p><a
+href="https://wiki.jenkins-ci.org/display/JENKINS/Flexible+Publish+Plugin">Flexible
+Publish</a> (to archive test results on failed builds)</p>
+</li><li>
+<p><a
+href="https://wiki.jenkins-ci.org/display/JENKINS/Flexible+Publish+Plugin">Plot</a>
+(to plot the test result summary)</p>
+</li></ul>
 </main>
 
 

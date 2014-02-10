@@ -737,6 +737,7 @@ will be stored in <code>__CAPTURE__</code>.</p>
             <pre><span class="ruby-comment"># File lib/bauxite/actions/click.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">click</span>(<span class="ruby-identifier">selector</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">click</span> }
+        <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
