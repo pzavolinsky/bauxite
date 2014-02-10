@@ -56,7 +56,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 			
 	# Echoes the raw action text.
 	def log_cmd(action)
-		ret = yield
+		ret = yield || false
 	ensure
 		status = case ret; when nil; :error; when false; :skip; else :ok; end
 		

@@ -31,5 +31,6 @@ class Bauxite::Action
 	# :category: Action Methods
 	def click(selector)
 		@ctx.find(selector) { |e| e.click }
+		true
 	end
 end
