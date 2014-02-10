@@ -33,7 +33,11 @@ class Bauxite::Action
 	# :category: Action Methods
 	def write(selector, text)
 		@ctx.find(selector) do |e|
-			e.clear
+			begin
+				e.clear
+			rescue Selenium::WebDriver::Error::UnknownError # user-editable...
+				# do nothing (if this should fail, it will in the line below)
+			end
 			e.send_keys(text)
 		end
 	end
