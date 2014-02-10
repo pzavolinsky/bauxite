@@ -278,64 +278,9 @@ Assuming you have Selenium Server running on localhost and your workspace (e.g. 
 
 Note the `--jenkins` option in the configuration above. That option sets the default configuration arguments for Jenkins integration. For more details on the `bauxite` command-line arguments refer to the [RDoc documentation](http://pzavolinsky.github.io/bauxite/Bauxite/Application.html).
 
-I won't go into the details of configuring the Jenkins publishing plugins to print Bauxite test results, but instead here is a fragment of a possible Jenkins `config.xml`:
+I won't go into the details of configuring the Jenkins publishing plugins to print Bauxite test results, but instead take a look at this [preconfigured Jenkins `config.xml`](https://raw.github.com/pzavolinsky/bauxite/master/jenkins/config.xml). This Jenkins configuration requires the following plugins:
 
-    <publishers>
-      ...
-      <hudson.plugins.plot.PlotPublisher plugin="plot@1.5">
-        <plots>
-          <hudson.plugins.plot.Plot>
-            <title>Number of tests</title>
-            <yaxis>Number of tests</yaxis>
-            <series>
-              <hudson.plugins.plot.CSVSeries>
-                <file>test-results/summary.csv</file>
-                <label></label>
-                <fileType>csv</fileType>
-                <strExclusionSet>
-                  <string>OK</string>
-                  <string>Failed</string>
-                  <string>Total</string>
-                </strExclusionSet>
-                <inclusionFlag>INCLUDE_BY_STRING</inclusionFlag>
-                <exclusionValues>Total,OK,Failed</exclusionValues>
-                <url></url>
-                <displayTableFlag>false</displayTableFlag>
-              </hudson.plugins.plot.CSVSeries>
-            </series>
-            <group>Test</group>
-            <numBuilds>100</numBuilds>
-            <csvFileName>1620406039.csv</csvFileName>
-            <csvLastModification>0</csvLastModification>
-            <style>line</style>
-            <useDescr>false</useDescr>
-          </hudson.plugins.plot.Plot>
-          <hudson.plugins.plot.Plot>
-            <title>Test Execution Time</title>
-            <yaxis>Test time (s)</yaxis>
-            <series>
-              <hudson.plugins.plot.CSVSeries>
-                <file>test-results/summary.csv</file>
-                <label></label>
-                <fileType>csv</fileType>
-                <strExclusionSet>
-                  <string>Time</string>
-                </strExclusionSet>
-                <inclusionFlag>INCLUDE_BY_STRING</inclusionFlag>
-                <exclusionValues>Time</exclusionValues>
-                <url></url>
-                <displayTableFlag>false</displayTableFlag>
-              </hudson.plugins.plot.CSVSeries>
-            </series>
-            <group>Test</group>
-            <numBuilds>100</numBuilds>
-            <csvFileName>336296054.csv</csvFileName>
-            <csvLastModification>0</csvLastModification>
-            <style>line</style>
-            <useDescr>false</useDescr>
-          </hudson.plugins.plot.Plot>
-        </plots>
-      </hudson.plugins.plot.PlotPublisher>
-      ...
-    </publishers>
+- [Git](https://wiki.jenkins-ci.org/display/JENKINS/Git+Plugin) (required by the template, optional if you are not using Git)
+- [Flexible Publish](https://wiki.jenkins-ci.org/display/JENKINS/Flexible+Publish+Plugin) (to archive test results on failed builds)
+- [Plot](https://wiki.jenkins-ci.org/display/JENKINS/Flexible+Publish+Plugin) (to plot the test result summary)
 

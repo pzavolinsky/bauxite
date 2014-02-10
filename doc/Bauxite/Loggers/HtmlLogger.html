@@ -334,7 +334,7 @@ the filesystem.</p>
         
         <div class="method-heading">
           <span class="method-name">log_cmd</span><span
-            class="method-args">(action) { || ... }</span>
+            class="method-args">(action) { ||| false| ... }</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -351,7 +351,7 @@ the filesystem.</p>
           <div class="method-source-code" id="log_cmd-source">
             <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 58</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
-        <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span>
+        <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">ensure</span>
         <span class="ruby-identifier">status</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">ret</span>; <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>; <span class="ruby-value">:error</span>; <span class="ruby-keyword">when</span> <span class="ruby-keyword">false</span>; <span class="ruby-value">:skip</span>; <span class="ruby-keyword">else</span> <span class="ruby-value">:ok</span>; <span class="ruby-keyword">end</span>
         
