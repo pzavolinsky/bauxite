@@ -27,6 +27,14 @@ require_relative 'terminal'
 # This logger outputs colorized lines using xterm (VT100/2) escape
 # sequences.
 #
+# XTerm logger options include:
+# [<tt>nc</tt>, <tt>color</tt>] If set to 'no', prints text without using
+#                               colors. Note that positional escape sequences
+#                               will still be used to show progress. To disable
+#                               escape sequences completely, consider using the
+#                               Bauxite::Loggers::TerminalLogger logger
+#                               instead.
+#
 class Bauxite::Loggers::XtermLogger < Bauxite::Loggers::TerminalLogger
 
 protected

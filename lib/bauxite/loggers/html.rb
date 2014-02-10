@@ -167,11 +167,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 		html << "
 	</body>
 </html>"
-		file = @file
-		if output != ''
-			file = File.join(output, file)
-			Dir.mkdir output unless Dir.exists? output
-		end
+		file = ctx.output_path(@file)
 		File.open(file, 'w') { |f| f.write html }
 		File.delete(*@imgs) if @imgs.size > 0
 	end

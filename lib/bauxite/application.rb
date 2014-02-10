@@ -53,6 +53,10 @@ module Bauxite
 	#     Number of seconds to wait before issuing a timeout error. This
 	#     timeout applies only to Selectors. 
 	#
+	# [-o, \--open_timeout SECONDS]
+	#     Number of seconds to wait before issuing a timeout error. This
+	#     timeout applies only to page loading times (i.e. Net::HTTP).
+	#
 	# [-d, \--debug]
 	#     If an error occurs, break into the debug console. This mode is very
 	#     useful to try different selector combinations and debug
@@ -84,6 +88,8 @@ module Bauxite
 	#    To see a complete list of the available loggers execute:
 	#        bauxite -h
 	#
+	#    Note that multiple instances of this option can be specified.
+	#
 	# [-L, \--logger-option OPTION]
 	#    A <tt>name=value</tt> pair of options that are directly forwarded to
 	#    the logger. This option argument can appear multiple times in the
@@ -106,11 +112,33 @@ module Bauxite
 	#    To see a complete list of the available selectors execute:
 	#        bauxite -h
 	#
+	# [-c, \--capture]
+	#    If the test fails, capture a screenshot in the +output+ directory.
+	#    See the \--output option below.
+	#
+	# [\--csv-summary FILE]
+	#    Output a single-line CSV summary ideal to feed into the Plot Jenkins
+	#    plugin. If +FILE+ is not specified, defaults to +summary.csv+
+	#
+	# [\--output DIR]
+	#    Output directory for generated artifacts. Defaults to the current
+	#    working directory.
+	#
 	# [-u, \--url URL]
 	#    This option is an alias of:
 	#        -p remote -P url=URL
 	#    If +URL+ is not present <tt>http://localhost:4444/wd/hub</tt> will be
 	#    assumed.
+	#
+	# [\--jenkins DIR]
+	#    Configures default options for Jenkins integration. This option is an
+	#    alias of:
+	#         -p remote -P url=http://localhost:4444/wd/hub -l echo -l html
+	#         -L html_package=true -c --csv-summary
+	#         --output DIR
+	#    Note that any of the options above can be overridden by specifying the
+	#    option after the <tt>--jenkins</tt> option. For example:
+	#         --jenkins -u selenium.my-organization.com:4445
 	#
 	# [-e, \--extension DIR]
 	#    Loads every Ruby file (*.rb) inside +DIR+ (and subdirectories). This
@@ -147,7 +175,7 @@ module Bauxite
 	class Application
 		def self.start #:nodoc:
 			options = {
-				:logger       => (ENV['TERM'] == 'xterm') ?  'xterm' : 'terminal',
+				:logger       => [],
 				:verbose      => false,
 				:break        => false,
 				:driver       => 'firefox',
@@ -160,7 +188,9 @@ module Bauxite
 				:logger_opt   => {},
 				:extensions   => []
 			}
-
+			
+			default_logger = (ENV['TERM'] == 'xterm') ?  'xterm' : 'terminal'
+			
 			OptionParser.new do |opts|
 				opts.banner = "Usage: bauxite [options] [files...]"
 				
@@ -173,10 +203,16 @@ module Bauxite
 					end
 					self
 				end
-				def opts.multi(*args)
+				def opts.hash(*args)
 					on(*args[1..-1]) do |v|
 						n,v = v.split('=', 2)
 						@o[args[0]][n.to_sym] = v || true
+					end
+					self
+				end
+				def opts.multi(*args)
+					on(*args[1..-1]) do |v|
+						@o[args[0]] << v
 					end
 					self
 				end
@@ -191,23 +227,36 @@ module Bauxite
 				.single(:debug       , "-d",  "--debug", "Break to debug on error. "+
 												"Start the debug console if no input files given.")
 				.single(:driver      , "-p",  "--provider PROVIDER"     , "Driver provider")
-				.multi( :driver_opt  , "-P",  "--provider-option OPTION", "Provider options (name=value)")
-				.single(:logger      , "-l",  "--logger LOGGER"         , "Logger type ('#{options[:logger]}')")
-				.multi( :logger_opt  , "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
+				.hash(  :driver_opt  , "-P",  "--provider-option OPTION", "Provider options (name=value)")
+				.multi( :logger      , "-l",  "--logger LOGGER"         , "Logger type ('#{default_logger}')")
+				.hash(  :logger_opt  , "-L",  "--logger-option OPTION"  , "Logger options (name=value)")
 				.single(:reset       , "-r",  "--reset"                 , "Reset driver between tests")
 				.single(:wait        , "-w",  "--wait"                  , "Wait for ENTER before exiting")
 				.single(:selector    , "-s",  "--selector SELECTOR"     , "Default selector ('#{options[:selector]}')")
 				.single(:capture     , "-c",  "--capture"               , "If the test fails, capture a screenshot")
-				.single(:csv         , "--csv-summary FILE"             , "Output a single-line CSV summary")
 				.single(:output      , "--output DIR"                   , "Output directory for generated artifacts")
-				opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url.") do |v|
+				.multi( :extensions  , "-e",  "--extension DIR"         , "Load extensions from DIR")
+				
+				opts.on("-u", "--url [URL]", "Configure the remote provider listening in the given url") do |v|
 					v = 'localhost:4444' unless v
 					v = 'http://'+v unless v.match /^https?:\/\//
 					v = v + '/wd/hub' unless v.end_with? '/wd/hub'
 					options[:driver] = 'remote'
 					options[:driver_opt][:url] = v
 				end
-				opts.on("-e", "--extension DIR", "Load extensions from DIR") { |v| options[:extensions] << v }
+				
+				opts.on("--csv-summary [FILE]", "Output a single-line CSV summary") { |v| options[:csv] = v || 'summary.csv' }
+				
+				opts.on("--jenkins DIR", "Configure default options for Jenkins integration") do |v|
+					options[:driver] = 'remote'
+					options[:driver_opt][:url] = 'http://localhost:4444/wd/hub'
+					options[:logger] = ['echo', 'html']
+					options[:output] = v
+					options[:logger_opt][:html_package] = true
+					options[:capture] = true
+					options[:csv] = 'summary.csv'
+				end
+				
 				opts.on("--version", "Show version") do
 					puts "bauxite #{Bauxite::VERSION}"
 					exit
@@ -232,7 +281,9 @@ module Bauxite
 				
 				opts.separator ""
 			end.parse!
-
+			
+			options[:logger] << default_logger unless options[:logger].size > 0
+			
 			ctx = nil
 			begin
 				ctx = Context.new(options)
@@ -273,7 +324,7 @@ module Bauxite
 						ok     = ctx.tests.inject(0) { |s,t| s + (t[:status] == 'OK' ? 1 : 0) }
 						failed = total - ok
 						time   = ctx.tests.inject(0) { |s,t| s + t[:time] }
-						File.open(csv_file, 'w') do |f|
+						File.open(ctx.output_path(csv_file), 'w') do |f|
 							f.write "Total,OK,Failed,Time\n#{total},#{ok},#{failed},#{time}\n"
 						end
 					end

@@ -20,8 +20,6 @@
 # SOFTWARE.
 #++
 
-require 'pathname'
-
 class Bauxite::Action
 	# Captures a screenshot of the current browser window and saves it with
 	# specified +file+ name. If +file+ is omitted a file name will be
@@ -36,7 +34,7 @@ class Bauxite::Action
 	#     
 	#     capture my_file.png
 	#     # => this would capture the screenshot to my_file.png in the current
-	#     #    working directory.
+	#     #    output directory.
 	#
 	# :category: Action Methods
 	def capture(file = nil)
@@ -52,17 +50,11 @@ class Bauxite::Action
 			file = "#{test}_#{file}" if test
 			file = file.gsub(/[^A-Z0-9_-]/i, '_') + '.png'
 		end
-
-		unless Pathname.new(file).absolute?
-			output = @ctx.variables['__OUTPUT__']
-			if output
-				Dir.mkdir output unless Dir.exists? output
-				file = File.join(output, file)
-			end
-		end
-
+		
+		file = @ctx.output_path(file)
+		
 		@ctx.driver.save_screenshot(file)
-
+		
 		@ctx.variables['__CAPTURE__'] = file
 		true
 	end

@@ -262,8 +262,7 @@ If you want to run Bauxite tests in your [Jenkins CI](http://jenkins-ci.org/) se
 
     #!/bin/bash
     source ~/.rvm/scripts/rvm
-    bauxite -l echo -u http://localhost:4444/wd/hub          \
-            -t 60 -o 240 --csv-summary "$WORKSPACE/test.csv" \
+    bauxite -t 60 -o 240 --jenkins "$WORKSPACE/test-results" \
             "$WORKSPACE/test/suite.bxt"
 
 Assuming you have Selenium Server running on localhost and your workspace (e.g. GIT repo) contains a folder named `test` with a file named `suite.bxt` the configuration above should work like a charm.
@@ -277,7 +276,9 @@ Assuming you have Selenium Server running on localhost and your workspace (e.g. 
     test purchase_something.bxt
     # more tests here...
 
-Note the `--csv-summary` option in the configuration above. That option generates a single-line CSV file ideal to feed into the `Plot` Jenkins plugin. I won't go into the details of configuring the Plot plugin, but instead here is a fragment of a possible Jenkins `config.xml` plotting the Bauxite test results:
+Note the `--jenkins` option in the configuration above. That option sets the default configuration arguments for Jenkins integration. For more details on the `bauxite` command-line arguments refer to the [RDoc documentation](http://pzavolinsky.github.io/bauxite/Bauxite/Application.html).
+
+I won't go into the details of configuring the Jenkins publishing plugins to print Bauxite test results, but instead here is a fragment of a possible Jenkins `config.xml`:
 
     <publishers>
       ...
@@ -288,7 +289,7 @@ Note the `--csv-summary` option in the configuration above. That option generate
             <yaxis>Number of tests</yaxis>
             <series>
               <hudson.plugins.plot.CSVSeries>
-                <file>test.csv</file>
+                <file>test-results/summary.csv</file>
                 <label></label>
                 <fileType>csv</fileType>
                 <strExclusionSet>
@@ -314,7 +315,7 @@ Note the `--csv-summary` option in the configuration above. That option generate
             <yaxis>Test time (s)</yaxis>
             <series>
               <hudson.plugins.plot.CSVSeries>
-                <file>test.csv</file>
+                <file>test-results/summary.csv</file>
                 <label></label>
                 <fileType>csv</fileType>
                 <strExclusionSet>

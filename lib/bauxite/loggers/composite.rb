@@ -24,19 +24,23 @@
 #
 # This composite logger forwards logging calls to each of its children.
 #
-# Set the +:loggers+ option to a comma-separated list of logger names
+# Composite logger options include:
+# [<tt>loggers</tt>] A comma-separated list of logger names.
 #
 class Bauxite::Loggers::CompositeLogger
 	
 	# Constructs a new composite logger instance.
-	def initialize(options)
-		unless options[:loggers]
-			raise ArgumentError, "Missing required logger option 'loggers'. "+
-				"The value of this option is a comma-separated list of valid loggers. "+
-				"For example loggers=xterm,file."
+	def initialize(options, loggers = nil)
+		unless loggers
+			unless options[:loggers]
+				raise ArgumentError, "Missing required logger option 'loggers'. "+
+					"The value of this option is a comma-separated list of valid loggers. "+
+					"For example loggers=xterm,file."
+			end
+			loggers = options[:loggers].split(',')
 		end
 
-		@loggers = options[:loggers].split(',').map do |l|
+		@loggers = loggers.map do |l|
 			Bauxite::Context::load_logger(l, options)
 		end
 	end

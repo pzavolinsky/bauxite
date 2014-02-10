@@ -25,6 +25,10 @@
 # This logger outputs the raw action text for every action executed to
 # the file specified in the +file+ logger option.
 #
+# File logger options include:
+# [<tt>file</tt>] Output file name.
+#
+#
 class Bauxite::Loggers::FileLogger < Bauxite::Loggers::NullLogger
 	
 	# Constructs a new echo logger instance.
@@ -34,12 +38,17 @@ class Bauxite::Loggers::FileLogger < Bauxite::Loggers::NullLogger
 		unless @file and @file != ''
 			raise ArgumentError, "FileLogger configuration error: Undefined 'file' option."
 		end
-		File.open(@file, "w") {} # truncate file
+		@lines = []
+	end
+	
+	# Completes the log execution.
+	def finalize(ctx)
+		File.open(ctx.output_path(@file), 'w') { |f| f.write(@lines.join("\n")) }
 	end
 	
 	# Echoes the raw action text.
 	def log_cmd(action)
-		File.open(@file, 'a+') { |f| f.write(action.text+"\n") }
+		@lines << action.text
 		yield
 	end
 end

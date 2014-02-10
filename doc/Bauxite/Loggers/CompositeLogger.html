@@ -102,8 +102,11 @@
 
 <p>This composite logger forwards logging calls to each of its children.</p>
 
-<p>Set the <code>:loggers</code> option to a comma-separated list of logger
-names</p>
+<p>Composite logger options include:</p>
+<dl class="rdoc-list label-list"><dt><code>loggers</code>
+<dd>
+<p>A comma-separated list of logger names.</p>
+</dd></dl>
 
   </section>
 
@@ -130,7 +133,7 @@ names</p>
         
         <div class="method-heading">
           <span class="method-name">new</span><span
-            class="method-args">(options)</span>
+            class="method-args">(options, loggers = nil)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -145,15 +148,18 @@ names</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 32</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
-        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:loggers</span>]
-                <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&quot;Missing required logger option &#39;loggers&#39;. &quot;</span><span class="ruby-operator">+</span>
-                        <span class="ruby-string">&quot;The value of this option is a comma-separated list of valid loggers. &quot;</span><span class="ruby-operator">+</span>
-                        <span class="ruby-string">&quot;For example loggers=xterm,file.&quot;</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">loggers</span> = <span class="ruby-keyword">nil</span>)
+        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">loggers</span>
+                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-value">:loggers</span>]
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&quot;Missing required logger option &#39;loggers&#39;. &quot;</span><span class="ruby-operator">+</span>
+                                <span class="ruby-string">&quot;The value of this option is a comma-separated list of valid loggers. &quot;</span><span class="ruby-operator">+</span>
+                                <span class="ruby-string">&quot;For example loggers=xterm,file.&quot;</span>
+                <span class="ruby-keyword">end</span>
+                <span class="ruby-identifier">loggers</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:loggers</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;,&#39;</span>)
         <span class="ruby-keyword">end</span>
 
-        <span class="ruby-ivar">@loggers</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:loggers</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;,&#39;</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
+        <span class="ruby-ivar">@loggers</span> = <span class="ruby-identifier">loggers</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span>
                 <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">l</span>, <span class="ruby-identifier">options</span>)
         <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
@@ -198,7 +204,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="debug_prompt-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 58</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">debug_prompt</span>
         <span class="ruby-ivar">@loggers</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">debug_prompt</span>
 <span class="ruby-keyword">end</span></pre>
@@ -231,7 +237,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="finalize-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 77</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -266,7 +272,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 71</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 75</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span>) }
 <span class="ruby-keyword">end</span></pre>
@@ -303,7 +309,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 50</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">_log_cmd_block</span>(<span class="ruby-ivar">@loggers</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -336,7 +342,7 @@ first logger.</p>
 
           
           <div class="method-source-code" id="progress-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 63</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/composite.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>)
         <span class="ruby-ivar">@loggers</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">progress</span>(<span class="ruby-identifier">value</span>) }
 <span class="ruby-keyword">end</span></pre>

@@ -23,6 +23,7 @@
 require 'selenium-webdriver'
 require 'readline'
 require 'csv'
+require 'pathname'
 
 # Load dependencies and extensions without leaking dir into the global scope
 lambda do
@@ -177,7 +178,12 @@ module Bauxite
 		#     #    and clicks the "Search" button.
 		#
 		def start(actions = [])
-			_load_driver
+			begin
+				_load_driver
+			rescue StandardError => e
+				print_error(e)
+				raise
+			end
 			return unless actions.size > 0
 			begin
 				actions.each do |action|
@@ -420,7 +426,13 @@ module Bauxite
 		# Constructs a Logger instance using +name+ as a hint for the logger
 		# type.
 		#
-		def self.load_logger(name, options)
+		def self.load_logger(loggers, options)
+			if loggers.is_a? Array
+				return Loggers::CompositeLogger.new(options, loggers)
+			end
+			
+			name = loggers
+			
 			log_name = (name || 'null').downcase
 			
 			class_name = "#{log_name.capitalize}Logger"
@@ -553,6 +565,29 @@ module Bauxite
 					e.variables['__CAPTURE__'] = @variables['__CAPTURE__']
 				end
 			end
+		end
+		
+		# Returns the output path for +path+ accounting for the 
+		# <tt>__OUTPUT__</tt> variable.
+		#
+		# For example:
+		#     # assuming --output /mnt/disk
+		#     
+		#     ctx.output_path '/tmp/myfile.txt'
+		#     # => returns '/tmp/myfile.txt'
+		#     
+		#     ctx.output_path 'myfile.txt'
+		#     # => returns '/mnt/disk/myfile.txt'
+		#
+		def output_path(path)
+			unless Pathname.new(path).absolute?
+				output = @variables['__OUTPUT__']
+				if output
+					Dir.mkdir output unless Dir.exists? output
+					path = File.join(output, path)
+				end
+			end
+			path
 		end
 		
 		# ======================================================================= #

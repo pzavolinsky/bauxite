@@ -1,5 +1,5 @@
-Sun, 09 Feb 2014 18:48:09 -0300
-README.md	Fri, 31 Jan 2014 08:21:19 -0300
+Sun, 09 Feb 2014 21:18:47 -0300
+README.md	Sun, 09 Feb 2014 20:55:37 -0300
 lib/bauxite/actions/break.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/asserth.rb	Sun, 09 Feb 2014 18:41:12 -0300
 lib/bauxite/actions/assert.rb	Mon, 27 Jan 2014 20:58:50 -0300
@@ -13,7 +13,7 @@ lib/bauxite/actions/assertw.rb	Thu, 06 Feb 2014 19:25:05 -0300
 lib/bauxite/actions/doif.rb	Tue, 04 Feb 2014 19:42:30 -0300
 lib/bauxite/actions/ruby.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/echo.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/actions/capture.rb	Thu, 06 Feb 2014 19:53:56 -0300
+lib/bauxite/actions/capture.rb	Sun, 09 Feb 2014 20:56:49 -0300
 lib/bauxite/actions/js.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/replace.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/actions/write.rb	Mon, 27 Jan 2014 20:58:50 -0300
@@ -34,10 +34,10 @@ lib/bauxite/actions/alias.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/parsers/html.rb	Thu, 06 Feb 2014 19:25:05 -0300
 lib/bauxite/parsers/csv.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/parsers/default.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/application.rb	Tue, 04 Feb 2014 19:42:30 -0300
+lib/bauxite/application.rb	Sun, 09 Feb 2014 21:02:36 -0300
 lib/bauxite/core/errors.rb	Mon, 27 Jan 2014 20:58:50 -0300
 lib/bauxite/core/selector.rb	Tue, 28 Jan 2014 21:05:35 -0300
-lib/bauxite/core/context.rb	Tue, 04 Feb 2014 21:48:38 -0300
+lib/bauxite/core/context.rb	Sun, 09 Feb 2014 21:04:35 -0300
 lib/bauxite/core/logger.rb	Tue, 04 Feb 2014 19:47:18 -0300
 lib/bauxite/core/action.rb	Tue, 04 Feb 2014 20:25:25 -0300
 lib/bauxite/core/parser.rb	Mon, 27 Jan 2014 20:58:50 -0300
@@ -47,8 +47,8 @@ lib/bauxite/selectors/window.rb	Thu, 06 Feb 2014 20:27:10 -0300
 lib/bauxite/selectors/smart.rb	Fri, 31 Jan 2014 20:43:53 -0300
 lib/bauxite/selectors/frame.rb	Tue, 28 Jan 2014 19:38:40 -0300
 lib/bauxite/loggers/terminal.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/loggers/file.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/loggers/composite.rb	Thu, 06 Feb 2014 19:25:05 -0300
-lib/bauxite/loggers/html.rb	Sun, 09 Feb 2014 18:48:01 -0300
+lib/bauxite/loggers/file.rb	Sun, 09 Feb 2014 21:17:29 -0300
+lib/bauxite/loggers/composite.rb	Sun, 09 Feb 2014 21:07:12 -0300
+lib/bauxite/loggers/html.rb	Sun, 09 Feb 2014 20:12:24 -0300
 lib/bauxite/loggers/echo.rb	Mon, 27 Jan 2014 20:58:50 -0300
-lib/bauxite/loggers/xterm.rb	Mon, 27 Jan 2014 20:58:50 -0300
+lib/bauxite/loggers/xterm.rb	Sun, 09 Feb 2014 21:15:58 -0300

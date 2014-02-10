@@ -669,14 +669,14 @@ will be stored in <code>__CAPTURE__</code>.</p>
 
 <span class="ruby-identifier">capture</span> <span class="ruby-identifier">my_file</span>.<span class="ruby-identifier">png</span>
 <span class="ruby-comment"># =&gt; this would capture the screenshot to my_file.png in the current</span>
-<span class="ruby-comment">#    working directory.</span>
+<span class="ruby-comment">#    output directory.</span>
 </pre>
           
           
 
           
           <div class="method-source-code" id="capture-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/actions/capture.rb, line 42</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/capture.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">capture</span>(<span class="ruby-identifier">file</span> = <span class="ruby-keyword">nil</span>)
         <span class="ruby-keyword">unless</span> <span class="ruby-identifier">file</span>
                 <span class="ruby-identifier">seq</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__CAPTURE_SEQ__&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
@@ -690,17 +690,11 @@ will be stored in <code>__CAPTURE__</code>.</p>
                 <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{test}_#{file}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">test</span>
                 <span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[^A-Z0-9_-]/i</span>, <span class="ruby-string">&#39;_&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39;.png&#39;</span>
         <span class="ruby-keyword">end</span>
-
-        <span class="ruby-keyword">unless</span> <span class="ruby-constant">Pathname</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">absolute?</span>
-                <span class="ruby-identifier">output</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__OUTPUT__&#39;</span>]
-                <span class="ruby-keyword">if</span> <span class="ruby-identifier">output</span>
-                        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span> <span class="ruby-identifier">output</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">output</span>
-                        <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">output</span>, <span class="ruby-identifier">file</span>)
-                <span class="ruby-keyword">end</span>
-        <span class="ruby-keyword">end</span>
-
+        
+        <span class="ruby-identifier">file</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">output_path</span>(<span class="ruby-identifier">file</span>)
+        
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">save_screenshot</span>(<span class="ruby-identifier">file</span>)
-
+        
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__CAPTURE__&#39;</span>] = <span class="ruby-identifier">file</span>
         <span class="ruby-keyword">true</span>
 <span class="ruby-keyword">end</span></pre>

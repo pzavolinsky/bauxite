@@ -118,6 +118,10 @@ href="../Bauxite.html">Bauxite</a> version execute:</p>
 <dd>
 <p>Number of seconds to wait before issuing a timeout error. This timeout
 applies only to Selectors.</p>
+</dd><dt>-o, --open_timeout SECONDS
+<dd>
+<p>Number of seconds to wait before issuing a timeout error. This timeout
+applies only to page loading times (i.e. Net::HTTP).</p>
 </dd><dt>-d, --debug
 <dd>
 <p>If an error occurs, break into the debug console. This mode is very useful
@@ -161,6 +165,8 @@ otherwise it defaults to <code>terminal</code>.</p>
 <p>To see a complete list of the available loggers execute:</p>
 
 <pre>bauxite -h</pre>
+
+<p>Note that multiple instances of this option can be specified.</p>
 </dd><dt>-L, --logger-option OPTION
 <dd>
 <p>A <code>name=value</code> pair of options that are directly forwarded to
@@ -184,6 +190,19 @@ does not contain an <code>=</code> sign.</p>
 <p>To see a complete list of the available selectors execute:</p>
 
 <pre>bauxite -h</pre>
+</dd><dt>-c, --capture
+<dd>
+<p>If the test fails, capture a screenshot in the <code>output</code>
+directory. See the --output option below.</p>
+</dd><dt>--csv-summary FILE
+<dd>
+<p>Output a single-line CSV summary ideal to feed into the Plot Jenkins
+plugin. If <code>FILE</code> is not specified, defaults to
+<code>summary.csv</code></p>
+</dd><dt>--output DIR
+<dd>
+<p>Output directory for generated artifacts. Defaults to the current working
+directory.</p>
 </dd><dt>-u, --url URL
 <dd>
 <p>This option is an alias of:</p>
@@ -192,6 +211,19 @@ does not contain an <code>=</code> sign.</p>
 
 <p>If <code>URL</code> is not present
 <code>http://localhost:4444/wd/hub</code> will be assumed.</p>
+</dd><dt>--jenkins DIR
+<dd>
+<p>Configures default options for Jenkins integration. This option is an alias
+of:</p>
+
+<pre>-p remote -P url=http://localhost:4444/wd/hub -l echo -l html
+-L html_package=true -c --csv-summary
+--output DIR</pre>
+
+<p>Note that any of the options above can be overridden by specifying the
+option after the <code>--jenkins</code> option. For example:</p>
+
+<pre>--jenkins -u selenium.my-organization.com:4445</pre>
 </dd><dt>-e, --extension DIR
 <dd>
 <p>Loads every Ruby file (*.rb) inside <code>DIR</code> (and subdirectories).
