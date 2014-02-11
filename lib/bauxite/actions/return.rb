@@ -56,7 +56,13 @@ class Bauxite::Action
 	#
 	# :category: Action Methods
 	def return_action(*vars)
+		if vars == ['*']
+			@ctx.variables['__RETURN__'] = vars
+			return true
+		end
+
 		rets = @ctx.variables['__RETURN__'] || []
-		@ctx.variables['__RETURN__'] = rets + vars
+		@ctx.variables['__RETURN__'] = rets + vars unless rets.include? '*'
+		true
 	end
 end

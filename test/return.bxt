@@ -1,0 +1,2 @@
+load return/f1.bxt
+assertv "my_value" "${my_var}"

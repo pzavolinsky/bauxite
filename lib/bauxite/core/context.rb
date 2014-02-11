@@ -710,7 +710,17 @@ module Bauxite
 		def with_vars(vars)
 			current = @variables
 			@variables = @variables.merge(vars)
-			yield
+			ret_vars = nil
+
+			ret = yield
+			
+			returned = @variables['__RETURN__']
+			if returned == ['*']
+				ret_vars = @variables.clone
+				ret_vars.delete '__RETURN__'
+			elsif returned != nil
+				ret_vars = @variables.select { |k,v| returned.include? k }
+			end
 		rescue StandardError => e
 			e.instance_variable_set "@variables", @variables
 			def e.variables
@@ -719,6 +729,8 @@ module Bauxite
 			raise
 		ensure
 			@variables = current
+			@variables.merge!(ret_vars) if ret_vars
+			ret
 		end
 		
 	private

@@ -65,17 +65,7 @@ private
 		end
 		
 		lambda do
-			ret_vars = nil
-			@ctx.with_vars var_hash do
-				yield file
-				rets = @ctx.variables['__RETURN__']
-				if rets == ['*']
-					ret_vars = @ctx.variables
-				elsif rets != nil 
-					ret_vars = @ctx.variables.select { |k,v| rets.include? k }
-				end
-			end
-			@ctx.variables.merge!(ret_vars) if ret_vars
+			@ctx.with_vars(var_hash) { yield file }
 		end
 	end
 end
