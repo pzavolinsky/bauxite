@@ -1876,7 +1876,17 @@ variables is restored.</p>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">with_vars</span>(<span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">current</span> = <span class="ruby-ivar">@variables</span>
         <span class="ruby-ivar">@variables</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">vars</span>)
-        <span class="ruby-keyword">yield</span>
+        <span class="ruby-identifier">ret_vars</span> = <span class="ruby-keyword">nil</span>
+
+        <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span>
+        
+        <span class="ruby-identifier">returned</span> = <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__RETURN__&#39;</span>]
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">returned</span> <span class="ruby-operator">==</span> [<span class="ruby-string">&#39;*&#39;</span>]
+                <span class="ruby-identifier">ret_vars</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">clone</span>
+                <span class="ruby-identifier">ret_vars</span>.<span class="ruby-identifier">delete</span> <span class="ruby-string">&#39;__RETURN__&#39;</span>
+        <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">returned</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span>
+                <span class="ruby-identifier">ret_vars</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">returned</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">k</span> }
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">rescue</span> <span class="ruby-constant">StandardError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
         <span class="ruby-identifier">e</span>.<span class="ruby-identifier">instance_variable_set</span> <span class="ruby-string">&quot;@variables&quot;</span>, <span class="ruby-ivar">@variables</span>
         <span class="ruby-keyword">def</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">variables</span>
@@ -1885,6 +1895,8 @@ variables is restored.</p>
         <span class="ruby-identifier">raise</span>
 <span class="ruby-keyword">ensure</span>
         <span class="ruby-ivar">@variables</span> = <span class="ruby-identifier">current</span>
+        <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">ret_vars</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret_vars</span>
+        <span class="ruby-identifier">ret</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
