@@ -40,10 +40,4 @@ class Bauxite::Parser
 			end
 		end.select { |item| item != nil }
 	end
-
-private
-	def _selenium_ide_html_parse_selector(selector)
-		selector = 'xpath='+selector if selector[0..1] == '//'
-		selector
-	end
 end

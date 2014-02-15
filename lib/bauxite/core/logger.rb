@@ -87,5 +87,83 @@ module Bauxite
 			def finalize(ctx)
 			end
 		end
+		
+		# Report logger.
+		#
+		# This base logger class can be inherited to create reporting loggers.
+		#
+		# Descendent classes must override the #finalize method and iterate the
+		# <tt>@data</tt> array to produce the report.
+		#
+		# The items included in the <tt>@data</tt> array contain the
+		# following fields:
+		# [:name]
+		#   Name of the current test.
+		# [:actions]
+		#   Array of actions with the following fields
+		#   - +:cmd+: name of the action.
+		#   - +:args+: action arguments.
+		#   - +:action+: action object.
+		#   - +:status+: action execution status: +:ok+, +:skip+ or +:error+.
+		#   - +:capture+: path to the current capture, if any.
+		#
+		# For an example of a ReportLogger implementation see the HtmlLogger
+		# class.
+		#
+		class ReportLogger < NullLogger
+			# Constructs a new report logger instance.
+			#
+			def initialize(options)
+				super(options)
+				@data = []
+			end
+			
+			# Logs the specified string.
+			#
+			# +type+, if specified, should be one of +:error+, +:warning+,
+			# +:info+ (default), +:debug+.
+			#
+			def log(s, type = :info)
+			end
+					
+			# Echoes the raw action text.
+			def log_cmd(action)
+				stime = Time.new
+				ret = yield || false
+				etime = Time.new
+			ensure
+				status = case ret; when nil; :error; when false; :skip; else :ok; end
+				
+				test_name = action.ctx.variables['__TEST__'] || 'Main'
+				test = @data.find { |t| t[:name] == test_name }
+				unless test
+					test = { :name => test_name, :actions => [] }
+					@data << test
+				end
+				
+				capture = action.ctx.variables['__CAPTURE__']
+				if capture == @last_capture
+					capture = nil
+				else
+					@last_capture = capture
+				end
+				
+				test[:actions] << {
+					:cmd     => action.cmd,
+					:args    => action.args(true),
+					:action  => action,
+					:status  => status,
+					:time    => (etime - stime),
+					:capture => capture
+				}
+				
+				ret
+			end
+			
+			# Completes the log execution.
+			#
+			def finalize(ctx)
+			end
+		end
 	end
 end

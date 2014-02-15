@@ -35,54 +35,14 @@ require 'base64'
 #                         captures embedded into the report are deleted from
 #                         the filesystem.
 #
-class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
+class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 	
 	# Constructs a new null logger instance.
 	#
 	def initialize(options)
 		super(options)
-		@data = []
 		@file = options[:html] || 'test.html'
 		@imgs = []
-	end
-	
-	# Logs the specified string.
-	#
-	# +type+, if specified, should be one of +:error+, +:warning+,
-	# +:info+ (default), +:debug+.
-	#
-	def log(s, type = :info)
-	end
-			
-	# Echoes the raw action text.
-	def log_cmd(action)
-		ret = yield || false
-	ensure
-		status = case ret; when nil; :error; when false; :skip; else :ok; end
-		
-		test_name = action.ctx.variables['__TEST__'] || 'Main'
-		test = @data.find { |t| t[:name] == test_name }
-		unless test
-			test = { :name => test_name, :actions => [] }
-			@data << test
-		end
-		
-		capture = action.ctx.variables['__CAPTURE__']
-		if capture == @last_capture
-			capture = nil
-		else
-			@last_capture = capture
-		end
-		
-		test[:actions] << {
-			:cmd => action.cmd,
-			:args => action.args(true),
-			:action => action,
-			:status => status,
-			:capture => capture
-		}
-		
-		ret
 	end
 	
 	# Completes the log execution.
@@ -97,16 +57,18 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 			body { font: 10pt sans-serif; }
 			.action div { display: inline-block; }
 			.cmd { width: 100px }
-			.status { width: 100px; float: right; text-align: center; font-weight: bold }
+			.status { float: right; text-align: center; }
+			.status .text { width: 100px; font-weight: bold }
 			.test { background-color: #DFDFFF; margin-top: 20px }
-			.ok    .status { background-color: #DFFFDF }
-			.error .status { background-color: #FFDFDF }
-			.skip  .status { background-color: #FFDFFF }
+			.ok    .status .text { background-color: #DFFFDF }
+			.error .status .text { background-color: #FFDFDF }
+			.skip  .status .text { background-color: #FFDFFF }
 			.capture { border: 1px solid black }
 			.capture img { max-width: 100% }
 			.odd { background-color: #EEEEEE }
 			.summary th { background-color: #DFDFFF; text-align: left }
 			.summary td { cursor: pointer; }
+			.top { position: absolute; top: 0px; right: 0px; background-color: #DFDFFF; padding: 5px; border-radius: 0px 0px 0px 5px; }
 			
 		</style>
 		<script type='text/javascript'>
@@ -117,7 +79,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 		</script>
 	</head>
 	<body>"
-	
+		html << _d(2, "<div class='top'>Created using <a href='https://github.com/pzavolinsky/bauxite'>bauxite</a> on #{Time.new}</div>")
 		if ctx.tests.any?
 			html << _d(2, "<h1>Test Summary</h1>")
 			html << _d(2, "<table class='summary'>")
@@ -139,14 +101,17 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::NullLogger
 			name = test[:name]
 			status = test[:actions].find { |a| a[:status] == :error } ? :error : :ok
 			html << _d(2, "<a name='#{name}'></a>")
-			html << _d(2, "<div class='test #{status}'>#{name}<div class='status'>#{status.upcase}</div></div>")
+			html << _d(2, "<div class='test #{status}'>#{name}<div class='status'><div class='text'>#{status.upcase}</div></div></div>")
 			html << _d(2, "<div id='#{name}_content' class='test-content'>")
 				
 			test[:actions].each_with_index do |action,idx|
 				html << _d(3, "<div class='action #{action[:status]} #{(idx % 2) == 1 ? 'odd' : 'even'}'>")
 				html << _d(4, 	"<div class='cmd'>#{action[:cmd]}</div>")
 				html << _d(4, 	"<div class='args'>#{action[:args].join(' ')}</div>")
-				html << _d(4, 	"<div class='status'>#{action[:status].upcase}</div>")
+				html << _d(4, 	"<div class='status'>")
+				html << _d(5, 		"<div class='time'>(#{action[:time].round(2).to_s}s)</div>")
+				html << _d(5, 		"<div class='text'>#{action[:status].upcase}</div>")
+				html << _d(4, 	"</div>")
 				html << _d(3, "</div>")
 				capture = action[:capture]
 				if capture

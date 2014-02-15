@@ -61,7 +61,7 @@
   <h3>Parent</h3>
 
   
-  <p class="link"><a href="NullLogger.html">Bauxite::Loggers::NullLogger</a>
+  <p class="link"><a href="ReportLogger.html">Bauxite::Loggers::ReportLogger</a>
   
 </div>
 
@@ -76,10 +76,6 @@
     <li class="calls-super" ><a href="#method-c-new">::new</a>
     
     <li ><a href="#method-i-finalize">#finalize</a>
-    
-    <li ><a href="#method-i-log">#log</a>
-    
-    <li ><a href="#method-i-log_cmd">#log_cmd</a>
     
   </ul>
 </div>
@@ -150,7 +146,7 @@ the filesystem.</p>
           
             <div class="method-calls-super">
               Calls superclass method
-              <a href="NullLogger.html#method-c-new">Bauxite::Loggers::NullLogger.new</a>
+              <a href="ReportLogger.html#method-c-new">Bauxite::Loggers::ReportLogger.new</a>
             </div>
           
 
@@ -159,7 +155,6 @@ the filesystem.</p>
             <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-keyword">super</span>(<span class="ruby-identifier">options</span>)
-        <span class="ruby-ivar">@data</span> = []
         <span class="ruby-ivar">@file</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:html</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;test.html&#39;</span>
         <span class="ruby-ivar">@imgs</span> = []
 <span class="ruby-keyword">end</span></pre>
@@ -200,7 +195,7 @@ the filesystem.</p>
 
           
           <div class="method-source-code" id="finalize-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 90</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 50</span>
         <span class="ruby-keyword">def</span> <span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>)
                 <span class="ruby-identifier">output</span> = <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__OUTPUT__&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
                 
@@ -211,16 +206,18 @@ the filesystem.</p>
                         body { font: 10pt sans-serif; }
                         .action div { display: inline-block; }
                         .cmd { width: 100px }
-                        .status { width: 100px; float: right; text-align: center; font-weight: bold }
+                        .status { float: right; text-align: center; }
+                        .status .text { width: 100px; font-weight: bold }
                         .test { background-color: #DFDFFF; margin-top: 20px }
-                        .ok    .status { background-color: #DFFFDF }
-                        .error .status { background-color: #FFDFDF }
-                        .skip  .status { background-color: #FFDFFF }
+                        .ok    .status .text { background-color: #DFFFDF }
+                        .error .status .text { background-color: #FFDFDF }
+                        .skip  .status .text { background-color: #FFDFFF }
                         .capture { border: 1px solid black }
                         .capture img { max-width: 100% }
                         .odd { background-color: #EEEEEE }
                         .summary th { background-color: #DFDFFF; text-align: left }
                         .summary td { cursor: pointer; }
+                        .top { position: absolute; top: 0px; right: 0px; background-color: #DFDFFF; padding: 5px; border-radius: 0px 0px 0px 5px; }
                         
                 &lt;/style&gt;
                 &lt;script type=&#39;text/javascript&#39;&gt;
@@ -231,7 +228,7 @@ the filesystem.</p>
                 &lt;/script&gt;
         &lt;/head&gt;
         &lt;body&gt;&quot;</span>
-        
+                <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-node">&quot;&lt;div class=&#39;top&#39;&gt;Created using &lt;a href=&#39;https://github.com/pzavolinsky/bauxite&#39;&gt;bauxite&lt;/a&gt; on #{Time.new}&lt;/div&gt;&quot;</span>)
                 <span class="ruby-keyword">if</span> <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">tests</span>.<span class="ruby-identifier">any?</span>
                         <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-string">&quot;&lt;h1&gt;Test Summary&lt;/h1&gt;&quot;</span>)
                         <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-string">&quot;&lt;table class=&#39;summary&#39;&gt;&quot;</span>)
@@ -253,14 +250,17 @@ the filesystem.</p>
                         <span class="ruby-identifier">name</span> = <span class="ruby-identifier">test</span>[<span class="ruby-value">:name</span>]
                         <span class="ruby-identifier">status</span> = <span class="ruby-identifier">test</span>[<span class="ruby-value">:actions</span>].<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">:status</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:error</span> } <span class="ruby-operator">?</span> <span class="ruby-value">:error</span> <span class="ruby-operator">:</span> <span class="ruby-value">:ok</span>
                         <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-node">&quot;&lt;a name=&#39;#{name}&#39;&gt;&lt;/a&gt;&quot;</span>)
-                        <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-node">&quot;&lt;div class=&#39;test #{status}&#39;&gt;#{name}&lt;div class=&#39;status&#39;&gt;#{status.upcase}&lt;/div&gt;&lt;/div&gt;&quot;</span>)
+                        <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-node">&quot;&lt;div class=&#39;test #{status}&#39;&gt;#{name}&lt;div class=&#39;status&#39;&gt;&lt;div class=&#39;text&#39;&gt;#{status.upcase}&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&quot;</span>)
                         <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">2</span>, <span class="ruby-node">&quot;&lt;div id=&#39;#{name}_content&#39; class=&#39;test-content&#39;&gt;&quot;</span>)
                                 
                         <span class="ruby-identifier">test</span>[<span class="ruby-value">:actions</span>].<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span>,<span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
                                 <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">3</span>, <span class="ruby-node">&quot;&lt;div class=&#39;action #{action[:status]} #{(idx % 2) == 1 ? &#39;odd&#39; : &#39;even&#39;}&#39;&gt;&quot;</span>)
                                 <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">4</span>,       <span class="ruby-node">&quot;&lt;div class=&#39;cmd&#39;&gt;#{action[:cmd]}&lt;/div&gt;&quot;</span>)
                                 <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">4</span>,       <span class="ruby-node">&quot;&lt;div class=&#39;args&#39;&gt;#{action[:args].join(&#39; &#39;)}&lt;/div&gt;&quot;</span>)
-                                <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">4</span>,       <span class="ruby-node">&quot;&lt;div class=&#39;status&#39;&gt;#{action[:status].upcase}&lt;/div&gt;&quot;</span>)
+                                <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">4</span>,       <span class="ruby-string">&quot;&lt;div class=&#39;status&#39;&gt;&quot;</span>)
+                                <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">5</span>,               <span class="ruby-node">&quot;&lt;div class=&#39;time&#39;&gt;(#{action[:time].round(2).to_s}s)&lt;/div&gt;&quot;</span>)
+                                <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">5</span>,               <span class="ruby-node">&quot;&lt;div class=&#39;text&#39;&gt;#{action[:status].upcase}&lt;/div&gt;&quot;</span>)
+                                <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">4</span>,       <span class="ruby-string">&quot;&lt;/div&gt;&quot;</span>)
                                 <span class="ruby-identifier">html</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">_d</span>(<span class="ruby-value">3</span>, <span class="ruby-string">&quot;&lt;/div&gt;&quot;</span>)
                                 <span class="ruby-identifier">capture</span> = <span class="ruby-identifier">action</span>[<span class="ruby-value">:capture</span>]
                                 <span class="ruby-keyword">if</span> <span class="ruby-identifier">capture</span>
@@ -285,100 +285,6 @@ the filesystem.</p>
                 <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>, <span class="ruby-string">&#39;w&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span> <span class="ruby-identifier">html</span> }
                 <span class="ruby-constant">File</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-operator">*</span><span class="ruby-ivar">@imgs</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@imgs</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
         <span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-log" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">log</span><span
-            class="method-args">(s, type = :info)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Logs the specified string.</p>
-
-<p><code>type</code>, if specified, should be one of <code>:error</code>,
-<code>:warning</code>, <code>:info</code> (default), <code>:debug</code>.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="log-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 54</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-log_cmd" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">log_cmd</span><span
-            class="method-args">(action) { ||| false| ... }</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Echoes the raw action text.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/html.rb, line 58</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
-        <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span> <span class="ruby-operator">||</span> <span class="ruby-keyword">false</span>
-<span class="ruby-keyword">ensure</span>
-        <span class="ruby-identifier">status</span> = <span class="ruby-keyword">case</span> <span class="ruby-identifier">ret</span>; <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>; <span class="ruby-value">:error</span>; <span class="ruby-keyword">when</span> <span class="ruby-keyword">false</span>; <span class="ruby-value">:skip</span>; <span class="ruby-keyword">else</span> <span class="ruby-value">:ok</span>; <span class="ruby-keyword">end</span>
-        
-        <span class="ruby-identifier">test_name</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__TEST__&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;Main&#39;</span>
-        <span class="ruby-identifier">test</span> = <span class="ruby-ivar">@data</span>.<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>[<span class="ruby-value">:name</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">test_name</span> }
-        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">test</span>
-                <span class="ruby-identifier">test</span> = { <span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">test_name</span>, <span class="ruby-value">:actions</span> =<span class="ruby-operator">&gt;</span> [] }
-                <span class="ruby-ivar">@data</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">test</span>
-        <span class="ruby-keyword">end</span>
-        
-        <span class="ruby-identifier">capture</span> = <span class="ruby-identifier">action</span>.<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-string">&#39;__CAPTURE__&#39;</span>]
-        <span class="ruby-keyword">if</span> <span class="ruby-identifier">capture</span> <span class="ruby-operator">==</span> <span class="ruby-ivar">@last_capture</span>
-                <span class="ruby-identifier">capture</span> = <span class="ruby-keyword">nil</span>
-        <span class="ruby-keyword">else</span>
-                <span class="ruby-ivar">@last_capture</span> = <span class="ruby-identifier">capture</span>
-        <span class="ruby-keyword">end</span>
-        
-        <span class="ruby-identifier">test</span>[<span class="ruby-value">:actions</span>] <span class="ruby-operator">&lt;&lt;</span> {
-                <span class="ruby-value">:cmd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">cmd</span>,
-                <span class="ruby-value">:args</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">args</span>(<span class="ruby-keyword">true</span>),
-                <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">action</span>,
-                <span class="ruby-value">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">status</span>,
-                <span class="ruby-value">:capture</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">capture</span>
-        }
-        
-        <span class="ruby-identifier">ret</span>
-<span class="ruby-keyword">end</span></pre>
           </div>
           
         </div>
