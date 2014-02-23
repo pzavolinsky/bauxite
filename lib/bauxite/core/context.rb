@@ -107,9 +107,6 @@ module Bauxite
 	# to change the test behavior by changing the built-in variables.
 	#
 	class Context
-		# Test engine driver instance (Selenium WebDriver).
-		attr_reader :driver
-		
 		# Logger instance.
 		attr_reader :logger
 		
@@ -178,12 +175,6 @@ module Bauxite
 		#     #    and clicks the "Search" button.
 		#
 		def start(actions = [])
-			begin
-				_load_driver
-			rescue StandardError => e
-				print_error(e)
-				raise
-			end
 			return unless actions.size > 0
 			begin
 				actions.each do |action|
@@ -207,8 +198,8 @@ module Bauxite
 		#     => closes the browser and opens a new one
 		#
 		def reset_driver
-			@driver.quit
-			_load_driver
+			@driver.quit if @driver
+			@driver = nil
 		end
 		
 		# Stops the test engine.
@@ -234,7 +225,7 @@ module Bauxite
 				print_error(e)
 				raise
 			ensure
-				@driver.quit
+				@driver.quit if @driver
 			end
 		end
 		
@@ -262,6 +253,12 @@ module Bauxite
 			with_timeout Selenium::WebDriver::Error::NoSuchElementError do
 				Selector.new(self, @variables['__SELECTOR__']).find(selector, &block)
 			end
+		end
+		
+		# Test engine driver instance (Selenium WebDriver).
+		def driver
+			_load_driver unless @driver
+			@driver
 		end
 		
 		# Breaks into the debug console.
@@ -406,11 +403,11 @@ module Bauxite
 		#
 		def with_driver_timeout(timeout)
 			current = @driver_timeout
-			@driver.manage.timeouts.implicit_wait = timeout
+			driver.manage.timeouts.implicit_wait = timeout
 			yield
 		ensure
 			@driver_timeout = current
-			@driver.manage.timeouts.implicit_wait = current
+			driver.manage.timeouts.implicit_wait = current
 		end
 
 		# Prompts the user to press ENTER before resuming execution.
