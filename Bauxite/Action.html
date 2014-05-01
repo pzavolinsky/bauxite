@@ -101,6 +101,8 @@
     
     <li ><a href="#method-i-asserth">#asserth</a>
     
+    <li ><a href="#method-i-assertm">#assertm</a>
+    
     <li ><a href="#method-i-assertv">#assertv</a>
     
     <li ><a href="#method-i-assertw">#assertw</a>
@@ -486,6 +488,60 @@ every expression specified.</p>
                         <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed for HTTP Header &#39;#{name}&#39;: expected &#39;#{value}&#39;, got &#39;#{actual}&#39;&quot;</span>
                 <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-assertm" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">assertm</span><span
+            class="method-args">(text, action = 'accept')</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Asserts that a native modal popup is present (e.g. alert, confirm, prompt,
+etc.) and that its text matches the specified <code>text</code>.</p>
+
+<p><code>text</code> can be a regular expression. See <a
+href="Action.html#method-i-assert">assert</a> for more details.</p>
+
+<p>The second <code>action</code> parameter specifies the action to be
+performed on the native popup. The default action is to <code>accept</code>
+the popup. Alternatively, the action specified could be to
+<code>dismiss</code> the popup.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming the page opened an alert popup with the &quot;hello world!&quot;</span>
+<span class="ruby-comment"># text</span>
+<span class="ruby-identifier">assertm</span> <span class="ruby-string">&quot;hello world!&quot;</span>
+<span class="ruby-comment"># =&gt; this assertion would pass</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="assertm-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/assertm.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">assertm</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">action</span> = <span class="ruby-string">&#39;accept&#39;</span>)
+        <span class="ruby-identifier">a</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">alert</span>
+        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">text</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">text</span>)
+                <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: expected &#39;#{a.text}&#39;, got &#39;#{actual}&#39;&quot;</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">a</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_sym</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -1715,7 +1771,7 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
         
         <div class="method-heading">
           <span class="method-name">test</span><span
-            class="method-args">(file, name = nil)</span>
+            class="method-args">(file, name = nil, *vars)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -1729,23 +1785,29 @@ href="Action.html#method-i-load">load</a> action into a new test context.</p>
 
 <p>If <code>name</code> is specified, it will be used as the test name.</p>
 
+<p>An optional list of variables can be provided in <code>vars</code>. These
+variables will override the value of the context variables for the
+execution of the file (See <a
+href="Context.html#method-i-with_vars">Bauxite::Context#with_vars</a>).</p>
+
 <p>If any action in the test context fails, the whole test context fails, and
 the execution continues with the next test context (if any).</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">test</span> <span class="ruby-identifier">mytest</span>.<span class="ruby-identifier">bxt</span> <span class="ruby-string">&quot;My Test&quot;</span>
+<pre class="ruby"><span class="ruby-identifier">test</span> <span class="ruby-identifier">mytest</span>.<span class="ruby-identifier">bxt</span> <span class="ruby-string">&quot;My Test&quot;</span> <span class="ruby-identifier">my_var</span>=<span class="ruby-value">1</span>
 <span class="ruby-comment"># =&gt; this would load mytest.bxt into a new test context</span>
-<span class="ruby-comment">#    named &quot;My Test&quot;</span>
+<span class="ruby-comment">#    named &quot;My Test&quot;, and within that context ${my_var}</span>
+<span class="ruby-comment">#    would expand to 1.</span>
 </pre>
           
           
 
           
           <div class="method-source-code" id="test-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/actions/test.rb, line 37</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">test</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">name</span> = <span class="ruby-keyword">nil</span>)
-        <span class="ruby-identifier">delayed</span> = <span class="ruby-identifier">load</span>(<span class="ruby-identifier">file</span>)
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/test.rb, line 42</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">name</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
+        <span class="ruby-identifier">delayed</span> = <span class="ruby-identifier">load</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
         <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">file</span>
         <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span>
                 <span class="ruby-keyword">begin</span>
