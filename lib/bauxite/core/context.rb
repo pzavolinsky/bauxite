@@ -360,6 +360,8 @@ module Bauxite
 			end
 
 			ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
+		rescue Selenium::WebDriver::Error::UnhandledAlertError
+			raise Bauxite::Errors::AssertionError, "Unexpected modal present"
 		end
 
 		# Executes the given block retrying for at most <tt>${__TIMEOUT__}</tt>
