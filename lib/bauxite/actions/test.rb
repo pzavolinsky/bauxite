@@ -25,17 +25,22 @@ class Bauxite::Action
 	#
 	# If +name+ is specified, it will be used as the test name.
 	#
+	# An optional list of variables can be provided in +vars+. These variables
+	# will override the value of the context variables for the execution of the
+	# file (See Context#with_vars).
+	#
 	# If any action in the test context fails, the whole test context fails,
 	# and the execution continues with the next test context (if any).
 	#
 	# For example:
-	#     test mytest.bxt "My Test"
+	#     test mytest.bxt "My Test" my_var=1
 	#     # => this would load mytest.bxt into a new test context
-	#     #    named "My Test"
+	#     #    named "My Test", and within that context ${my_var}
+	#     #    would expand to 1.
 	#
 	# :category: Action Methods
-	def test(file, name = nil)
-		delayed = load(file)
+	def test(file, name = nil, *vars)
+		delayed = load(file, *vars)
 		name = name || file
 		lambda do
 			begin

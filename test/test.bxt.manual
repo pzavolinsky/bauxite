@@ -2,4 +2,5 @@ test test/test1.bxt
 test test/test2.bxt "broken test"
 test test/test2.bxt "broken again"
 test test/test1.bxt "final test"
-
+test test/test4.bxt "check defined var" var=defined
+test test/test5.bxt "expect var undefined"

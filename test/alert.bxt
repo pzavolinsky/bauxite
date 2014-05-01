@@ -1,4 +1,3 @@
 open "file://${__DIR__}/alert/page.html"
-break
 assertm "hello world!"
 assert text "There is an alert over this text!"
