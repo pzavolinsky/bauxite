@@ -38,10 +38,12 @@ class Bauxite::Action
 	#
 	# :category: Action Methods
 	def assertm(text, action = 'accept')
-		a = @ctx.driver.switch_to.alert
-		unless a.text =~ _pattern(text)
-			raise Bauxite::Errors::AssertionError, "Assertion failed: expected '#{a.text}', got '#{actual}'"
+		ctx.with_timeout Selenium::WebDriver::Error::NoAlertPresentError do
+			a = @ctx.driver.switch_to.alert
+			unless a.text =~ _pattern(text)
+				raise Bauxite::Errors::AssertionError, "Assertion failed: expected '#{text}', got '#{a.text}'"
+			end
+			a.send(action.to_sym)
 		end
-		a.send(action.to_sym)
 	end
 end
