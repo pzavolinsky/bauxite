@@ -537,11 +537,13 @@ the popup. Alternatively, the action specified could be to
           <div class="method-source-code" id="assertm-source">
             <pre><span class="ruby-comment"># File lib/bauxite/actions/assertm.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">assertm</span>(<span class="ruby-identifier">text</span>, <span class="ruby-identifier">action</span> = <span class="ruby-string">&#39;accept&#39;</span>)
-        <span class="ruby-identifier">a</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">alert</span>
-        <span class="ruby-keyword">unless</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">text</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">text</span>)
-                <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: expected &#39;#{a.text}&#39;, got &#39;#{actual}&#39;&quot;</span>
+        <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">NoAlertPresentError</span> <span class="ruby-keyword">do</span>
+                <span class="ruby-identifier">a</span> = <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">alert</span>
+                <span class="ruby-keyword">unless</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">text</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">text</span>)
+                        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Errors</span><span class="ruby-operator">::</span><span class="ruby-constant">AssertionError</span>, <span class="ruby-node">&quot;Assertion failed: expected &#39;#{text}&#39;, got &#39;#{a.text}&#39;&quot;</span>
+                <span class="ruby-keyword">end</span>
+                <span class="ruby-identifier">a</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_sym</span>)
         <span class="ruby-keyword">end</span>
-        <span class="ruby-identifier">a</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_sym</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
