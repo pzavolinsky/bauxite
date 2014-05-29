@@ -1,4 +1,4 @@
-Mon, 05 May 2014 11:34:05 -0300
+Thu, 29 May 2014 14:50:33 -0300
 README.md	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/selectors/smart.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/selectors/attr.rb	Wed, 26 Mar 2014 13:39:30 -0300
@@ -42,14 +42,15 @@ lib/bauxite/actions/assertw.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/echo.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/break.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/test.rb	Thu, 01 May 2014 13:56:24 -0300
-lib/bauxite/actions/reset.rb	Wed, 26 Mar 2014 13:39:30 -0300
+lib/bauxite/actions/reset.rb	Thu, 29 May 2014 14:35:09 -0300
 lib/bauxite/actions/submit.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/tryload.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/source.rb	Wed, 26 Mar 2014 13:39:30 -0300
+lib/bauxite/actions/exit.rb	Thu, 29 May 2014 14:43:04 -0300
 lib/bauxite/application.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/core/logger.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/core/errors.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/core/selector.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/core/action.rb	Wed, 26 Mar 2014 13:39:30 -0300
-lib/bauxite/core/context.rb	Thu, 01 May 2014 13:43:36 -0300
+lib/bauxite/core/context.rb	Thu, 29 May 2014 14:41:43 -0300
 lib/bauxite/core/parser.rb	Wed, 26 Mar 2014 13:39:30 -0300
