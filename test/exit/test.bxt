@@ -1,0 +1,4 @@
+set message "hi!"
+return message
+exit
+assertv true false

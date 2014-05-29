@@ -21,18 +21,15 @@
 #++
 
 class Bauxite::Action
-	# Resets the test engine by closing and reopening the browser. As a side
-	# effect of resetting the test engine, all cookies, logins and cache items
-	# are destroyed.
+	# Aborts the execution of the current context.
 	#
 	# For example:
-	#     reset
-	#     # => this would close and re-open the browser window, removing 
-	#     #    cookies, cache, login sessions, etc.
+	#     exit
+	#     assertv true false
+	#     # => the assertv will NOT be executed
 	#
 	# :category: Action Methods
-	def reset()
-		@ctx.reset_driver
-		true
+	def exit_action
+		:break
 	end
 end

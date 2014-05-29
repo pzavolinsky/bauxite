@@ -1,0 +1,4 @@
+load exit/test.bxt
+assertv "hi!" "${message}"
+exit
+assertv true false

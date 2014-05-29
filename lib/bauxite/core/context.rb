@@ -179,7 +179,7 @@ module Bauxite
 			begin
 				actions.each do |action|
 					begin
-						exec_action(action)
+						break if exec_action(action) == :break
 					rescue StandardError => e
 						print_error(e)
 						raise unless @options[:debug]
@@ -326,7 +326,7 @@ module Bauxite
 				@variables['__DIR__'] = File.absolute_path(File.dirname(file))
 				@variables['__FILE__'] = file
 				@variables['__LINE__'] = line
-				exec_parsed_action(action, args, true, text)
+				break if exec_parsed_action(action, args, true, text) == :break
 			end
 
 			@variables['__DIR__' ] = current_dir
@@ -359,7 +359,11 @@ module Bauxite
 				ret = exec_action_object(action)
 			end
 
-			ret.call if ret.respond_to? :call # delayed actions (after log_cmd)
+			if ret.respond_to? :call # delayed actions (after log_cmd)
+				ret.call
+			else
+				ret
+			end
 		rescue Selenium::WebDriver::Error::UnhandledAlertError
 			raise Bauxite::Errors::AssertionError, "Unexpected modal present"
 		end
