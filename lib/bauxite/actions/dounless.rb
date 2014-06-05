@@ -20,10 +20,24 @@
 # SOFTWARE.
 #++
 
-#--
-module Bauxite
-	VERSION = "0.6.14"
+class Bauxite::Action
+	# Executes +action+ only if +expected+ does not match +actual+.
+	#
+	# The conditional check in this action is similar to #assertv.
+	#
+	# For example:
+	#     set first john
+	#     set last doe
+	#     dounless james ${first} assertv doe ${last}
+	#     # => this assertion would pass.
+	#     
+	#     dounless false ${load_captcha} load captcha.bxt
+	#     # => this would only load captcha.bxt if the load_captcha
+	#     #    variable is not 'false'
+	#
+	# :category: Action Methods
+	def dounless(expected, actual, action, *args)
+		return false if actual =~ _pattern(expected)
+		@ctx.exec_action_object(@ctx.get_action(action, args))
+	end
 end
-#++
-
-require_relative 'bauxite/application'

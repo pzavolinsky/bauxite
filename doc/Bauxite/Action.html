@@ -117,6 +117,8 @@
     
     <li ><a href="#method-i-doif">#doif</a>
     
+    <li ><a href="#method-i-dounless">#dounless</a>
+    
     <li ><a href="#method-i-echo">#echo</a>
     
     <li ><a href="#method-i-exec">#exec</a>
@@ -895,6 +897,56 @@ href="Action.html#method-i-assertv">assertv</a>.</p>
             <pre><span class="ruby-comment"># File lib/bauxite/actions/doif.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">doif</span>(<span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
         <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">expected</span>)
+        <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_action_object</span>(<span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-dounless" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">dounless</span><span
+            class="method-args">(expected, actual, action, *args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Executes <code>action</code> only if <code>expected</code> does not match
+<code>actual</code>.</p>
+
+<p>The conditional check in this action is similar to <a
+href="Action.html#method-i-assertv">assertv</a>.</p>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">first</span> <span class="ruby-identifier">john</span>
+<span class="ruby-identifier">set</span> <span class="ruby-identifier">last</span> <span class="ruby-identifier">doe</span>
+<span class="ruby-identifier">dounless</span> <span class="ruby-identifier">james</span> ${<span class="ruby-identifier">first</span>} <span class="ruby-identifier">assertv</span> <span class="ruby-identifier">doe</span> ${<span class="ruby-identifier">last</span>}
+<span class="ruby-comment"># =&gt; this assertion would pass.</span>
+
+<span class="ruby-identifier">dounless</span> <span class="ruby-keyword">false</span> ${<span class="ruby-identifier">load_captcha</span>} <span class="ruby-identifier">load</span> <span class="ruby-identifier">captcha</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-comment"># =&gt; this would only load captcha.bxt if the load_captcha</span>
+<span class="ruby-comment">#    variable is not &#39;false&#39;</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="dounless-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/actions/dounless.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">dounless</span>(<span class="ruby-identifier">expected</span>, <span class="ruby-identifier">actual</span>, <span class="ruby-identifier">action</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">actual</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">_pattern</span>(<span class="ruby-identifier">expected</span>)
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">exec_action_object</span>(<span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>))
 <span class="ruby-keyword">end</span></pre>
           </div>

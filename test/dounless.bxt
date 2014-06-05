@@ -1,0 +1,6 @@
+set first john
+set last doe
+dounless james ${first} assertv doe ${last}
+dounless james ${first} set is_john true
+assertv true ${is_john}
+dounless doe ${last} load smith_specific_text.bxt
