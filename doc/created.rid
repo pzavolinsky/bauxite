@@ -1,4 +1,4 @@
-Thu, 05 Jun 2014 16:43:04 -0300
+Thu, 25 Dec 2014 11:42:19 -0300
 README.md	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/selectors/smart.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/selectors/attr.rb	Wed, 26 Mar 2014 13:39:30 -0300
@@ -13,7 +13,7 @@ lib/bauxite/loggers/html.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/loggers/terminal.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/loggers/echo.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/loggers/composite.rb	Wed, 26 Mar 2014 13:39:30 -0300
-lib/bauxite/loggers/file.rb	Wed, 26 Mar 2014 13:39:30 -0300
+lib/bauxite/loggers/file.rb	Thu, 25 Dec 2014 11:39:11 -0300
 lib/bauxite/actions/assertv.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/ruby.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/load.rb	Wed, 26 Mar 2014 13:39:30 -0300
@@ -27,7 +27,7 @@ lib/bauxite/actions/failif.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/doif.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/setif.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/wait.rb	Wed, 26 Mar 2014 13:39:30 -0300
-lib/bauxite/actions/exec.rb	Wed, 26 Mar 2014 13:39:30 -0300
+lib/bauxite/actions/exec.rb	Wed, 25 Jun 2014 14:46:25 -0300
 lib/bauxite/actions/replace.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/store.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/debug.rb	Wed, 26 Mar 2014 13:39:30 -0300

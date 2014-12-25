@@ -27,6 +27,7 @@
 #
 # File logger options include:
 # [<tt>file</tt>] Output file name.
+# [<tt>verbose</tt>] Output all log (e.g. errors) to the file.
 #
 #
 class Bauxite::Loggers::FileLogger < Bauxite::Loggers::NullLogger
@@ -38,6 +39,7 @@ class Bauxite::Loggers::FileLogger < Bauxite::Loggers::NullLogger
 		unless @file and @file != ''
 			raise ArgumentError, "FileLogger configuration error: Undefined 'file' option."
 		end
+		@verbose = options[:verbose]
 		@lines = []
 	end
 	
@@ -50,5 +52,18 @@ class Bauxite::Loggers::FileLogger < Bauxite::Loggers::NullLogger
 	def log_cmd(action)
 		@lines << action.text
 		yield
+	end
+
+	# Logs the specified string.
+	#
+	# +type+, if specified, should be one of +:error+, +:warning+,
+	# +:info+ (default), +:debug+.
+	#
+	def log(s, type = :info)
+		if @verbose
+			@lines << s
+		else
+			super
+		end
 	end
 end

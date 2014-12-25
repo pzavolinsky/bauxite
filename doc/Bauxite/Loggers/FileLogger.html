@@ -77,6 +77,8 @@
     
     <li ><a href="#method-i-finalize">#finalize</a>
     
+    <li class="calls-super" ><a href="#method-i-log">#log</a>
+    
     <li ><a href="#method-i-log_cmd">#log_cmd</a>
     
   </ul>
@@ -101,6 +103,9 @@ file specified in the <code>file</code> logger option.</p>
 <dl class="rdoc-list label-list"><dt><code>file</code>
 <dd>
 <p>Output file name.</p>
+</dd><dt><code>verbose</code>
+<dd>
+<p>Output all log (e.g. errors) to the file.</p>
 </dd></dl>
 
   </section>
@@ -148,13 +153,14 @@ file specified in the <code>file</code> logger option.</p>
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 35</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 36</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-keyword">super</span>(<span class="ruby-identifier">options</span>)
         <span class="ruby-ivar">@file</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:file</span>]
         <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@file</span> <span class="ruby-keyword">and</span> <span class="ruby-ivar">@file</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&#39;&#39;</span>
                 <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&quot;FileLogger configuration error: Undefined &#39;file&#39; option.&quot;</span>
         <span class="ruby-keyword">end</span>
+        <span class="ruby-ivar">@verbose</span> = <span class="ruby-identifier">options</span>[<span class="ruby-value">:verbose</span>]
         <span class="ruby-ivar">@lines</span> = []
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -194,9 +200,54 @@ file specified in the <code>file</code> logger option.</p>
 
           
           <div class="method-source-code" id="finalize-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 45</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 47</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">finalize</span>(<span class="ruby-identifier">ctx</span>)
         <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">output_path</span>(<span class="ruby-ivar">@file</span>), <span class="ruby-string">&#39;w&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-ivar">@lines</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-log" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">log</span><span
+            class="method-args">(s, type = :info)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Logs the specified string.</p>
+
+<p><code>type</code>, if specified, should be one of <code>:error</code>,
+<code>:warning</code>, <code>:info</code> (default), <code>:debug</code>.</p>
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="NullLogger.html#method-i-log">Bauxite::Loggers::NullLogger#log</a>
+            </div>
+          
+
+          
+          <div class="method-source-code" id="log-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 62</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">type</span> = <span class="ruby-value">:info</span>)
+        <span class="ruby-keyword">if</span> <span class="ruby-ivar">@verbose</span>
+                <span class="ruby-ivar">@lines</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>
+        <span class="ruby-keyword">else</span>
+                <span class="ruby-keyword">super</span>
+        <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -227,7 +278,7 @@ file specified in the <code>file</code> logger option.</p>
 
           
           <div class="method-source-code" id="log_cmd-source">
-            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 50</span>
+            <pre><span class="ruby-comment"># File lib/bauxite/loggers/file.rb, line 52</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">log_cmd</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-ivar">@lines</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">action</span>.<span class="ruby-identifier">text</span>
         <span class="ruby-keyword">yield</span>
@@ -250,7 +301,7 @@ file specified in the <code>file</code> logger option.</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.1.
+  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.2.
   <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
