@@ -41,6 +41,8 @@ If you don't have Ruby 2.x yet, check the [Installing Ruby](#installing-ruby) se
 
 Remember you should probably install [Firefox](http://www.mozilla.org) (unless you want to use other browsers or Selenium server by specifying the `-p` switch to the `bauxite` executable).
 
+You might also like to try the [bauxite-capture](https://github.com/pzavolinsky/bauxite-capture) Firefox add-on to record Bauxite tests directly from the browser (please note that this extension is still *very* experimental so its not yet hosted in the Mozilla add-ons page).
+
 Hello World
 -----------
 
@@ -108,6 +110,11 @@ This section presented a  brief introduction into the basic Bauxite concepts. Fo
  - [Bauxite Variables](http://pzavolinsky.github.io/bauxite/Bauxite/Context.html#class-Bauxite::Context-label-Context+variables)
  - [Creating new Actions](http://pzavolinsky.github.io/bauxite/Bauxite/Action.html)
  - [Creating new Selectors](http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html)
+
+Firefox add-on
+--------------
+
+As an alternative method of writing Bauxite tests, you might try the [bauxite-capture](https://github.com/pzavolinsky/bauxite-capture) Firefox add-on to record Bauxite tests directly from the browser (please note that this extension is still *very* experimental so its not yet hosted in the Mozilla add-ons page).
 
 Installing Ruby
 ---------------
