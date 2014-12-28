@@ -43,7 +43,7 @@ class Bauxite::Action
 				@ctx.with_vars({ '__TIMEOUT__' => 0}) do
 					@ctx.exec_parsed_action(action, args, false)
 				end
-			rescue Bauxite::Errors::AssertionError
+			rescue Bauxite::Errors::AssertionError, Selenium::WebDriver::Error::NoSuchElementError
 				return true
 			end
 			raise Bauxite::Errors::AssertionError, "Assertion did not failed as expected:#{action} #{args.join(' ')}"
