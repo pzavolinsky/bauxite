@@ -1,0 +1,14 @@
+{
+	"top":"level",
+	"parent": {
+		"first":"child",
+		"second":"Child",
+		"third": 3,
+		"fourth": true
+	},
+	"list": [
+		"first",
+		{"name":"second"},
+		{"name":"third"}
+	]
+}

@@ -1,0 +1,20 @@
+open "file://${__DIR__}/json/object.json"
+assert json=top level
+assert json=parent.first child
+assert json=parent.second Child
+assert json=parent.third 3
+assert json=parent.fourth true
+assert json=parent.fourth /.*/
+failif assert json=parent.fifth /.*/
+assert json=list[0] first
+assert json=list[1].name second
+assert json=list.length 3
+failif assert json=list.length 4
+
+open "file://${__DIR__}/json/array.json"
+assert json=[0] 1
+assert json=[1].value two
+assert json=length 2
+
+store json=[1].value is_this_two
+assertv two "${is_this_two}"

@@ -99,6 +99,8 @@
     
     <li ><a href="#method-i-frame">#frame</a>
     
+    <li ><a href="#method-i-json">#json</a>
+    
     <li ><a href="#method-i-sid">#sid</a>
     
     <li ><a href="#method-i-smart">#smart</a>
@@ -360,6 +362,71 @@ selector.</p>
                         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">switch_to</span>.<span class="ruby-identifier">default_content</span>
                 <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-json" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">json</span><span
+            class="method-args">(arg) { |element| ... }</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Select a field in a JSON document.</p>
+
+<p>The JSON selector syntax is:</p>
+
+<pre class="ruby"><span class="ruby-comment"># For objects:</span>
+<span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>           <span class="ruby-comment"># {&quot;key&quot;:1}               =&gt; 1</span>
+<span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>.<span class="ruby-identifier">subkey</span>    <span class="ruby-comment"># {&quot;key&quot;:{&quot;subkey&quot;:2}}    =&gt; 2</span>
+<span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>[<span class="ruby-value">0</span>]        <span class="ruby-comment"># {&quot;key&quot;: [3]}            =&gt; 3</span>
+<span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">subkey</span> <span class="ruby-comment"># {&quot;key&quot;: [{&quot;subkey&quot;:4}]} =&gt; 4</span>
+<span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>.<span class="ruby-identifier">length</span>    <span class="ruby-comment"># {&quot;key&quot;: [5]}            =&gt; 1</span>
+
+<span class="ruby-comment"># For arrays:</span>
+<span class="ruby-identifier">json</span>=[<span class="ruby-value">0</span>]           <span class="ruby-comment"># [1]                     =&gt; 1</span>
+<span class="ruby-identifier">json</span>=[<span class="ruby-value">1</span>].<span class="ruby-identifier">value</span>     <span class="ruby-comment"># [{&quot;value&quot;: 2}]          =&gt; 2</span>
+<span class="ruby-identifier">json</span>=<span class="ruby-identifier">length</span>        <span class="ruby-comment"># [3]                     =&gt; 1</span>
+</pre>
+
+<p>For example:</p>
+
+<pre class="ruby"><span class="ruby-comment"># assuming {&quot;key&quot;: [{&quot;subkey&quot;:4},{&quot;val&quot;:&quot;42&quot;}]}</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">subkey</span> <span class="ruby-value">4</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">val</span> <span class="ruby-value">42</span>
+<span class="ruby-identifier">assert</span> <span class="ruby-identifier">json</span>=<span class="ruby-identifier">key</span>.<span class="ruby-identifier">length</span> <span class="ruby-value">2</span>
+<span class="ruby-comment"># =&gt; these assertions would pass</span>
+</pre>
+          
+          
+
+          
+          <div class="method-source-code" id="json-source">
+            <pre><span class="ruby-comment"># File lib/bauxite/selectors/json.rb, line 49</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">json</span>(<span class="ruby-identifier">arg</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">source</span> = <span class="ruby-constant">JSON</span><span class="ruby-operator">::</span><span class="ruby-identifier">parse</span>(<span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">page_source</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/^&lt;html[^&gt;]*&gt;.*&lt;pre&gt;/</span>, <span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/&lt;\/pre&gt;.*&lt;\/html&gt;$/</span>, <span class="ruby-string">&#39;&#39;</span>))
+        <span class="ruby-identifier">element</span> = <span class="ruby-identifier">_json_find</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">arg</span>)
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">NoSuchElementError</span>, <span class="ruby-node">&quot;Cannot find JSON element: #{arg}&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">element</span>
+
+        <span class="ruby-identifier">element</span> = <span class="ruby-identifier">element</span>.<span class="ruby-identifier">to_s</span>
+        <span class="ruby-keyword">def</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">text</span>; <span class="ruby-keyword">self</span>; <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">def</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">tag_name</span>; <span class="ruby-string">&#39;json&#39;</span>; <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">yield</span> <span class="ruby-identifier">element</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>
+        <span class="ruby-identifier">element</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
