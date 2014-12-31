@@ -1,7 +1,7 @@
-Sun, 28 Dec 2014 11:06:40 -0300
-README.md	Wed, 26 Mar 2014 13:39:30 -0300
+Wed, 31 Dec 2014 18:36:22 -0300
+README.md	Sun, 28 Dec 2014 11:09:54 -0300
 lib/bauxite/selectors/smart.rb	Wed, 26 Mar 2014 13:39:30 -0300
-lib/bauxite/selectors/json.rb	Sun, 28 Dec 2014 10:59:40 -0300
+lib/bauxite/selectors/json.rb	Sun, 28 Dec 2014 11:09:54 -0300
 lib/bauxite/selectors/attr.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/selectors/frame.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/selectors/sid.rb	Wed, 26 Mar 2014 13:39:30 -0300
@@ -24,7 +24,7 @@ lib/bauxite/actions/alias.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/write.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/dounless.rb	Thu, 05 Jun 2014 16:39:48 -0300
 lib/bauxite/actions/select.rb	Wed, 26 Mar 2014 13:39:30 -0300
-lib/bauxite/actions/failif.rb	Sun, 28 Dec 2014 10:37:02 -0300
+lib/bauxite/actions/failif.rb	Sun, 28 Dec 2014 11:09:54 -0300
 lib/bauxite/actions/doif.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/setif.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/wait.rb	Wed, 26 Mar 2014 13:39:30 -0300
@@ -50,7 +50,7 @@ lib/bauxite/actions/tryload.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/source.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/actions/exit.rb	Thu, 29 May 2014 14:43:04 -0300
 lib/bauxite/application.rb	Wed, 26 Mar 2014 13:39:30 -0300
-lib/bauxite/core/logger.rb	Wed, 26 Mar 2014 13:39:30 -0300
+lib/bauxite/core/logger.rb	Wed, 31 Dec 2014 18:31:46 -0300
 lib/bauxite/core/errors.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/core/selector.rb	Wed, 26 Mar 2014 13:39:30 -0300
 lib/bauxite/core/action.rb	Wed, 26 Mar 2014 13:39:30 -0300
