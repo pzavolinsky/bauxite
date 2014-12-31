@@ -132,6 +132,7 @@ module Bauxite
 				ret = yield || false
 				etime = Time.new
 			ensure
+				etime ||= Time.new
 				status = case ret; when nil; :error; when false; :skip; else :ok; end
 				
 				test_name = action.ctx.variables['__TEST__'] || 'Main'
