@@ -22,7 +22,7 @@
 
 #--
 module Bauxite
-	VERSION = "0.6.16"
+	VERSION = "0.6.17"
 end
 #++
 
