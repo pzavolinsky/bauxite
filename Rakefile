@@ -16,7 +16,7 @@ spec = Gem::Specification.new do |s|
 	s.license     = 'MIT'
 	s.version     = CURRENT_VERSION
 	s.executables = ["bauxite"]
-	s.add_runtime_dependency     'selenium-webdriver', '~> 2.39'
+	s.add_runtime_dependency     'selenium-webdriver', '~> 2.47'
 	s.add_development_dependency 'rake'              , '~> 10.1'
 	s.files = FileList[
 		'LICENSE',
