@@ -6,19 +6,16 @@
 
 <title>RDoc Documentation</title>
 
-<link href="./fonts.css" rel="stylesheet">
-<link href="./rdoc.css" rel="stylesheet">
-
 <script type="text/javascript">
   var rdoc_rel_prefix = "./";
 </script>
 
 <script src="./js/jquery.js"></script>
-<script src="./js/navigation.js"></script>
-<script src="./js/search_index.js"></script>
-<script src="./js/search.js"></script>
-<script src="./js/searcher.js"></script>
 <script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
 
 
 <body id="top" role="document" class="file">
@@ -123,7 +120,7 @@
 <main role="main">
 
 
-<h1 id="label-bauxite">bauxite<span><a href="#label-bauxite">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+<h1 id="label-bauxite">bauxite<span><a href="#label-bauxite">&para;</a> <a href="#top">&uarr;</a></span></h1>
 
 <p><a href="Bauxite.html">Bauxite</a> is a façade over Selenium intended for
 non-developers</p>
@@ -156,15 +153,17 @@ might be a bit shocked.</p>
 <p>The equivalent <a href="Bauxite.html">Bauxite</a> test is easier on the
 eyes:</p>
 
-<pre>open &quot;http://google.com&quot;
-write &quot;name=q&quot; &quot;Hello WebDriver!&quot;
-click &quot;gbqfb&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://google.com&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;name=q&quot;</span> <span class="ruby-string">&quot;Hello WebDriver!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;gbqfb&quot;</span>
+</pre>
 
-<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>In a nutshell:</p>
 
-<pre>gem install bauxite</pre>
+<pre class="ruby"><span class="ruby-identifier">gem</span> <span class="ruby-identifier">install</span> <span class="ruby-identifier">bauxite</span>
+</pre>
 
 <p>If you don&#39;t have Ruby 2.x yet, check the <a
 href="#installing-ruby">Installing Ruby</a> section below.</p>
@@ -180,17 +179,19 @@ Firefox add-on to record <a href="Bauxite.html">Bauxite</a> tests directly
 from the browser (please note that this extension is still <em>very</em>
 experimental so its not yet hosted in the Mozilla add-ons page).</p>
 
-<h2 id="label-Hello+World">Hello World<span><a href="#label-Hello+World">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Hello+World">Hello World<span><a href="#label-Hello+World">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>Paste the following text into <code>hello.bxt</code>:</p>
 
-<pre>open &quot;http://www.gnu.org/fun/jokes/helloworld.html&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://www.gnu.org/fun/jokes/helloworld.html&quot;</span>
+</pre>
 
 <p>Launch a terminal/command prompt and type:</p>
 
-<pre>bauxite hello.bxt</pre>
+<pre class="ruby"><span class="ruby-identifier">bauxite</span> <span class="ruby-identifier">hello</span>.<span class="ruby-identifier">bxt</span>
+</pre>
 
-<h2 id="label-Command-line+Interface">Command-line Interface<span><a href="#label-Command-line+Interface">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Command-line+Interface">Command-line Interface<span><a href="#label-Command-line+Interface">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>The <code>bauxite</code> command-line program supports several
 configuration options.</p>
@@ -199,7 +200,7 @@ configuration options.</p>
 href="http://pzavolinsky.github.io/bauxite/Bauxite/Application.html">RDoc
 documentation</a> for more details.</p>
 
-<h2 id="label-The+Bauxite+Language">The <a href="Bauxite.html">Bauxite</a> Language<span><a href="#label-The+Bauxite+Language">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-The+Bauxite+Language">The <a href="Bauxite.html">Bauxite</a> Language<span><a href="#label-The+Bauxite+Language">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>The <a href="Bauxite.html">Bauxite</a> language is composed of two elements
 <code>Actions</code> and <code>Selectors</code>: Actions are testing
@@ -211,9 +212,10 @@ elements of a page such as a button, a textbox, a label, etc.</p>
 contains a series of Actions (one per line). Depending on the Action, a few
 action arguments might need to be specified as well. For example in:</p>
 
-<pre>open &quot;http://google.com&quot;
-write &quot;name=q&quot; &quot;Hello WebDriver!&quot;
-click &quot;gbqfb&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://google.com&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;name=q&quot;</span> <span class="ruby-string">&quot;Hello WebDriver!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;gbqfb&quot;</span>
+</pre>
 
 <p><code>open</code>, <code>write</code> and <code>click</code> are Actions: -
 <code>open</code> takes a single URL argument
@@ -242,7 +244,8 @@ href="Bauxite.html">Bauxite</a> uses Selectors.</p>
 
 <p>If we want to click the “Search” button we can do the following:</p>
 
-<pre>click &quot;gbqfb&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">click</span> <span class="ruby-string">&quot;gbqfb&quot;</span>
+</pre>
 
 <p><a href="Bauxite.html">Bauxite</a> supports several other Selectors such as
 <code>name=</code> in the example above. The <code>name</code> Selector
@@ -256,7 +259,8 @@ the <code>=</code> sign.</p>
 <p>If we want to type the text “Hello WebDriver!” in the textbox we can do the
 following:</p>
 
-<pre>write &quot;name=q&quot; &quot;Hello WebDriver!&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">write</span> <span class="ruby-string">&quot;name=q&quot;</span> <span class="ruby-string">&quot;Hello WebDriver!&quot;</span>
+</pre>
 
 <p>This section presented a brief introduction into the basic <a
 href="Bauxite.html">Bauxite</a> concepts. For more details and a list of
@@ -287,7 +291,7 @@ href="http://pzavolinsky.github.io/bauxite/Bauxite/Selector.html">Creating
 new Selectors</a></p>
 </li></ul>
 
-<h2 id="label-Firefox+add-on">Firefox add-on<span><a href="#label-Firefox+add-on">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Firefox+add-on">Firefox add-on<span><a href="#label-Firefox+add-on">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>As an alternative method of writing <a href="Bauxite.html">Bauxite</a>
 tests, you might try the <a
@@ -296,7 +300,7 @@ Firefox add-on to record <a href="Bauxite.html">Bauxite</a> tests directly
 from the browser (please note that this extension is still <em>very</em>
 experimental so its not yet hosted in the Mozilla add-ons page).</p>
 
-<h2 id="label-Installing+Ruby">Installing Ruby<span><a href="#label-Installing+Ruby">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Installing+Ruby">Installing Ruby<span><a href="#label-Installing+Ruby">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>I won&#39;t cover all the details of installing Ruby on your system (Google
 knows best), but the following should probably work.</p>
@@ -315,9 +319,10 @@ Ruby</code> option in your start menu.</p>
 <p>Regadless of your OS, you should be able to install <a
 href="Bauxite.html">Bauxite</a> with:</p>
 
-<pre>gem install bauxite</pre>
+<pre class="ruby"><span class="ruby-identifier">gem</span> <span class="ruby-identifier">install</span> <span class="ruby-identifier">bauxite</span>
+</pre>
 
-<h2 id="label-Implementation">Implementation<span><a href="#label-Implementation">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Implementation">Implementation<span><a href="#label-Implementation">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p><a href="Bauxite.html">Bauxite</a> is both a command-line program and a
 library. You can use the program to run <a href="Bauxite.html">Bauxite</a>
@@ -335,12 +340,12 @@ application take a look a the code in
 example of how to create a <a href="Bauxite.html">Bauxite</a> Context and
 execute some actions.</p>
 
-<h2 id="label-Extending+Bauxite">Extending <a href="Bauxite.html">Bauxite</a><span><a href="#label-Extending+Bauxite">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Extending+Bauxite">Extending <a href="Bauxite.html">Bauxite</a><span><a href="#label-Extending+Bauxite">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p><a href="Bauxite.html">Bauxite</a> supports two types of extensions:
 functional extensions and coded plugins.</p>
 
-<h3 id="label-Functional+extensions">Functional extensions<span><a href="#label-Functional+extensions">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+<h3 id="label-Functional+extensions">Functional extensions<span><a href="#label-Functional+extensions">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>Functional extensions are composite constructs created using existing <a
 href="Bauxite.html">Bauxite</a> actions to convey functional meaning. For
@@ -356,10 +361,11 @@ example, imagine a login form:</p>
 <p>The <a href="Bauxite.html">Bauxite</a> code to login into this site would
 be:</p>
 
-<pre>open &quot;http://hostname/login.html&quot;
-write &quot;username&quot; &quot;jdoe&quot;
-write &quot;password&quot; &quot;hello world!&quot;
-click &quot;login&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://hostname/login.html&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;username&quot;</span> <span class="ruby-string">&quot;jdoe&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;password&quot;</span> <span class="ruby-string">&quot;hello world!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;login&quot;</span>
+</pre>
 
 <p>If we were creating a suite of automated web tests for our
 <em>hostname</em> site, we&#39;ll probably need to login into the site
@@ -377,40 +383,44 @@ load other_test_fragment.bxt
 <p>Back to our login example, first we can package the login part of our tests
 into a separate <a href="Bauxite.html">Bauxite</a> file:</p>
 
-<pre># login.bxt
-open &quot;http://hostname/login.html&quot;
-write &quot;username&quot; &quot;jdoe&quot;
-write &quot;password&quot; &quot;hello world!&quot;
-click &quot;login&quot;</pre>
+<pre class="ruby"><span class="ruby-comment"># login.bxt</span>
+<span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://hostname/login.html&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;username&quot;</span> <span class="ruby-string">&quot;jdoe&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;password&quot;</span> <span class="ruby-string">&quot;hello world!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;login&quot;</span>
+</pre>
 
 <p>Of course we would like to be able to login with different
 username/password combinations, so we can replace the literals in
 <code>login.bxt</code> with variables:</p>
 
-<pre># login.bxt
-open &quot;http://hostname/login.html&quot;
-write &quot;username&quot; &quot;${username}&quot;
-write &quot;password&quot; &quot;${password}&quot;
-click &quot;login&quot;</pre>
+<pre class="ruby"><span class="ruby-comment"># login.bxt</span>
+<span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://hostname/login.html&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;username&quot;</span> <span class="ruby-string">&quot;${username}&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;password&quot;</span> <span class="ruby-string">&quot;${password}&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;login&quot;</span>
+</pre>
 
 <p>Now, we would like to assert that both <code>username</code> and
 <code>password</code> variables are set before calling our test (just in
 case someone forgets). We can do this with <code>params</code></p>
 
-<pre># login.bxt
-params username password
-open &quot;http://hostname/login.html&quot;
-write &quot;username&quot; &quot;${username}&quot;
-write &quot;password&quot; &quot;${password}&quot;
-click &quot;login&quot;</pre>
+<pre class="ruby"><span class="ruby-comment"># login.bxt</span>
+<span class="ruby-identifier">params</span> <span class="ruby-identifier">username</span> <span class="ruby-identifier">password</span>
+<span class="ruby-identifier">open</span> <span class="ruby-string">&quot;http://hostname/login.html&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;username&quot;</span> <span class="ruby-string">&quot;${username}&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;password&quot;</span> <span class="ruby-string">&quot;${password}&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;login&quot;</span>
+</pre>
 
 <p>In our main test we can load <code>login.bxt</code> and specify the
 variables required using this code:</p>
 
-<pre># main_test.bxt
-load &quot;login.bxt&quot; &quot;username=jdoe&quot; &quot;password=hello world!&quot;
+<pre class="ruby"><span class="ruby-comment"># main_test.bxt</span>
+<span class="ruby-identifier">load</span> <span class="ruby-string">&quot;login.bxt&quot;</span> <span class="ruby-string">&quot;username=jdoe&quot;</span> <span class="ruby-string">&quot;password=hello world!&quot;</span>
 
-# additional actions go here</pre>
+<span class="ruby-comment"># additional actions go here</span>
+</pre>
 
 <p>We could improve this even further by creating an <code>alias</code> to
 simplify the login process. To do this, lets create an new file called
@@ -423,17 +433,18 @@ alias &quot;login&quot; &quot;load&quot; &quot;login.bxt&quot; &quot;username=${
 
 <p>Now we can change our main test to use our alias:</p>
 
-<pre># main_test.bxt
-load &quot;alias.bxt&quot;
+<pre class="ruby"><span class="ruby-comment"># main_test.bxt</span>
+<span class="ruby-identifier">load</span> <span class="ruby-string">&quot;alias.bxt&quot;</span>
 
-login &quot;jdoe&quot; &quot;hello world!&quot;
+<span class="ruby-identifier">login</span> <span class="ruby-string">&quot;jdoe&quot;</span> <span class="ruby-string">&quot;hello world!&quot;</span>
 
-# additional actions go here</pre>
+<span class="ruby-comment"># additional actions go here</span>
+</pre>
 
 <p>That was a bit of work but the resulting test is purely functional (minus
 the load alias part, of course).</p>
 
-<h3 id="label-Coded+plugins">Coded plugins<span><a href="#label-Coded+plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+<h3 id="label-Coded+plugins">Coded plugins<span><a href="#label-Coded+plugins">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>Coded plugins are Ruby files that extend the <a
 href="Bauxite.html">Bauxite</a> language by providing additional language
@@ -453,15 +464,16 @@ For example:</p>
 <p>Using standard <a href="Bauxite.html">Bauxite</a> language we could select
 these elements using:</p>
 
-<pre># === my_test.bxt === #
-write &quot;attr=custom-attr:username&quot; &quot;jdoe&quot;
-write &quot;attr=custom-attr:password&quot; &quot;hello world!&quot;
-click &quot;attr=custom-attr:login&quot;</pre>
+<pre class="ruby"><span class="ruby-comment"># === my_test.bxt === #</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;attr=custom-attr:username&quot;</span> <span class="ruby-string">&quot;jdoe&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;attr=custom-attr:password&quot;</span> <span class="ruby-string">&quot;hello world!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;attr=custom-attr:login&quot;</span>
+</pre>
 
 <p>But we can improve the overall readability of our test by using a coded
 plugin:</p>
 
-<pre class="ruby"><span class="ruby-comment"># === plugins/custom_selector.rb === #</span>
+<pre class="ruby"><span class="ruby-comment"># === plugins/custom_selector.rb === #</span>
 <span class="ruby-keyword">class</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Selector</span>
     <span class="ruby-keyword">def</span> <span class="ruby-identifier">custom</span>(<span class="ruby-identifier">value</span>)
         <span class="ruby-identifier">attr</span> <span class="ruby-node">&quot;custom-attr:#{value}&quot;</span>
@@ -471,17 +483,18 @@ plugin:</p>
 
 <p>Now we can change our test to look like this:</p>
 
-<pre># === my_test.bxt === #
-write &quot;custom=username&quot; &quot;jdoe&quot;
-write &quot;custom=password&quot; &quot;hello world!&quot;
-click &quot;custom=login&quot;</pre>
+<pre class="ruby"><span class="ruby-comment"># === my_test.bxt === #</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;custom=username&quot;</span> <span class="ruby-string">&quot;jdoe&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;custom=password&quot;</span> <span class="ruby-string">&quot;hello world!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;custom=login&quot;</span>
+</pre>
 
 <p>Finally, to execute <a href="Bauxite.html">Bauxite</a> loading our plugin
 we can type:</p>
 
 <pre>bauxite -e plugins my_test.bxt</pre>
 
-<h2 id="label-Jenkins+Integration">Jenkins Integration<span><a href="#label-Jenkins+Integration">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Jenkins+Integration">Jenkins Integration<span><a href="#label-Jenkins+Integration">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>If you want to run <a href="Bauxite.html">Bauxite</a> tests in your <a
 href="http://jenkins-ci.org/">Jenkins CI</a> server you must install
@@ -502,12 +515,13 @@ bauxite -t 60 -o 240 --jenkins &quot;$WORKSPACE/test-results&quot; \
 
 <p><code>suite.bxt</code> could be something like:</p>
 
-<pre># === suite.bxt === #
-test login.bxt
-test register.bxt
-test browse_around.bxt
-test purchase_something.bxt
-# more tests here...</pre>
+<pre class="ruby"><span class="ruby-comment"># === suite.bxt === #</span>
+<span class="ruby-identifier">test</span> <span class="ruby-identifier">login</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-identifier">test</span> <span class="ruby-identifier">register</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-identifier">test</span> <span class="ruby-identifier">browse_around</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-identifier">test</span> <span class="ruby-identifier">purchase_something</span>.<span class="ruby-identifier">bxt</span>
+<span class="ruby-comment"># more tests here...</span>
+</pre>
 
 <p>Note the <code>--jenkins</code> option in the configuration above. That
 option sets the default configuration arguments for Jenkins integration.
@@ -540,7 +554,7 @@ href="https://wiki.jenkins-ci.org/display/JENKINS/Flexible+Publish+Plugin">Plot<
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.2.
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 

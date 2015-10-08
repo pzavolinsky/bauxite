@@ -6,19 +6,16 @@
 
 <title>class Bauxite::Application - RDoc Documentation</title>
 
-<link href="../fonts.css" rel="stylesheet">
-<link href="../rdoc.css" rel="stylesheet">
-
 <script type="text/javascript">
   var rdoc_rel_prefix = "../";
 </script>
 
 <script src="../js/jquery.js"></script>
-<script src="../js/navigation.js"></script>
-<script src="../js/search_index.js"></script>
-<script src="../js/search.js"></script>
-<script src="../js/searcher.js"></script>
 <script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
 
 
 <body id="top" role="document" class="class">
@@ -93,24 +90,24 @@
 <p>This program executes <a href="../Bauxite.html">Bauxite</a> tests and
 outputs the execution progress and tests results to the terminal.</p>
 
-<h2 id="class-Bauxite::Application-label-Synopsis">Synopsis<span><a href="#class-Bauxite::Application-label-Synopsis">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="class-Bauxite::Application-label-Synopsis">Synopsis<span><a href="#class-Bauxite::Application-label-Synopsis">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<pre class="ruby"><span class="ruby-identifier">bauxite</span> [<span class="ruby-constant">OPTIONS</span>] <span class="ruby-identifier">file1</span> <span class="ruby-identifier">file2</span> <span class="ruby-operator">...</span>
-<span class="ruby-comment"># =&gt; Executes file1, then file2, and so on.</span>
+<pre>bauxite [OPTIONS] file1 file2 ...
+# =&gt; Executes file1, then file2, and so on.
 
-<span class="ruby-identifier">bauxite</span> [<span class="ruby-constant">OPTIONS</span>] <span class="ruby-operator">-</span><span class="ruby-identifier">d</span>
-<span class="ruby-comment"># =&gt; Start Bauxite directly in the debug console.</span>
+bauxite [OPTIONS] -d
+# =&gt; Start Bauxite directly in the debug console.
 
-<span class="ruby-identifier">bauxite</span> [<span class="ruby-constant">OPTIONS</span>]
-<span class="ruby-comment"># =&gt; Start Bauxite and read test actions from the standard input.</span>
-</pre>
+bauxite [OPTIONS]
+# =&gt; Start Bauxite and read test actions from the standard input.</pre>
 
-<h2 id="class-Bauxite::Application-label-Options">Options<span><a href="#class-Bauxite::Application-label-Options">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="class-Bauxite::Application-label-Options">Options<span><a href="#class-Bauxite::Application-label-Options">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>For a detailed list of options for your <a
 href="../Bauxite.html">Bauxite</a> version execute:</p>
 
-<pre>bauxite -h</pre>
+<pre class="ruby"><span class="ruby-identifier">bauxite</span> <span class="ruby-operator">-</span><span class="ruby-identifier">h</span>
+</pre>
 <dl class="rdoc-list label-list"><dt>-v, --verbose
 <dd>
 <p>Show verbose error messages (i.e. print exception names and backtraces).</p>
@@ -164,7 +161,8 @@ otherwise it defaults to <code>terminal</code>.</p>
 
 <p>To see a complete list of the available loggers execute:</p>
 
-<pre>bauxite -h</pre>
+<pre class="ruby"><span class="ruby-identifier">bauxite</span> <span class="ruby-operator">-</span><span class="ruby-identifier">h</span>
+</pre>
 
 <p>Note that multiple instances of this option can be specified.</p>
 </dd><dt>-L, --logger-option OPTION
@@ -189,7 +187,8 @@ does not contain an <code>=</code> sign.</p>
 
 <p>To see a complete list of the available selectors execute:</p>
 
-<pre>bauxite -h</pre>
+<pre class="ruby"><span class="ruby-identifier">bauxite</span> <span class="ruby-operator">-</span><span class="ruby-identifier">h</span>
+</pre>
 </dd><dt>-c, --capture
 <dd>
 <p>If the test fails, capture a screenshot in the <code>output</code>
@@ -233,28 +232,27 @@ href="Loggers.html">Loggers</a>, etc.) for a specific test run.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># === custom/my_selector.rb ======= #</span>
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Bauxite</span><span class="ruby-operator">::</span><span class="ruby-constant">Selector</span>
-    <span class="ruby-keyword">def</span> <span class="ruby-identifier">by_attr</span>(<span class="ruby-identifier">value</span>)
-        <span class="ruby-identifier">attr</span> <span class="ruby-node">&quot;by_attr:#{value}&quot;</span>
-    <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span>
-<span class="ruby-comment"># === end custom/my_selector.rb === #</span>
+<pre># === custom/my_selector.rb ======= #
+class Bauxite::Selector
+    def by_attr(value)
+        attr &quot;by_attr:#{value}&quot;
+    end
+end
+# === end custom/my_selector.rb === #
 
-<span class="ruby-comment"># === custom/my_test.bxt ========== #</span>
-<span class="ruby-comment"># ...</span>
-<span class="ruby-identifier">assert</span> <span class="ruby-string">&quot;by_attr=attr_value&quot;</span> <span class="ruby-identifier">hello</span>
-<span class="ruby-comment"># ...</span>
-<span class="ruby-comment"># === end custom/my_test.bxt ====== #</span>
+# === custom/my_test.bxt ========== #
+# ...
+assert &quot;by_attr=attr_value&quot; hello
+# ...
+# === end custom/my_test.bxt ====== #
 
-<span class="ruby-identifier">bauxite</span> <span class="ruby-operator">-</span><span class="ruby-identifier">e</span> <span class="ruby-identifier">custom</span> <span class="ruby-identifier">custom</span><span class="ruby-operator">/</span><span class="ruby-identifier">my_test</span>.<span class="ruby-identifier">bxt</span>
-</pre>
+bauxite -e custom custom/my_test.bxt</pre>
 </dd><dt>--version
 <dd>
 <p>Shows the <a href="../Bauxite.html">Bauxite</a> version.</p>
 </dd></dl>
 
-<h2 id="class-Bauxite::Application-label-Exit+Status">Exit Status<span><a href="#class-Bauxite::Application-label-Exit+Status">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="class-Bauxite::Application-label-Exit+Status">Exit Status<span><a href="#class-Bauxite::Application-label-Exit+Status">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>The <code>bauxite</code> program exits with <code>zero</code> if every
 action in the test succeeded and <code>non-zero</code> otherwise.</p>
@@ -285,7 +283,7 @@ indicates success).</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.2.
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
