@@ -1,6 +1,6 @@
-exec today=date "--date='2001-01-01' | cut -f 1 -d ' '"
+exec today=date "--date='2001-01-01' | sed 's/\(...\).*/\1/'"
 assertv "^Mon$" "${today}"
 
-alias get_date exec ${2}=date "--date='${1}' | cut -f 1 -d ' '" 
+alias get_date exec ${2}=date "--date='${1}' | sed 's/\(...\).*/\1/'" 
 get_date 2001-01-02 tomorrow
 assertv "^Tue$" "${tomorrow}"

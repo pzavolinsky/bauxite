@@ -1,0 +1,5 @@
+open "file://${__DIR__}/set_builtin/page.html"
+write textbox something
+set __TIMEOUT__ 1
+write textbox "other thing"
+assertv "${__TIMEOUT__}" "1"

@@ -50,7 +50,7 @@ module Bauxite
 	# - Action#exec sets a variable to the output of an external command
 	#   (i.e. stdout).
 	# - Action#js sets a variable to the result of Javascript command.
-	# - Action#replace sets a variable to the result of doing a 
+	# - Action#replace sets a variable to the result of doing a
 	#   find-and-replace operation on a literal.
 	#
 	# Variables can be expanded in every Action argument (e.g. selectors,
@@ -109,13 +109,13 @@ module Bauxite
 	class Context
 		# Logger instance.
 		attr_reader :logger
-		
+
 		# Test options.
 		attr_reader :options
-		
+
 		# Context variables.
 		attr_accessor :variables
-		
+
 		# Test containers.
 		attr_accessor :tests
 
@@ -147,19 +147,19 @@ module Bauxite
 			}
 			@aliases = {}
 			@tests = []
-			
+
 			client = Selenium::WebDriver::Remote::Http::Default.new
 			client.timeout = (@options[:open_timeout] || 60).to_i
 			@options[:driver_opt] = {} unless @options[:driver_opt]
 			@options[:driver_opt][:http_client] = client
 
 			_load_extensions(options[:extensions] || [])
-			
+
 			@logger = Context::load_logger(options[:logger], options[:logger_opt])
-			
+
 			@parser = Parser.new(self)
 		end
-		
+
 		# Starts the test engine and executes the actions specified. If no action
 		# was specified, returns without stopping the test engine (see #stop).
 		#
@@ -190,7 +190,7 @@ module Bauxite
 				stop
 			end
 		end
-		
+
 		# Stops the test engine and starts a new engine with the same provider.
 		#
 		# For example:
@@ -201,7 +201,7 @@ module Bauxite
 			@driver.quit if @driver
 			@driver = nil
 		end
-		
+
 		# Stops the test engine.
 		#
 		# Calling this method at the end of the test is mandatory if #start was
@@ -228,12 +228,12 @@ module Bauxite
 				@driver.quit if @driver
 			end
 		end
-		
+
 		# Finds an element by +selector+.
 		#
 		# The element found is yielded to the given +block+ (if any) and returned.
 		#
-		# Note that the recommeneded way to call this method is by passing a 
+		# Note that the recommeneded way to call this method is by passing a
 		# +block+. This is because the method ensures that the element context is
 		# maintained for the duration of the +block+ but it makes no guarantees
 		# after the +block+ completes (the same applies if no +block+ was given).
@@ -254,13 +254,13 @@ module Bauxite
 				Selector.new(self, @variables['__SELECTOR__']).find(selector, &block)
 			end
 		end
-		
+
 		# Test engine driver instance (Selenium WebDriver).
 		def driver
 			_load_driver unless @driver
 			@driver
 		end
-		
+
 		# Breaks into the debug console.
 		#
 		# For example:
@@ -269,7 +269,7 @@ module Bauxite
 		def debug
 			exec_parsed_action('debug', [], false)
 		end
-		
+
 		# Returns the value of the specified +element+.
 		#
 		# This method takes into account the type of element and selectively
@@ -278,25 +278,25 @@ module Bauxite
 		# For example:
 		#     # assuming <input type='text' value='Hello' />
 		#     #          <span id='label'>World!</span>
-		#     
+		#
 		#     ctx.get_value(ctx.find('css=input[type=text]'))
 		#     # => returns 'Hello'
-		#     
+		#
 		#     ctx.get_value(ctx.find('label'))
 		#     # => returns 'World!'
 		#
 		def get_value(element)
 			if ['input','select','textarea'].include? element.tag_name.downcase
-				element.attribute('value') 
+				element.attribute('value')
 			else
 				element.text
 			end
 		end
-		
+
 		# ======================================================================= #
 		# :section: Advanced Helpers
 		# ======================================================================= #
-		
+
 		# Executes the specified action string handling errors, logging and debug
 		# history.
 		#
@@ -310,7 +310,7 @@ module Bauxite
 			data = Context::parse_action_default(text, '<unknown>', 0)
 			exec_parsed_action(data[:action], data[:args], true, text)
 		end
-		
+
 		# Executes the specified +file+.
 		#
 		# For example:
@@ -381,7 +381,7 @@ module Bauxite
 		#
 		def with_timeout(*error_types)
 			stime = Time.new
-			timeout ||= stime + @variables['__TIMEOUT__']
+			timeout ||= stime + @variables['__TIMEOUT__'].to_i
 			yield
 		rescue *error_types => e
 			t = Time.new
@@ -393,7 +393,7 @@ module Bauxite
 			sleep(1.0/10.0) if (t - stime).to_i < 1
 			retry
 		end
-		
+
 		# Executes the given block using the specified driver +timeout+.
 		#
 		# Note that the driver +timeout+ is the time (in seconds) Selenium
@@ -425,7 +425,7 @@ module Bauxite
 		def self.wait
 			Readline.readline("Press ENTER to continue\n")
 		end
-		
+
 		# Constructs a Logger instance using +name+ as a hint for the logger
 		# type.
 		#
@@ -433,28 +433,28 @@ module Bauxite
 			if loggers.is_a? Array
 				return Loggers::CompositeLogger.new(options, loggers)
 			end
-			
+
 			name = loggers
-			
+
 			log_name = (name || 'null').downcase
-			
+
 			class_name = "#{log_name.capitalize}Logger"
-			
+
 			unless Loggers.const_defined? class_name.to_sym
 				raise NameError,
 					"Invalid logger '#{log_name}'"
 			end
-			
+
 			Loggers.const_get(class_name).new(options)
 		end
-		
+
 		# Adds an alias named +name+ to the specified +action+ with the
 		# arguments specified in +args+.
 		#
 		def add_alias(name, action, args)
 			@aliases[name] = { :action => action, :args => args }
 		end
-		
+
 		# Default action parsing strategy.
 		#
 		def self.parse_action_default(text, file = '<unknown>', line = 0)
@@ -462,14 +462,14 @@ module Bauxite
 			begin
 				args_text = data[1] ? data[1].strip : ''
 				args = []
-				
+
 				unless args_text == ''
 					# col_sep must be a regex because String.split has a
 					# special case for a single space char (' ') that produced
 					# unexpected results (i.e. if line is '"a      b"' the
 					# resulting array contains ["a b"]).
 					#
-					# ...but... 
+					# ...but...
 					#
 					# CSV expects col_sep to be a string so we need to work
 					# some dark magic here. Basically we proxy the StringIO
@@ -480,7 +480,7 @@ module Bauxite
 					.shift
 					.select { |a| a != nil } || []
 				end
-				
+
 				{
 					:action => data[0].strip.downcase,
 					:args   => args
@@ -489,7 +489,7 @@ module Bauxite
 				raise "#{file} (line #{line+1}): #{e.message}"
 			end
 		end
-		
+
 		# Returns an executable Action object constructed from the specified
 		# arguments resolving action aliases.
 		#
@@ -516,14 +516,14 @@ module Bauxite
 					end
 				end
 			end
-			
+
 			text = ([action] + args.map { |a| '"'+a.gsub('"', '""')+'"' }).join(' ') unless text
 			file = @variables['__FILE__']
 			line = @variables['__LINE__']
-			
+
 			Action.new(self, action, args, text, file, line)
 		end
-		
+
 		# Executes the specified action object injecting built-in variables.
 		# Note that the result returned by this method might be a lambda.
 		# If this is the case, a further +call+ method must be issued.
@@ -541,9 +541,9 @@ module Bauxite
 			action.execute
 		end
 
-		# Prints the specified +error+ using the Logger configured and 
+		# Prints the specified +error+ using the Logger configured and
 		# handling the verbose option.
-		# 
+		#
 		# For example:
 		#     begin
 		#         # => some code here
@@ -569,16 +569,16 @@ module Bauxite
 				end
 			end
 		end
-		
-		# Returns the output path for +path+ accounting for the 
+
+		# Returns the output path for +path+ accounting for the
 		# <tt>__OUTPUT__</tt> variable.
 		#
 		# For example:
 		#     # assuming --output /mnt/disk
-		#     
+		#
 		#     ctx.output_path '/tmp/myfile.txt'
 		#     # => returns '/tmp/myfile.txt'
-		#     
+		#
 		#     ctx.output_path 'myfile.txt'
 		#     # => returns '/mnt/disk/myfile.txt'
 		#
@@ -592,11 +592,11 @@ module Bauxite
 			end
 			path
 		end
-		
+
 		# ======================================================================= #
 		# :section: Metadata
 		# ======================================================================= #
-		
+
 		# Returns an array with the names of every action available.
 		#
 		# For example:
@@ -606,7 +606,7 @@ module Bauxite
 		def self.actions
 			_action_methods.map { |m| m.sub(/_action$/, '') }
 		end
-			
+
 		# Returns an array with the names of the arguments of the specified action.
 		#
 		# For example:
@@ -621,7 +621,7 @@ module Bauxite
 		# Returns an array with the names of every selector available.
 		#
 		# If +include_standard_selectors+ is +true+ (default behavior) both
-		# standard and custom selector are returned, otherwise only custom 
+		# standard and custom selector are returned, otherwise only custom
 		# selectors are returned.
 		#
 		# For example:
@@ -635,7 +635,7 @@ module Bauxite
 			end
 			ret
 		end
-		
+
 		# Returns an array with the names of every logger available.
 		#
 		# For example:
@@ -645,7 +645,7 @@ module Bauxite
 		def self.loggers
 			Loggers.constants.map { |l| l.to_s.downcase.sub(/logger$/, '') }
 		end
-		
+
 		# Returns an array with the names of every parser available.
 		#
 		# For example:
@@ -657,7 +657,7 @@ module Bauxite
 			 - ParserModule.public_instance_methods(false))
 			.map { |p| p.to_s }
 		end
-		
+
 		# Returns the maximum size in characters of an action name.
 		#
 		# This method is useful to pretty print lists of actions
@@ -669,11 +669,11 @@ module Bauxite
 		def self.max_action_name_size
 			actions.inject(0) { |s,a| a.size > s ? a.size : s }
 		end
-		
+
 		# ======================================================================= #
 		# :section: Variable manipulation methods
 		# ======================================================================= #
-		
+
 		# Recursively replaces occurencies of variable expansions in +s+ with the
 		# corresponding variable value.
 		#
@@ -694,7 +694,7 @@ module Bauxite
 			result = expand(result) if result != s
 			result
 		end
-		
+
 		# Temporarily alter the value of context variables.
 		#
 		# This method alters the value of the variables specified in the +vars+
@@ -716,7 +716,7 @@ module Bauxite
 			ret_vars = nil
 
 			ret = yield
-			
+
 			returned = @variables['__RETURN__']
 			if returned == ['*']
 				ret_vars = @variables.clone
@@ -735,20 +735,20 @@ module Bauxite
 			@variables.merge!(ret_vars) if ret_vars
 			ret
 		end
-		
+
 	private
 		def self._action_methods
 			(Action.public_instance_methods(false) \
 			 - ActionModule.public_instance_methods(false))
 			.map { |a| a.to_s }
 		end
-		
+
 		def _load_driver
 			@driver = Selenium::WebDriver.for(@driver_name, @options[:driver_opt])
 			@driver.manage.timeouts.implicit_wait = 1
 			@driver_timeout = 1
 		end
-		
+
 		def _load_extensions(dirs)
 			dirs.each do |d|
 				d = File.join(Dir.pwd, d) unless Dir.exists? d
@@ -756,30 +756,30 @@ module Bauxite
 				Dir[File.join(d, '**', '*.rb')].each { |file| require file }
 			end
 		end
-		
+
 		# ======================================================================= #
 		# Hacks required to overcome the String#split(' ') behavior of folding the
 		# space characters, coupled with CSV not supporting a regex as :col_sep.
-		
+
 		# Same as a common String except that split(' ') behaves as split(/\s/).
 		class StringProxy # :nodoc:
 			def initialize(s)
 				@s = s
 			end
-			
+
 			def method_missing(method, *args, &block)
 				args[0] = /\s/ if method == :split and args.size > 0 and args[0] == ' '
 				ret = @s.send(method, *args, &block)
 			end
 		end
-		
+
 		# Same as a common StringIO except that get(sep) returns a StringProxy
 		# instead of a regular string.
 		class StringIOProxy # :nodoc:
 			def initialize(s)
 				@s = StringIO.new(s)
 			end
-			
+
 			def method_missing(method, *args, &block)
 				ret = @s.send(method, *args, &block)
 				return ret unless method == :gets and args.size == 1

@@ -6,19 +6,16 @@
 
 <title>class Bauxite::Action - RDoc Documentation</title>
 
-<link href="../fonts.css" rel="stylesheet">
-<link href="../rdoc.css" rel="stylesheet">
-
 <script type="text/javascript">
   var rdoc_rel_prefix = "../";
 </script>
 
 <script src="../js/jquery.js"></script>
-<script src="../js/navigation.js"></script>
-<script src="../js/search_index.js"></script>
-<script src="../js/search.js"></script>
-<script src="../js/searcher.js"></script>
 <script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
 
 
 <body id="top" role="document" class="class">
@@ -194,18 +191,17 @@ attribute to refer to the current test <a href="Context.html">Context</a>.</p>
 
 <p>For example (new action template):</p>
 
-<pre class="ruby"><span class="ruby-comment"># === actions/print_source.rb ======= #</span>
-<span class="ruby-keyword">class</span> <span class="ruby-constant">Action</span>
-    <span class="ruby-comment"># :category: Action Methods</span>
-    <span class="ruby-keyword">def</span> <span class="ruby-identifier">print_source</span>
-        <span class="ruby-comment"># action code goes here, for example:</span>
-        <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">driver</span>.<span class="ruby-identifier">page_source</span>.
-    <span class="ruby-identifier">end</span>
-<span class="ruby-keyword">end</span>
-<span class="ruby-comment"># === end actions/print_source.rb === #</span>
+<pre># === actions/print_source.rb ======= #
+class Action
+    # :category: Action Methods
+    def print_source
+        # action code goes here, for example:
+        puts @ctx.driver.page_source.
+    end
+end
+# === end actions/print_source.rb === #
 
-<span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">actions</span>.<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;print_source&#39;</span> <span class="ruby-comment"># =&gt; true</span>
-</pre>
+Context::actions.include? &#39;print_source&#39; # =&gt; true</pre>
 
 <p>To avoid name clashing with Ruby reserved words, the &#39;_action&#39;
 suffix can be included in the action method name (this suffix will not be
@@ -358,11 +354,10 @@ not alias_action.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-keyword">alias</span> <span class="ruby-identifier">hey</span> <span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;$1, nice to see you!&quot;</span>
-<span class="ruby-identifier">hey</span> <span class="ruby-identifier">john</span>
-<span class="ruby-comment"># =&gt; this would expand to</span>
-<span class="ruby-comment"># echo &quot;john, nice to see you!&quot;</span>
-</pre>
+<pre>alias hey echo &quot;$1, nice to see you!&quot;
+hey john
+# =&gt; this would expand to
+# echo &quot;john, nice to see you!&quot;</pre>
           
           
 
@@ -681,9 +676,8 @@ break_action.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-keyword">break</span>
-<span class="ruby-comment"># =&gt; echoes &quot;Press ENTER to continue&quot; and waits for user input</span>
-</pre>
+<pre>break
+# =&gt; echoes &quot;Press ENTER to continue&quot; and waits for user input</pre>
           
           
 
@@ -880,15 +874,14 @@ href="Action.html#method-i-assertv">assertv</a>.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">first</span> <span class="ruby-identifier">john</span>
-<span class="ruby-identifier">set</span> <span class="ruby-identifier">last</span> <span class="ruby-identifier">doe</span>
-<span class="ruby-identifier">doif</span> <span class="ruby-identifier">john</span> ${<span class="ruby-identifier">first</span>} <span class="ruby-identifier">assertv</span> <span class="ruby-identifier">doe</span> ${<span class="ruby-identifier">last</span>}
-<span class="ruby-comment"># =&gt; this assertion would pass.</span>
+<pre>set first john
+set last doe
+doif john ${first} assertv doe ${last}
+# =&gt; this assertion would pass.
 
-<span class="ruby-identifier">doif</span> <span class="ruby-identifier">smith</span> ${<span class="ruby-identifier">last</span>} <span class="ruby-identifier">load</span> <span class="ruby-identifier">smith_specific_text</span>.<span class="ruby-identifier">bxt</span>
-<span class="ruby-comment"># =&gt; this would only load smith_specific_text.bxt if the last</span>
-<span class="ruby-comment">#    variable matches &#39;smith&#39;</span>
-</pre>
+doif smith ${last} load smith_specific_text.bxt
+# =&gt; this would only load smith_specific_text.bxt if the last
+#    variable matches &#39;smith&#39;</pre>
           
           
 
@@ -930,15 +923,14 @@ href="Action.html#method-i-assertv">assertv</a>.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">first</span> <span class="ruby-identifier">john</span>
-<span class="ruby-identifier">set</span> <span class="ruby-identifier">last</span> <span class="ruby-identifier">doe</span>
-<span class="ruby-identifier">dounless</span> <span class="ruby-identifier">james</span> ${<span class="ruby-identifier">first</span>} <span class="ruby-identifier">assertv</span> <span class="ruby-identifier">doe</span> ${<span class="ruby-identifier">last</span>}
-<span class="ruby-comment"># =&gt; this assertion would pass.</span>
+<pre>set first john
+set last doe
+dounless james ${first} assertv doe ${last}
+# =&gt; this assertion would pass.
 
-<span class="ruby-identifier">dounless</span> <span class="ruby-keyword">false</span> ${<span class="ruby-identifier">load_captcha</span>} <span class="ruby-identifier">load</span> <span class="ruby-identifier">captcha</span>.<span class="ruby-identifier">bxt</span>
-<span class="ruby-comment"># =&gt; this would only load captcha.bxt if the load_captcha</span>
-<span class="ruby-comment">#    variable is not &#39;false&#39;</span>
-</pre>
+dounless false ${load_captcha} load captcha.bxt
+# =&gt; this would only load captcha.bxt if the load_captcha
+#    variable is not &#39;false&#39;</pre>
           
           
 
@@ -1041,7 +1033,7 @@ results of the execution will be assigned to the variable named
                 <span class="ruby-identifier">command</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">data</span>[<span class="ruby-value">1</span>]
         <span class="ruby-keyword">end</span>
 
-        <span class="ruby-identifier">ret</span> = <span class="ruby-node">%x#{command.join(&#39; &#39;)}`</span>
+        <span class="ruby-identifier">ret</span> = <span class="ruby-node">%x`#{command.join(&#39; &#39;)}`</span>
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">variables</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">strip</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -1071,10 +1063,9 @@ results of the execution will be assigned to the variable named
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">exit</span>
-<span class="ruby-identifier">assertv</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">false</span>
-<span class="ruby-comment"># =&gt; the assertv will NOT be executed</span>
-</pre>
+<pre>exit
+assertv true false
+# =&gt; the assertv will NOT be executed</pre>
           
           
 
@@ -1125,12 +1116,11 @@ href="Action.html#method-i-test">test</a>, etc.) is undefined.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&quot;text&quot; id=&quot;hello&quot; value=&quot;world&quot; /&gt;</span>
-<span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">world</span>
-<span class="ruby-identifier">failif</span> <span class="ruby-identifier">assert</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">universe</span>
-<span class="ruby-identifier">failif</span> <span class="ruby-identifier">assertv</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">false</span>
-<span class="ruby-comment"># =&gt; these assertions would pass</span>
-</pre>
+<pre># assuming &lt;input type=&quot;text&quot; id=&quot;hello&quot; value=&quot;world&quot; /&gt;
+assert hello world
+failif assert hello universe
+failif assertv true false
+# =&gt; these assertions would pass</pre>
           
           
 
@@ -1180,10 +1170,9 @@ using the Javascript <code>return</code> statement.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">js</span> <span class="ruby-string">&quot;return document.title&quot;</span> <span class="ruby-identifier">title_var</span>
-<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${title_var}&quot;</span>
-<span class="ruby-comment"># =&gt; this would print the title of the page</span>
-</pre>
+<pre>js &quot;return document.title&quot; title_var
+echo &quot;${title_var}&quot;
+# =&gt; this would print the title of the page</pre>
           
           
 
@@ -1367,11 +1356,10 @@ empty.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">place</span> <span class="ruby-string">&quot;World&quot;</span>
-<span class="ruby-identifier">replace</span> <span class="ruby-string">&quot;Hello ${place}&quot;</span> <span class="ruby-string">&quot;World&quot;</span> <span class="ruby-string">&quot;Universe&quot;</span> <span class="ruby-identifier">greeting</span>
-<span class="ruby-identifier">echo</span> <span class="ruby-string">&quot;${greeting}!&quot;</span>
-<span class="ruby-comment"># =&gt; this would print &#39;Hello Universe!&#39;</span>
-</pre>
+<pre>set place &quot;World&quot;
+replace &quot;Hello ${place}&quot; &quot;World&quot; &quot;Universe&quot; greeting
+echo &quot;${greeting}!&quot;
+# =&gt; this would print &#39;Hello Universe!&#39;</pre>
           
           
 
@@ -1473,20 +1461,19 @@ href="Action.html#method-i-click">click</a>, <a
 href="Action.html#method-i-store">store</a> and <a
 href="Action.html#method-i-assert">assert</a> for more details):</p>
 
-<pre class="ruby"><span class="ruby-comment"># in main.bxt</span>
-<span class="ruby-identifier">load</span> <span class="ruby-identifier">login</span>.<span class="ruby-identifier">txt</span> <span class="ruby-string">&quot;username=jdoe&quot;</span> <span class="ruby-string">&quot;password=hello world!&quot;</span>
+<pre># in main.bxt
+load login.txt &quot;username=jdoe&quot; &quot;password=hello world!&quot;
 
-    <span class="ruby-comment"># in login.bxt</span>
-    <span class="ruby-identifier">write</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">user</span> <span class="ruby-string">&quot;${username}&quot;</span>
-    <span class="ruby-identifier">write</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">pass</span> <span class="ruby-string">&quot;${password}&quot;</span>
-    <span class="ruby-identifier">click</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">login</span>
-    <span class="ruby-identifier">store</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">loginName</span> <span class="ruby-identifier">fullName</span>
-    <span class="ruby-keyword">return</span> <span class="ruby-identifier">fullName</span>
+    # in login.bxt
+    write id=user &quot;${username}&quot;
+    write id=pass &quot;${password}&quot;
+    click id=login
+    store id=loginName fullName
+    return fullName
 
-<span class="ruby-comment"># back in main.bxt</span>
-<span class="ruby-identifier">assert</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">greeting</span> <span class="ruby-string">&quot;Welcome ${fullName}!&quot;</span>
-<span class="ruby-comment"># =&gt; this assertion uses the variable returned from login.bxt</span>
-</pre>
+# back in main.bxt
+assert id=greeting &quot;Welcome ${fullName}!&quot;
+# =&gt; this assertion uses the variable returned from login.bxt</pre>
           
           
 
@@ -1560,7 +1547,7 @@ href="Context.html">Context</a> instance as its only argument.</p>
           <div class="method-source-code" id="ruby-source">
             <pre><span class="ruby-comment"># File lib/bauxite/actions/ruby.rb, line 50</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">ruby</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>)
-        <span class="ruby-comment"># _load_file_action is defined in tryload.rb</span>
+        <span class="ruby-comment"># _load_file_action is defined in tryload.rb</span>
         <span class="ruby-identifier">_load_file_action</span>(<span class="ruby-identifier">file</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">vars</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
                 <span class="ruby-identifier">content</span> = <span class="ruby-string">&#39;&#39;</span>
                 <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">f</span>, <span class="ruby-string">&#39;r&#39;</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">ff</span><span class="ruby-operator">|</span> <span class="ruby-identifier">content</span> = <span class="ruby-identifier">ff</span>.<span class="ruby-identifier">read</span> }
@@ -1697,11 +1684,10 @@ execution fails, the value of <code>name</code> is left unchanged.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">name</span> <span class="ruby-identifier">john</span>
-<span class="ruby-identifier">setif</span> <span class="ruby-identifier">is_john</span> <span class="ruby-keyword">true</span> <span class="ruby-identifier">assertv</span> <span class="ruby-string">&quot;/John/i&quot;</span> <span class="ruby-string">&quot;${name}&quot;</span>
-<span class="ruby-identifier">assertv</span> <span class="ruby-keyword">true</span> ${<span class="ruby-identifier">is_john</span>}
-<span class="ruby-comment"># =&gt; the assertion would pass</span>
-</pre>
+<pre>set name john
+setif is_john true assertv &quot;/John/i&quot; &quot;${name}&quot;
+assertv true ${is_john}
+# =&gt; the assertion would pass</pre>
           
           
 
@@ -1798,11 +1784,10 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># assuming &lt;span id=&quot;name&quot;&gt;John&lt;/span&gt;</span>
-<span class="ruby-identifier">store</span> <span class="ruby-identifier">id</span>=<span class="ruby-identifier">name</span> <span class="ruby-identifier">firstName</span>
-<span class="ruby-identifier">echo</span> <span class="ruby-node">&quot;${firstName}
-# =&gt; this would print &#39;John&#39;
-</span></pre>
+<pre># assuming &lt;span id=&quot;name&quot;&gt;John&lt;/span&gt;
+store id=name firstName
+echo &quot;${firstName}
+# =&gt; this would print &#39;John&#39;</pre>
           
           
 
@@ -1892,11 +1877,10 @@ the execution continues with the next test context (if any).</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">test</span> <span class="ruby-identifier">mytest</span>.<span class="ruby-identifier">bxt</span> <span class="ruby-string">&quot;My Test&quot;</span> <span class="ruby-identifier">my_var</span>=<span class="ruby-value">1</span>
-<span class="ruby-comment"># =&gt; this would load mytest.bxt into a new test context</span>
-<span class="ruby-comment">#    named &quot;My Test&quot;, and within that context ${my_var}</span>
-<span class="ruby-comment">#    would expand to 1.</span>
-</pre>
+<pre>test mytest.bxt &quot;My Test&quot; my_var=1
+# =&gt; this would load mytest.bxt into a new test context
+#    named &quot;My Test&quot;, and within that context ${my_var}
+#    would expand to 1.</pre>
           
           
 
@@ -2058,10 +2042,9 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-comment"># assuming &lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;</span>
-<span class="ruby-identifier">write</span> <span class="ruby-identifier">name</span>=<span class="ruby-identifier">username</span> <span class="ruby-string">&quot;John&quot;</span>
-<span class="ruby-comment"># =&gt; this would type the word &#39;John&#39; in the username textbox</span>
-</pre>
+<pre># assuming &lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;
+write name=username &quot;John&quot;
+# =&gt; this would type the word &#39;John&#39; in the username textbox</pre>
           
           
 
@@ -2072,8 +2055,8 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
         <span class="ruby-ivar">@ctx</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
                 <span class="ruby-keyword">begin</span>
                         <span class="ruby-identifier">e</span>.<span class="ruby-identifier">clear</span>
-                <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">UnknownError</span> <span class="ruby-comment"># user-editable...</span>
-                        <span class="ruby-comment"># do nothing (if this should fail, it will in the line below)</span>
+                <span class="ruby-keyword">rescue</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">UnknownError</span> <span class="ruby-comment"># user-editable...</span>
+                        <span class="ruby-comment"># do nothing (if this should fail, it will in the line below)</span>
                 <span class="ruby-keyword">end</span>
                 <span class="ruby-identifier">e</span>.<span class="ruby-identifier">send_keys</span>(<span class="ruby-identifier">text</span>)
         <span class="ruby-keyword">end</span>
@@ -2096,7 +2079,7 @@ href="Context.html#method-i-expand">Bauxite::Context#expand</a>).</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.2.
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 

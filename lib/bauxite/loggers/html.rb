@@ -28,7 +28,7 @@ require 'base64'
 # captures taken, if any.
 #
 # Html logger options include:
-# [<tt>html</tt>] Name of the outpus HTML report file. If not present, defaults 
+# [<tt>html</tt>] Name of the outpus HTML report file. If not present, defaults
 #                 to "test.html".
 # [<tt>html_package</tt>] If set, embed captures into the HTML report file
 #                         using the data URI scheme (base64 encoded). The
@@ -36,7 +36,7 @@ require 'base64'
 #                         the filesystem.
 #
 class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
-	
+
 	# Constructs a new null logger instance.
 	#
 	def initialize(options)
@@ -44,12 +44,12 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 		@file = options[:html] || 'test.html'
 		@imgs = []
 	end
-	
+
 	# Completes the log execution.
 	#
 	def finalize(ctx)
 		output = ctx.variables['__OUTPUT__'] || ''
-		
+
 		html = "<!DOCTYPE html>
 <html>
 	<head>
@@ -69,7 +69,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 			.summary th { background-color: #DFDFFF; text-align: left }
 			.summary td { cursor: pointer; }
 			.top { position: absolute; top: 0px; right: 0px; background-color: #DFDFFF; padding: 5px; border-radius: 0px 0px 0px 5px; }
-			
+
 		</style>
 		<script type='text/javascript'>
 			function show(target) {
@@ -84,7 +84,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 			html << _d(2, "<h1>Test Summary</h1>")
 			html << _d(2, "<table class='summary'>")
 			html << _d(3, "<tr><th>Name</th><th>Time</th><th>Status</th><th>Error</th></tr>")
-		
+
 			ctx.tests.each_with_index do |t,idx|
 				error = t[:error]
 				error = error ? error.message : ''
@@ -92,10 +92,10 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 				html << _d(4, "<td>#{t[:name]}</td><td>#{t[:time].round(2)}</td><td class='status'>#{t[:status]}</td><td>#{error}</td>")
 				html << _d(3, "</tr>")
 			end
-			
+
 			html << _d(2, "</table>")
 		end
-		
+
 		html << _d(2, "<h1>Test Details</h1>")
 		@data.each do |test|
 			name = test[:name]
@@ -103,7 +103,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 			html << _d(2, "<a name='#{name}'></a>")
 			html << _d(2, "<div class='test #{status}'>#{name}<div class='status'><div class='text'>#{status.upcase}</div></div></div>")
 			html << _d(2, "<div id='#{name}_content' class='test-content'>")
-				
+
 			test[:actions].each_with_index do |action,idx|
 				html << _d(3, "<div class='action #{action[:status]} #{(idx % 2) == 1 ? 'odd' : 'even'}'>")
 				html << _d(4, 	"<div class='cmd'>#{action[:cmd]}</div>")
@@ -118,7 +118,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 					html << _d(3, "<div class='capture'>#{_img(output, capture)}</div>")
 				end
 			end
-			
+
 			item = ctx.tests.find { |t| t[:name] == name }
 			if item and item[:error]
 				capture = item[:error].variables['__CAPTURE__']
@@ -126,7 +126,7 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 					html << _d(3, "<div class='capture'>#{_img(output, capture)}</div>")
 				end
 			end
-			
+
 			html << _d(2, "</div>")
 		end
 		html << "
@@ -136,14 +136,14 @@ class Bauxite::Loggers::HtmlLogger < Bauxite::Loggers::ReportLogger
 		File.open(file, 'w') { |f| f.write html }
 		File.delete(*@imgs) if @imgs.size > 0
 	end
-	
+
 private
 	def _d(depth, s)
 		"\n"+depth.times.inject('') { |s,i| s + "\t" } + s
 	end
 	def _img(output, path)
 		if @options[:html_package]
-			content = Base64.encode64(File.open(path, 'r') { |f| f.read })
+			content = Base64.encode64(File.open(path, 'rb') { |f| f.read })
 			@imgs << path unless @imgs.include? path
 			"<img src='data:image/png;base64,#{content}'/>"
 		else

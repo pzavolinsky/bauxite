@@ -6,19 +6,16 @@
 
 <title>class Bauxite::Context - RDoc Documentation</title>
 
-<link href="../fonts.css" rel="stylesheet">
-<link href="../rdoc.css" rel="stylesheet">
-
 <script type="text/javascript">
   var rdoc_rel_prefix = "../";
 </script>
 
 <script src="../js/jquery.js"></script>
-<script src="../js/navigation.js"></script>
-<script src="../js/search_index.js"></script>
-<script src="../js/search.js"></script>
-<script src="../js/searcher.js"></script>
 <script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
 
 
 <body id="top" role="document" class="class">
@@ -173,7 +170,7 @@
 by clients execute tests and by actions and selectors to interact with the
 test engine (i.e. Selenium WebDriver).</p>
 
-<h3 id="class-Bauxite::Context-label-Context+variables"><a href="Context.html">Context</a> variables<span><a href="#class-Bauxite::Context-label-Context+variables">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+<h3 id="class-Bauxite::Context-label-Context+variables"><a href="Context.html">Context</a> variables<span><a href="#class-Bauxite::Context-label-Context+variables">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p><a href="Context.html">Context</a> variables are a key/value pairs scoped
 to the a test context.</p>
@@ -193,7 +190,7 @@ variable to the output of an external command (i.e. stdout).</p>
 the result of Javascript command.</p>
 </li><li>
 <p><a href="Action.html#method-i-replace">Bauxite::Action#replace</a> sets a
-variable to the result of doing a  find-and-replace operation on a literal.</p>
+variable to the result of doing a find-and-replace operation on a literal.</p>
 </li></ul>
 
 <p>Variables can be expanded in every <a href="Action.html">Action</a>
@@ -204,12 +201,13 @@ a variable through variable expansion the following syntax must be used:</p>
 
 <p>For example:</p>
 
-<pre>set field &quot;greeting&quot;
-set name &quot;John&quot;
-write &quot;${field}_textbox&quot; &quot;Hi, my name is ${name}!&quot;
-click &quot;${field}_button&quot;</pre>
+<pre class="ruby"><span class="ruby-identifier">set</span> <span class="ruby-identifier">field</span> <span class="ruby-string">&quot;greeting&quot;</span>
+<span class="ruby-identifier">set</span> <span class="ruby-identifier">name</span> <span class="ruby-string">&quot;John&quot;</span>
+<span class="ruby-identifier">write</span> <span class="ruby-string">&quot;${field}_textbox&quot;</span> <span class="ruby-string">&quot;Hi, my name is ${name}!&quot;</span>
+<span class="ruby-identifier">click</span> <span class="ruby-string">&quot;${field}_button&quot;</span>
+</pre>
 
-<h3 id="class-Bauxite::Context-label-Variable+scope">Variable scope<span><a href="#class-Bauxite::Context-label-Variable+scope">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+<h3 id="class-Bauxite::Context-label-Variable+scope">Variable scope<span><a href="#class-Bauxite::Context-label-Variable+scope">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>When the main test starts (via the <a
 href="Context.html#method-i-start">start</a> method), the test is bound to
@@ -239,7 +237,7 @@ action:</p>
 href="Action.html#method-i-return_action">Bauxite::Action#return_action</a></p>
 </li></ul>
 
-<h3 id="class-Bauxite::Context-label-Built-in+variable">Built-in variable<span><a href="#class-Bauxite::Context-label-Built-in+variable">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+<h3 id="class-Bauxite::Context-label-Built-in+variable">Built-in variable<span><a href="#class-Bauxite::Context-label-Built-in+variable">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p><a href="../Bauxite.html">Bauxite</a> has a series of built-in variables
 that provide information of the current test context and allow dynamic
@@ -416,16 +414,16 @@ href="Context.html#method-i-stop">stop</a> (defaults to <code>false</code>)</p>
         }
         <span class="ruby-ivar">@aliases</span> = {}
         <span class="ruby-ivar">@tests</span> = []
-        
+
         <span class="ruby-identifier">client</span> = <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Remote</span><span class="ruby-operator">::</span><span class="ruby-constant">Http</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">new</span>
         <span class="ruby-identifier">client</span>.<span class="ruby-identifier">timeout</span> = (<span class="ruby-ivar">@options</span>[<span class="ruby-value">:open_timeout</span>] <span class="ruby-operator">||</span> <span class="ruby-value">60</span>).<span class="ruby-identifier">to_i</span>
         <span class="ruby-ivar">@options</span>[<span class="ruby-value">:driver_opt</span>] = {} <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-value">:driver_opt</span>]
         <span class="ruby-ivar">@options</span>[<span class="ruby-value">:driver_opt</span>][<span class="ruby-value">:http_client</span>] = <span class="ruby-identifier">client</span>
 
         <span class="ruby-identifier">_load_extensions</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:extensions</span>] <span class="ruby-operator">||</span> [])
-        
+
         <span class="ruby-ivar">@logger</span> = <span class="ruby-constant">Context</span><span class="ruby-operator">::</span><span class="ruby-identifier">load_logger</span>(<span class="ruby-identifier">options</span>[<span class="ruby-value">:logger</span>], <span class="ruby-identifier">options</span>[<span class="ruby-value">:logger_opt</span>])
-        
+
         <span class="ruby-ivar">@parser</span> = <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -537,7 +535,7 @@ href="Context.html#method-i-stop">stop</a> (defaults to <code>false</code>)</p>
 <p>The element found is yielded to the given <code>block</code> (if any) and
 returned.</p>
 
-<p>Note that the recommeneded way to call this method is by passing a 
+<p>Note that the recommeneded way to call this method is by passing a
 <code>block</code>. This is because the method ensures that the element
 context is maintained for the duration of the <code>block</code> but it
 makes no guarantees after the <code>block</code> completes (the same
@@ -563,7 +561,7 @@ applies if no <code>block</code> was given).</p>
           
           <div class="method-source-code" id="find-source">
             <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 252</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment"># yields: element</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment"># yields: element</span>
         <span class="ruby-identifier">with_timeout</span> <span class="ruby-constant">Selenium</span><span class="ruby-operator">::</span><span class="ruby-constant">WebDriver</span><span class="ruby-operator">::</span><span class="ruby-constant">Error</span><span class="ruby-operator">::</span><span class="ruby-constant">NoSuchElementError</span> <span class="ruby-keyword">do</span>
                 <span class="ruby-constant">Selector</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__SELECTOR__&#39;</span>]).<span class="ruby-identifier">find</span>(<span class="ruby-identifier">selector</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-keyword">end</span>
@@ -615,7 +613,7 @@ the inner text or the value of the <code>value</code> attribute.</p>
             <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 288</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_value</span>(<span class="ruby-identifier">element</span>)
         <span class="ruby-keyword">if</span> [<span class="ruby-string">&#39;input&#39;</span>,<span class="ruby-string">&#39;select&#39;</span>,<span class="ruby-string">&#39;textarea&#39;</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">element</span>.<span class="ruby-identifier">tag_name</span>.<span class="ruby-identifier">downcase</span>
-                <span class="ruby-identifier">element</span>.<span class="ruby-identifier">attribute</span>(<span class="ruby-string">&#39;value&#39;</span>) 
+                <span class="ruby-identifier">element</span>.<span class="ruby-identifier">attribute</span>(<span class="ruby-string">&#39;value&#39;</span>)
         <span class="ruby-keyword">else</span>
                 <span class="ruby-identifier">element</span>.<span class="ruby-identifier">text</span>
         <span class="ruby-keyword">end</span>
@@ -647,9 +645,8 @@ the inner text or the value of the <code>value</code> attribute.</p>
 
 <p>For example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">reset_driver</span>
-=<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">closes</span> <span class="ruby-identifier">the</span> <span class="ruby-identifier">browser</span> <span class="ruby-keyword">and</span> <span class="ruby-identifier">opens</span> <span class="ruby-identifier">a</span> <span class="ruby-identifier">new</span> <span class="ruby-identifier">one</span>
-</pre>
+<pre>ctx.reset_driver
+=&gt; closes the browser and opens a new one</pre>
           
           
 
@@ -846,18 +843,18 @@ logger type.</p>
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">loggers</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Array</span>
                 <span class="ruby-keyword">return</span> <span class="ruby-constant">Loggers</span><span class="ruby-operator">::</span><span class="ruby-constant">CompositeLogger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>, <span class="ruby-identifier">loggers</span>)
         <span class="ruby-keyword">end</span>
-        
+
         <span class="ruby-identifier">name</span> = <span class="ruby-identifier">loggers</span>
-        
+
         <span class="ruby-identifier">log_name</span> = (<span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;null&#39;</span>).<span class="ruby-identifier">downcase</span>
-        
+
         <span class="ruby-identifier">class_name</span> = <span class="ruby-node">&quot;#{log_name.capitalize}Logger&quot;</span>
-        
+
         <span class="ruby-keyword">unless</span> <span class="ruby-constant">Loggers</span>.<span class="ruby-identifier">const_defined?</span> <span class="ruby-identifier">class_name</span>.<span class="ruby-identifier">to_sym</span>
                 <span class="ruby-identifier">raise</span> <span class="ruby-constant">NameError</span>,
                         <span class="ruby-node">&quot;Invalid logger &#39;#{log_name}&#39;&quot;</span>
         <span class="ruby-keyword">end</span>
-        
+
         <span class="ruby-constant">Loggers</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">class_name</span>).<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -895,25 +892,25 @@ logger type.</p>
         <span class="ruby-keyword">begin</span>
                 <span class="ruby-identifier">args_text</span> = <span class="ruby-identifier">data</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">data</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">strip</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>
                 <span class="ruby-identifier">args</span> = []
-                
+
                 <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args_text</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;&#39;</span>
-                        <span class="ruby-comment"># col_sep must be a regex because String.split has a</span>
-                        <span class="ruby-comment"># special case for a single space char (&#39; &#39;) that produced</span>
-                        <span class="ruby-comment"># unexpected results (i.e. if line is &#39;&quot;a      b&quot;&#39; the</span>
-                        <span class="ruby-comment"># resulting array contains [&quot;a b&quot;]).</span>
-                        <span class="ruby-comment">#</span>
-                        <span class="ruby-comment"># ...but... </span>
-                        <span class="ruby-comment">#</span>
-                        <span class="ruby-comment"># CSV expects col_sep to be a string so we need to work</span>
-                        <span class="ruby-comment"># some dark magic here. Basically we proxy the StringIO</span>
-                        <span class="ruby-comment"># received by CSV to returns strings for which the split</span>
-                        <span class="ruby-comment"># method does not fold the whitespaces.</span>
-                        <span class="ruby-comment">#</span>
+                        <span class="ruby-comment"># col_sep must be a regex because String.split has a</span>
+                        <span class="ruby-comment"># special case for a single space char (&#39; &#39;) that produced</span>
+                        <span class="ruby-comment"># unexpected results (i.e. if line is &#39;&quot;a      b&quot;&#39; the</span>
+                        <span class="ruby-comment"># resulting array contains [&quot;a b&quot;]).</span>
+                        <span class="ruby-comment">#</span>
+                        <span class="ruby-comment"># ...but...</span>
+                        <span class="ruby-comment">#</span>
+                        <span class="ruby-comment"># CSV expects col_sep to be a string so we need to work</span>
+                        <span class="ruby-comment"># some dark magic here. Basically we proxy the StringIO</span>
+                        <span class="ruby-comment"># received by CSV to returns strings for which the split</span>
+                        <span class="ruby-comment"># method does not fold the whitespaces.</span>
+                        <span class="ruby-comment">#</span>
                         <span class="ruby-identifier">args</span> = <span class="ruby-constant">CSV</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">StringIOProxy</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args_text</span>), { <span class="ruby-value">:col_sep</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39; &#39;</span> })
                         .<span class="ruby-identifier">shift</span>
                         .<span class="ruby-identifier">select</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword">nil</span> } <span class="ruby-operator">||</span> []
                 <span class="ruby-keyword">end</span>
-                
+
                 {
                         <span class="ruby-value">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">data</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">downcase</span>,
                         <span class="ruby-value">:args</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">args</span>
@@ -1082,9 +1079,10 @@ preferred.</p>
 
 <p>For example:</p>
 
-<pre>action = ctx.get_action(&quot;echo&quot;, [&#39;Hi!&#39;], &#39;echo &quot;Hi!&quot;&#39;)
-ret = ctx.exec_action_object(action)
-ret.call if ret.respond_to? :call</pre>
+<pre class="ruby"><span class="ruby-identifier">action</span> = <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">get_action</span>(<span class="ruby-string">&quot;echo&quot;</span>, [<span class="ruby-string">&#39;Hi!&#39;</span>], <span class="ruby-string">&#39;echo &quot;Hi!&quot;&#39;</span>)
+<span class="ruby-identifier">ret</span> = <span class="ruby-identifier">ctx</span>.<span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
+<span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> :<span class="ruby-identifier">call</span>
+</pre>
           
           
 
@@ -1203,7 +1201,7 @@ preferred.</p>
                 <span class="ruby-identifier">ret</span> = <span class="ruby-identifier">exec_action_object</span>(<span class="ruby-identifier">action</span>)
         <span class="ruby-keyword">end</span>
 
-        <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span> <span class="ruby-comment"># delayed actions (after log_cmd)</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-value">:call</span> <span class="ruby-comment"># delayed actions (after log_cmd)</span>
                 <span class="ruby-identifier">ret</span>.<span class="ruby-identifier">call</span>
         <span class="ruby-keyword">else</span>
                 <span class="ruby-identifier">ret</span>
@@ -1253,9 +1251,9 @@ preferred.</p>
                 <span class="ruby-identifier">action</span> = <span class="ruby-identifier">alias_action</span>[<span class="ruby-value">:action</span>]
                 <span class="ruby-identifier">args</span>   = <span class="ruby-identifier">alias_action</span>[<span class="ruby-value">:args</span>].<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span>
                         <span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\$\{(\d+)(\*q?)?\}/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span>
-                                <span class="ruby-comment"># expand ${1} to args[0], ${2} to args[1], etc.</span>
-                                <span class="ruby-comment"># expand ${4*} to &quot;#{args[4]} #{args[5]} ...&quot;</span>
-                                <span class="ruby-comment"># expand ${4*q} to &quot;\&quot;#{args[4]}\&quot; \&quot;#{args[5]}\&quot; ...&quot;</span>
+                                <span class="ruby-comment"># expand ${1} to args[0], ${2} to args[1], etc.</span>
+                                <span class="ruby-comment"># expand ${4*} to &quot;#{args[4]} #{args[5]} ...&quot;</span>
+                                <span class="ruby-comment"># expand ${4*q} to &quot;\&quot;#{args[4]}\&quot; \&quot;#{args[5]}\&quot; ...&quot;</span>
                                 <span class="ruby-identifier">idx</span> = <span class="ruby-node">$1</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>
                                 <span class="ruby-keyword">if</span> <span class="ruby-node">$2</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">nil</span>
                                         <span class="ruby-identifier">args</span>[<span class="ruby-identifier">idx</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
@@ -1267,11 +1265,11 @@ preferred.</p>
                         <span class="ruby-keyword">end</span>
                 <span class="ruby-keyword">end</span>
         <span class="ruby-keyword">end</span>
-        
+
         <span class="ruby-identifier">text</span> = ([<span class="ruby-identifier">action</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-string">&#39;&quot;&#39;</span><span class="ruby-operator">+</span><span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&#39;&quot;&#39;</span>, <span class="ruby-string">&#39;&quot;&quot;&#39;</span>)<span class="ruby-operator">+</span><span class="ruby-string">&#39;&quot;&#39;</span> }).<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">text</span>
         <span class="ruby-identifier">file</span> = <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__FILE__&#39;</span>]
         <span class="ruby-identifier">line</span> = <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__LINE__&#39;</span>]
-        
+
         <span class="ruby-constant">Action</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">action</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">file</span>, <span class="ruby-identifier">line</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -1297,7 +1295,7 @@ preferred.</p>
 
         <div class="method-description">
           
-          <p>Returns the output path for <code>path</code> accounting for the 
+          <p>Returns the output path for <code>path</code> accounting for the
 <code>__OUTPUT__</code> variable.</p>
 
 <p>For example:</p>
@@ -1349,7 +1347,7 @@ preferred.</p>
 
         <div class="method-description">
           
-          <p>Prints the specified <code>error</code> using the Logger configured and 
+          <p>Prints the specified <code>error</code> using the Logger configured and
 handling the verbose option.</p>
 
 <p>For example:</p>
@@ -1478,7 +1476,7 @@ to execute the block itself.</p>
             <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 382</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">with_timeout</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">error_types</span>)
         <span class="ruby-identifier">stime</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">new</span>
-        <span class="ruby-identifier">timeout</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">stime</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__TIMEOUT__&#39;</span>]
+        <span class="ruby-identifier">timeout</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">stime</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__TIMEOUT__&#39;</span>].<span class="ruby-identifier">to_i</span>
         <span class="ruby-keyword">yield</span>
 <span class="ruby-keyword">rescue</span> <span class="ruby-operator">*</span><span class="ruby-identifier">error_types</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
         <span class="ruby-identifier">t</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">new</span>
@@ -1718,7 +1716,8 @@ to execute the block itself.</p>
           <div class="method-source-code" id="parsers-source">
             <pre><span class="ruby-comment"># File lib/bauxite/core/context.rb, line 655</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">parsers</span>
-        (<span class="ruby-constant">Parser</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>)                           <span class="ruby-operator">-</span> <span class="ruby-constant">ParserModule</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>))
+        (<span class="ruby-constant">Parser</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>) \
+         <span class="ruby-operator">-</span> <span class="ruby-constant">ParserModule</span>.<span class="ruby-identifier">public_instance_methods</span>(<span class="ruby-keyword">false</span>))
         .<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">to_s</span> }
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -1748,7 +1747,7 @@ to execute the block itself.</p>
 
 <p>If <code>include_standard_selectors</code> is <code>true</code> (default
 behavior) both standard and custom selector are returned, otherwise only
-custom  selectors are returned.</p>
+custom selectors are returned.</p>
 
 <p>For example:</p>
 
@@ -1827,7 +1826,8 @@ with the corresponding variable value.</p>
 
 <p>The variable expansion expression format is:</p>
 
-<pre>&#39;${variable_name}&#39;</pre>
+<pre class="ruby"><span class="ruby-string">&#39;${variable_name}&#39;</span>
+</pre>
 
 <p>For example:</p>
 
@@ -1902,7 +1902,7 @@ variables is restored.</p>
         <span class="ruby-identifier">ret_vars</span> = <span class="ruby-keyword">nil</span>
 
         <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">yield</span>
-        
+
         <span class="ruby-identifier">returned</span> = <span class="ruby-ivar">@variables</span>[<span class="ruby-string">&#39;__RETURN__&#39;</span>]
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">returned</span> <span class="ruby-operator">==</span> [<span class="ruby-string">&#39;*&#39;</span>]
                 <span class="ruby-identifier">ret_vars</span> = <span class="ruby-ivar">@variables</span>.<span class="ruby-identifier">clone</span>
@@ -1939,7 +1939,7 @@ variables is restored.</p>
 
 <footer id="validator-badges" role="contentinfo">
   <p><a href="http://validator.w3.org/check/referer">Validate</a>
-  <p>Generated by <a href="http://rdoc.rubyforge.org">RDoc</a> 4.1.2.
-  <p>Based on <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
 </footer>
 
